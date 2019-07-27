@@ -18,7 +18,7 @@ public class Card{
 		return value;
 	}
 
-	public void setPointValue(int value){
+	public void setPointValue(char value){
 		//Possible better way to do this other than an if tree ? 
 		if(value != 'A' && value != 'K' && value != 'Q' && value != 'J'){
 			pointValue = 0;		
