@@ -10,6 +10,11 @@ public class Person{
 		hand = new ArrayList<Card>();
 		points = 0;
 		name = "";
-	} 
+	}
+	Person(ArrayList<Card> hand,name){
+		this.hand = new ArrayList<Card>(hand);
+		this.points = 0;
+		this.name = name;
+	}
 
 }
