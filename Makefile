@@ -1,6 +1,5 @@
-# Binary Tree Assignmnet program makefile
-# Chris Cushway
-# 12 March 2018
+# Bridge-Game makefile
+#  2019
 
 JAVAC=/usr/bin/javac
 .SUFFIXES: .java .class
