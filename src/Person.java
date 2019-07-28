@@ -11,7 +11,7 @@ public class Person{
 		points = 0;
 		name = "";
 	}
-	Person(ArrayList<Card> hand,name){
+	Person(ArrayList<Card> hand,String name){
 		this.hand = new ArrayList<Card>(hand);
 		this.points = 0;
 		this.name = name;
