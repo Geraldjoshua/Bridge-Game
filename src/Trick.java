@@ -22,6 +22,22 @@ public class Trick{
 		return west.trim();
 	}
 
+	public static String potentialplay(String cardplayed,int place,Trick trick){
+		if(place==0){
+			return trick.west.trim();
+		}
+		if(place==1){
+			return trick.north.trim();
+		}
+		if(place==2){
+			return trick.east.trim();
+		}
+		else{
+			return trick.south.trim();
+		}
+
+	}
+
 
 	public static boolean checktrick(String cardplayed,int place,Trick trick){
 		if(place==0){
