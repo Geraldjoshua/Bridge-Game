@@ -62,6 +62,14 @@ public class Person{
 		points++;		
 
 	}
+	public void removePlayedCard(String card ){
+		//ArrayList<Card> hand = getPersonHand();
+		for(int i=0;i<hand.size();i++){
+			if(hand.get(i).toString().equals(card)){
+				hand.remove(i);
+			}
+		}
+	}
 
 
 
