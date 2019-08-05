@@ -38,6 +38,6 @@ public class Card{
 	}
 
 	public String toString(){
-		return suite + "" +value;
+		return value + "" +suite;
 	}
 }

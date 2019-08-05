@@ -70,6 +70,23 @@ public class Person{
 			}
 		}
 	}
+	public boolean checkhand(String card){
+		boolean check = true;
+		for(int i=0;i<hand.size();i++){
+			if(hand.get(i).toString().equals(card))
+				check = false;
+		}
+		return check;
+	}
+
+	public boolean checksuit(String card,ArrayList<String> playedCards){
+		boolean check = true;
+		String firstcard = playedCards.get(0);
+		if(firstcard.charAt(1)==card.charAt(1)){	
+					check = false;
+		}
+		return check;
+	}
 
 
 

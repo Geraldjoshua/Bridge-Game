@@ -41,18 +41,28 @@ public class Game{
 				
 				Person player = players[player_number];
 				String displayHand = displayhand(player); //displays hand to the console
-				System.out.println(displayHand);
+				//System.out.println(displayHand);
 				System.out.println("It is "+ player.getPersonName()+ " turn");
-				System.out.println("cards played:"+getplayedCards(playedCards));
-				System.out.println("Enter the corret suit card to play: ");
-				String cardplayed;
+				//System.out.println("cards played:"+getplayedCards(playedCards));
+				//System.out.println("Please Enter the corret suit card to play: ");
+				String cardplayed="";
 				//gets first card played by west when the game starts
 				if((j==0)&&(temp_trick==0)){
 					cardplayed = trickArray.get(j).getWest();
-					System.out.println("west played first");
+					System.out.println("west played first  automatically");
 				}
 				else{
-					cardplayed = userinput.nextLine();  //gets input from user
+					boolean checkuserdeck = true;
+					while(checkuserdeck){
+						System.out.println(player.getPersonName() +" player Please Enter the correct suit card in your hand to play: ");
+						System.out.println("cards played:"+getplayedCards(playedCards));
+						System.out.println(displayHand);
+						cardplayed = userinput.nextLine();  //gets input from user
+						checkuserdeck=player.checkhand(cardplayed.trim());
+						if (!checkuserdeck){
+							checkuserdeck = player.checksuit(cardplayed.trim(),playedCards);
+						}
+					}
 				}
 				//checks if the potential right card in the lesson is played by the user
 				boolean checkcardtrick = Trick.checktrick(cardplayed.trim(),temp_trick,trickArray.get(j));
