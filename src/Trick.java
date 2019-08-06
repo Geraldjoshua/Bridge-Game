@@ -18,11 +18,14 @@ public class Trick{
 	Trick(String claim){
 		this.claim=claim;
 	}
+
+	Trick(){
+	}
 	public String getWest(){
 		return west.trim();
 	}
 
-	public static String potentialplay(String cardplayed,int place,Trick trick){
+	public  String potentialplay(String cardplayed,int place,Trick trick){
 		if(place==0){
 			return trick.west.trim();
 		}
@@ -39,7 +42,7 @@ public class Trick{
 	}
 
 
-	public static boolean checktrick(String cardplayed,int place,Trick trick){
+	public  boolean checktrick(String cardplayed,int place,Trick trick){
 		if(place==0){
 			return cardplayed.equals(trick.west.trim());
 		}
@@ -54,7 +57,7 @@ public class Trick{
 		}
 	}
 
-	public static boolean checkclaim(String word){
+	public  boolean checkclaim(String word){
 		return word.trim().equals("CLAIM");
 	}
 

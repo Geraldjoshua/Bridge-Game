@@ -17,11 +17,11 @@ public class Game{
 		//created a lesson object to read lesson
 		Lesson lesson_class = new Lesson();
 		lesson_class.loadlesson(level);
-		Person[] players = Lesson.getplayers();
-		ArrayList<Card> cardArray = Lesson.getCardArray();
+		Person[] players = lesson_class.getplayers();
+		ArrayList<Card> cardArray = lesson_class.getCardArray();
 
 		//stores all the tricks obtained from reading the lesson
-		ArrayList<Trick> trickArray = Lesson.getTrickArray();
+		ArrayList<Trick> trickArray = lesson_class.getTrickArray();
 
 
 		//counts a tick played by a person in a particular game(better name will be found later for it)
@@ -65,10 +65,11 @@ public class Game{
 					}
 				}
 				//checks if the potential right card in the lesson is played by the user
-				boolean checkcardtrick = Trick.checktrick(cardplayed.trim(),temp_trick,trickArray.get(j));
+				Trick trick = new Trick();
+				boolean checkcardtrick = trick.checktrick(cardplayed.trim(),temp_trick,trickArray.get(j));
 				if (!checkcardtrick){
 					//what player could play 
-					String potential = Trick.potentialplay(cardplayed.trim(),temp_trick,trickArray.get(j));
+					String potential = trick.potentialplay(cardplayed.trim(),temp_trick,trickArray.get(j));
 					System.out.println(potential+" was the better option");
 				}
 				playedCards.add(cardplayed.trim());

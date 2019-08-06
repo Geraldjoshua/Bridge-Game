@@ -8,9 +8,9 @@ import java.lang.StringBuilder;
 
 public class Lesson{
 
-	private static Person[] players={new Person("West"),new Person("North"),new Person("East"),new Person("South")}; 
-	private static ArrayList<Card> cardArray;
-	private static ArrayList<Trick> trickArray;
+	private  Person[] players={new Person("West"),new Person("North"),new Person("East"),new Person("South")}; 
+	private  ArrayList<Card> cardArray;
+	private  ArrayList<Trick> trickArray;
 
 	Lesson(){
 		//players = new Person[4]; //{new Person("West"),new Person("North"),new Person("East"),new Person("South")};
@@ -20,7 +20,7 @@ public class Lesson{
 
 
 
-	static void loadlesson(String lesson_number){
+	void loadlesson(String lesson_number){
 		
 		
 		
@@ -73,17 +73,17 @@ public class Lesson{
 
 	}
 
-	static public ArrayList<Card> getCardArray(){
+	public ArrayList<Card> getCardArray(){
 
 		return cardArray;	
 
 	}
-	static public ArrayList<Trick> getTrickArray(){
+	public ArrayList<Trick> getTrickArray(){
 
 		return trickArray;	
 
 	}
-	static public Person[] getplayers(){
+	public Person[] getplayers(){
 
 		return players;	
 
