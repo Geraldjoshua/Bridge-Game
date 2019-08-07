@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.lang.StringBuilder;
+import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 public class Lesson{
 
@@ -29,6 +32,16 @@ public class Lesson{
 			Scanner lesson = new Scanner(new File(lesson_file));
 			System.out.println("The bidding is: ");
 			String bidding = lesson.nextLine();
+			String[] biddingl = bidding.split(" ");
+			ArrayList<String> biddingstring = new ArrayList<>(Arrays.asList(biddingl));
+			Collections.reverse(biddingstring);
+			//Trick bidcard = new Trick();
+			for(int j=0;j<biddingstring.size();j++){
+				if(j==3){
+					Trick.setBid(biddingstring.get(j));
+					break;
+				}
+			}
 			System.out.println(bidding);
 			int number_of_hands=0;
 

@@ -36,8 +36,10 @@ public class Game{
 			while(temp_trick<=4){
 				if(playedCards.size()==4){
 					players = countpoints(playedCards,players);
-					//System.out.println(player_to_start);
+					System.out.println(players[0].getPersonName()+" player won the previous trick");
 					playedCards.clear();
+					players[0].incrementPoints();
+					//System.out.println(players[0].getPoints());
 					player_number=0;
 					temp_trick=0;
 					break;
@@ -59,8 +61,8 @@ public class Game{
 				else{
 					boolean checkuserdeck = true;
 					while(checkuserdeck){
-						System.out.println(player.getPersonName() +" player Please Enter the correct suit card in your hand to play: ");
 						System.out.println("cards played:"+getplayedCards(playedCards));
+						System.out.println(player.getPersonName() +" player Please Enter the correct suit card from your hand to play: ");
 						System.out.println(displayHand);
 						cardplayed = userinput.nextLine();  //gets input from user
 						checkuserdeck=player.checkhand(cardplayed.trim());
@@ -158,8 +160,8 @@ public class Game{
 		Person[] new_person_array = new Person[4];
 		ArrayList<Integer> temporder = new ArrayList<>();
 		for (int i=0;i<playedcards.size();i++){
-			if(playedcards.get(i).substring(0,1).trim().equals("A")){
-				temporder.add(14);
+			if(playedcards.get(i).substring(1,2).trim().charAt(0)==Trick.getBid().charAt(1)){
+				temporder.add(15);
 			}
 			else if(playedcards.get(i).substring(0,1).trim().equals("K")){
 				temporder.add(13);
@@ -172,6 +174,9 @@ public class Game{
 			}
 			else if(playedcards.get(i).substring(0,1).trim().equals("T")){
 				temporder.add(10);
+			}
+			else if(playedcards.get(i).substring(0,1).trim().equals("A")){
+				temporder.add(14);
 			}
 			else{
 				temporder.add(Integer.parseInt(playedcards.get(i).substring(0,1)));
