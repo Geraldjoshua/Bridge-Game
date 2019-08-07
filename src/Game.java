@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.io.File;
 import java.lang.StringBuilder;
 
+
 public class Game{
 
 	public static void main(String args[]){
@@ -26,6 +27,7 @@ public class Game{
 
 		//counts a tick played by a person in a particular game(better name will be found later for it)
 		int temp_trick=0;
+		//int[] player_to_start = {0,1,2,3};
 		int player_number=0;
 		//holds played cards
 		ArrayList<String> playedCards = new ArrayList<>();
@@ -33,6 +35,8 @@ public class Game{
 		for(int j=0; j<trickArray.size();j++){
 			while(temp_trick<=4){
 				if(playedCards.size()==4){
+					players = countpoints(playedCards,players);
+					//System.out.println(player_to_start);
 					playedCards.clear();
 					player_number=0;
 					temp_trick=0;
@@ -50,6 +54,7 @@ public class Game{
 				if((j==0)&&(temp_trick==0)){
 					cardplayed = trickArray.get(j).getWest();
 					System.out.println("west played first  automatically");
+					
 				}
 				else{
 					boolean checkuserdeck = true;
@@ -59,7 +64,7 @@ public class Game{
 						System.out.println(displayHand);
 						cardplayed = userinput.nextLine();  //gets input from user
 						checkuserdeck=player.checkhand(cardplayed.trim());
-						if (!checkuserdeck){
+						if ((!checkuserdeck)&&(playedCards.size()>0)){
 							checkuserdeck = player.checksuit(cardplayed.trim(),playedCards);
 						}
 					}
@@ -74,8 +79,11 @@ public class Game{
 				}
 				playedCards.add(cardplayed.trim());
 				player.removePlayedCard(cardplayed.trim());
+				//player_number=player_to_start[temp_trick];
 				temp_trick++;
-				player_number++;
+				//if(temp_trick<=3){
+				player_number++;//player_to_start[temp_trick];}
+				
 
 
 			}	
@@ -143,5 +151,61 @@ public class Game{
 			//temp+=" ";
 		}
 		return temp;
+	}
+
+	public static Person[] countpoints(ArrayList<String> playedcards,Person[] players){
+		int[] temparray = new int[4];
+		Person[] new_person_array = new Person[4];
+		ArrayList<Integer> temporder = new ArrayList<>();
+		for (int i=0;i<playedcards.size();i++){
+			if(playedcards.get(i).substring(0,1).trim().equals("A")){
+				temporder.add(14);
+			}
+			else if(playedcards.get(i).substring(0,1).trim().equals("K")){
+				temporder.add(13);
+			}
+			else if(playedcards.get(i).substring(0,1).trim().equals("Q")){
+				temporder.add(12);
+			}
+			else if(playedcards.get(i).substring(0,1).trim().equals("J")){
+				temporder.add(11);
+			}
+			else if(playedcards.get(i).substring(0,1).trim().equals("T")){
+				temporder.add(10);
+			}
+			else{
+				temporder.add(Integer.parseInt(playedcards.get(i).substring(0,1)));
+			}
+		}
+		int played=0;
+		int rem=0;
+		int max=0;
+		int index=0;
+		while(played<4){
+				max = temporder.get(0);
+				index = 0;
+				for (int i=0;i<temporder.size();i++){
+					if(max<temporder.get(i)){
+						max=temporder.get(i);
+						index=i;
+					}
+				}
+			index+=played;
+			if(index<4){
+				temparray[played]=index;
+				new_person_array[played]=players[index];
+				
+			}
+			else{
+				rem=index-4;
+				temparray[played]=rem;
+				new_person_array[played]=players[rem];
+
+			}
+			played++;
+		}
+		return new_person_array;
+
+
 	}
 }
