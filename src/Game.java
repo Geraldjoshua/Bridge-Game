@@ -37,9 +37,11 @@ public class Game{
 				if(playedCards.size()==4){
 					players = countpoints(playedCards,players);
 					System.out.println(players[0].getPersonName()+" player won the previous trick");
+					
+					players[0].incrementPoints(players[0].getrecordplayedCard());
 					playedCards.clear();
-					players[0].incrementPoints();
-					//System.out.println(players[0].getPoints());
+					
+					System.out.println(players[0].getPoints());
 					player_number=0;
 					temp_trick=0;
 					break;
@@ -47,10 +49,8 @@ public class Game{
 				
 				Person player = players[player_number];
 				String displayHand = displayhand(player); //displays hand to the console
-				//System.out.println(displayHand);
+				
 				System.out.println("It is "+ player.getPersonName()+ " turn");
-				//System.out.println("cards played:"+getplayedCards(playedCards));
-				//System.out.println("Please Enter the corret suit card to play: ");
 				String cardplayed="";
 				//gets first card played by west when the game starts
 				if((j==0)&&(temp_trick==0)){
@@ -80,11 +80,12 @@ public class Game{
 					System.out.println(potential+" was the better option");
 				}
 				playedCards.add(cardplayed.trim());
+				player.recordplayedCard(cardplayed.trim());
 				player.removePlayedCard(cardplayed.trim());
-				//player_number=player_to_start[temp_trick];
+				
 				temp_trick++;
-				//if(temp_trick<=3){
-				player_number++;//player_to_start[temp_trick];}
+				
+				player_number++;
 				
 
 

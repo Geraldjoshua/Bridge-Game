@@ -5,6 +5,7 @@ public class Person{
 	private ArrayList<Card> hand;
 	private int points;
 	private String name;
+	private String playedcard;
 
 	Person(){
 		
@@ -57,9 +58,22 @@ public class Person{
 
 	}
 
-	public void incrementPoints(){
-		
-		points++;		
+	public void incrementPoints(String card){
+		if(card.charAt(0)=='A'){
+			points+=4;
+		}
+		else if(card.charAt(0)=='K'){
+			points+=3;
+		}
+		else if(card.charAt(0)=='Q'){
+			points+=2;
+		} 
+		else if(card.charAt(0)=='J'){
+			points+=1;
+		}
+		else{
+			points+=0;
+		}		
 
 	}
 	public int getPoints(){
@@ -67,6 +81,15 @@ public class Person{
 		return points;		
 
 	}
+
+	public void recordplayedCard(String card){
+		this.playedcard = card;
+	}
+
+	public String getrecordplayedCard(){
+		return playedcard;
+	}
+
 	public void removePlayedCard(String card ){
 		//ArrayList<Card> hand = getPersonHand();
 		for(int i=0;i<hand.size();i++){
