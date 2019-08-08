@@ -7,6 +7,7 @@ public class Trick{
 	private String east;
 	private String south;
 	private String claim;
+	private static String bid;
 
 
 	Trick(String west,String north,String east,String south){
@@ -20,9 +21,18 @@ public class Trick{
 	}
 
 	Trick(){
+
 	}
+
 	public String getWest(){
 		return west.trim();
+	}
+
+	public static void setBid(String newbid){
+		bid = newbid;
+	}
+	public static String getBid(){
+		return bid;
 	}
 
 	public  String potentialplay(String cardplayed,int place,Trick trick){

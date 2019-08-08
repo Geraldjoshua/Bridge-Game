@@ -20,16 +20,20 @@ public class Card{
 
 	public void setPointValue(char value){
 		//Possible better way to do this other than an if tree ? 
-		if(value != 'A' && value != 'K' && value != 'Q' && value != 'J'){
-			pointValue = 0;		
-		}else if(value == 'A'){
+		if(value == 'A'){
 			pointValue = 4;
-		}else if(value == 'K'){
+		}
+		else if(value == 'K'){
 			pointValue = 3;		
-		}else if(value == 'Q'){
+		}
+		else if(value == 'Q'){
 			pointValue = 2;
-		}else if(value == 'J'){
+		}
+		else if(value == 'J'){
 			pointValue = 1;
+		}
+		else{
+			pointValue=0;
 		}
 	}
 
