@@ -3,215 +3,113 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.File;
-import java.lang.StringBuilder;
-
+import java.util.Arrays;
 
 public class Game{
+	public static void main(String args[]) throws IOException, InterruptedException{
 
-	public static void main(String args[]){
-		
 		Scanner userinput = new Scanner(System.in);
 		System.out.println("Enter level: ");
 		String level = userinput.nextLine();
+		String lesson_file = "input/input"+level+".txt";
+		Lesson lesson = new Lesson(lesson_file);
+		
+		ArrayList<String> copyBestCase = lesson.getBestCase();
+		ArrayList<String> cardsPlayed = new ArrayList<String>();
+		
+		System.out.println("------------------------------------------------------------------\n");
+		
+		int playerTurn = 0;
+		
+		//-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
+		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
+		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName()+" played: "+lesson.getFirstCardPlayed());
+		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " completed their turn."+"\n");
+		copyBestCase.remove(0);
+		lesson.isValid(lesson.getFirstCardPlayed(),lesson.getPlayers().get(playerTurn));
+		cardsPlayed.add(lesson.getFirstCardPlayed());
+		playerTurn++;
+		//-----FIRST PLAY OF THE GAME END----------------------------------------------------------------------//		
+	
 
-		//created a lesson object to read lesson
-		Lesson lesson_class = new Lesson();
-		lesson_class.loadlesson(level);
-		Person[] players = lesson_class.getplayers();
-		ArrayList<Card> cardArray = lesson_class.getCardArray();
+		//---------------------------------------------------------THE ACTUAL GAME-----------------------------------------------------///
 
-		//stores all the tricks obtained from reading the lesson
-		ArrayList<Trick> trickArray = lesson_class.getTrickArray();
-
-
-		//counts a tick played by a person in a particular game(better name will be found later for it)
-		int temp_trick=0;
-		//int[] player_to_start = {0,1,2,3};
-		int player_number=0;
-		//holds played cards
-		ArrayList<String> playedCards = new ArrayList<>();
-		//for loop to state number of tricks
-		for(int j=0; j<trickArray.size();j++){
-			while(temp_trick<=4){
-				if(playedCards.size()==4){
-					players = countpoints(playedCards,players);
-					System.out.println(players[0].getPersonName()+" player won the previous trick");
-					
-					players[0].incrementPoints(players[0].getrecordplayedCard());
-					playedCards.clear();
-					
-					System.out.println(players[0].getPoints());
-					player_number=0;
-					temp_trick=0;
-					break;
-				}
-				
-				Person player = players[player_number];
-				String displayHand = displayhand(player); //displays hand to the console
-				
-				System.out.println("It is "+ player.getPersonName()+ " turn");
-				String cardplayed="";
-				//gets first card played by west when the game starts
-				if((j==0)&&(temp_trick==0)){
-					cardplayed = trickArray.get(j).getWest();
-					System.out.println("west played first  automatically");
-					
+		//Variables to be tracked
+		int tricks = 0;			//tricks in the game (max is 13)	
+		boolean trickWinner = false;
+		boolean claim = false;		//If a person plays claim
+		
+		while(tricks < 13){ //max tricks is 13 unless claim played beforehand
+				if(tricks==0){
+					copyBestCase = lesson.getBestCase1(tricks);
+					copyBestCase.remove(0);
 				}
 				else{
-					boolean checkuserdeck = true;
-					while(checkuserdeck){
-						System.out.println("cards played:"+getplayedCards(playedCards));
-						System.out.println(player.getPersonName() +" player Please Enter the correct suit card from your hand to play: ");
-						System.out.println(displayHand);
-						cardplayed = userinput.nextLine();  //gets input from user
-						checkuserdeck=player.checkhand(cardplayed.trim());
-						if ((!checkuserdeck)&&(playedCards.size()>0)){
-							checkuserdeck = player.checksuit(cardplayed.trim(),playedCards);
+					copyBestCase = lesson.getBestCase1(tricks);
+				}
+				while(playerTurn<4){
+					System.out.print("Cards played: ");
+					for(String card:cardsPlayed){
+						System.out.print(card+" ");				
+					}
+					System.out.print("\n\n");
+					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
+					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " Please play a card by typing the number and then the suite e.g 6D \n");
+					lesson.getPlayers().get(playerTurn).printNiceHand();
+					System.out.println("\n");
+					System.out.println("------------------------------------------------------------------");
+					
+					String card = userinput.nextLine();
+					//If not the first turn
+					if(playerTurn>0){
+
+						while(!lesson.isValid(card,lesson.getPlayers().get(playerTurn))){
+							System.out.println("That card is not a valid play please play another card");
+							card = userinput.nextLine();
 						}
+					//else its the first turn we need to set the suite	
+					}else{
+						lesson.setFirstCardPlayed(card);
+						while(!lesson.isValid(card,lesson.getPlayers().get(playerTurn))){
+
+							System.out.println("That card is not a valid play please play another card");
+							card = userinput.nextLine();
+						}
+				
+						
 					}
-				}
-				//checks if the potential right card in the lesson is played by the user
-				Trick trick = new Trick();
-				boolean checkcardtrick = trick.checktrick(cardplayed.trim(),temp_trick,trickArray.get(j));
-				if (!checkcardtrick){
-					//what player could play 
-					String potential = trick.potentialplay(cardplayed.trim(),temp_trick,trickArray.get(j));
-					System.out.println(potential+" was the better option");
-				}
-				playedCards.add(cardplayed.trim());
-				player.recordplayedCard(cardplayed.trim());
-				player.removePlayedCard(cardplayed.trim());
-				
-				temp_trick++;
-				
-				player_number++;
-				
-
-
-			}	
-		}	
-	
-	}
-
-	static String displayhand(Person player){
-		ArrayList<Card> hand_of_player = new ArrayList<Card>(player.getPersonHand());
-		StringBuilder sb = new StringBuilder();
-		for (int i=0;i<hand_of_player.size();i++){
 					
-			if (hand_of_player.get(i).getSuite()=='S'){
-				sb.append('\u2660');
-						//System.out.println("\u2660");
-			}
-			if (hand_of_player.get(i).getSuite()=='C'){
-				sb.append('\u2663');
-						//System.out.println("\u2663");
-			}
-			if (hand_of_player.get(i).getSuite()=='H'){
-				sb.append('\u2665');
-						//System.out.println("\u2665");
-			}
-			if (hand_of_player.get(i).getSuite()=='D'){
-				sb.append('\u2666');
-						//System.out.println("\u2666");
-				}
-			int value = hand_of_player.get(i).getPointValue();
-			if(value>0){
-				if (value==4){
-					sb.append('A');
+					if(!card.equals(copyBestCase.get(0))){
+						String bestPlay = lesson.getPlayers().get(playerTurn).bestCaseInHand(copyBestCase);
+						System.out.println("The card that should have been played was: "+bestPlay);
 						
-				}
-				if (value==3){
-					sb.append('K');
-						
-				}
-				if (value==2){
-					sb.append('Q');
-						
-				}
-				if (value==1){
-					sb.append('J');
-						
-				}
-			}
-					
-			else{
-				sb.append(hand_of_player.get(i).getValue());
-			}
-			sb.append(" ");
-					
-		}
-		return sb.toString();
-
-	}
-
-
-	static String getplayedCards(ArrayList<String> played){
-		String temp = "";
-		for(int i=0;i<played.size();i++){
-			temp+=" ";
-			temp+=played.get(i);
-			//temp+=" ";
-		}
-		return temp;
-	}
-
-	public static Person[] countpoints(ArrayList<String> playedcards,Person[] players){
-		int[] temparray = new int[4];
-		Person[] new_person_array = new Person[4];
-		ArrayList<Integer> temporder = new ArrayList<>();
-		for (int i=0;i<playedcards.size();i++){
-			if(playedcards.get(i).substring(1,2).trim().charAt(0)==Trick.getBid().charAt(1)){
-				temporder.add(15);
-			}
-			else if(playedcards.get(i).substring(0,1).trim().equals("K")){
-				temporder.add(13);
-			}
-			else if(playedcards.get(i).substring(0,1).trim().equals("Q")){
-				temporder.add(12);
-			}
-			else if(playedcards.get(i).substring(0,1).trim().equals("J")){
-				temporder.add(11);
-			}
-			else if(playedcards.get(i).substring(0,1).trim().equals("T")){
-				temporder.add(10);
-			}
-			else if(playedcards.get(i).substring(0,1).trim().equals("A")){
-				temporder.add(14);
-			}
-			else{
-				temporder.add(Integer.parseInt(playedcards.get(i).substring(0,1)));
-			}
-		}
-		int played=0;
-		int rem=0;
-		int max=0;
-		int index=0;
-		while(played<4){
-				max = temporder.get(0);
-				index = 0;
-				for (int i=0;i<temporder.size();i++){
-					if(max<temporder.get(i)){
-						max=temporder.get(i);
-						index=i;
 					}
+					//Add the points of the play to the player i.e playing an ACE adds 14 points to player
+					lesson.getPlayers().get(playerTurn).addPoints(lesson.getPlayPoints(card));
+					cardsPlayed.add(card);
+
+					//Only let the person claim if it is in fact a stage in the game where claiming will actually win them the game
+					if(card.equals("CLAIM") && copyBestCase.equals("CLAIM")){
+						claim=true;
+						break;
+					}
+					copyBestCase.remove(0);
+					playerTurn++;
 				}
-			index+=played;
-			if(index<4){
-				temparray[played]=index;
-				new_person_array[played]=players[index];
-				
-			}
-			else{
-				rem=index-4;
-				temparray[played]=rem;
-				new_person_array[played]=players[rem];
 
+			//If they claimed
+			if(claim){
+				lesson.getPlayers().get(playerTurn).setTrickWins(13 - tricks + lesson.getPlayers().get(playerTurn).getTrickWins());
 			}
-			played++;
+			lesson.decideWinner();
+			lesson.reorderPlayers();
+			cardsPlayed.clear();
+			playerTurn=0;
+			tricks++;
+			
 		}
-		return new_person_array;
 
-
+		lesson.decideGameWinner();
+						
 	}
 }

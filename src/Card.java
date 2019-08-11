@@ -44,4 +44,19 @@ public class Card{
 	public String toString(){
 		return value + "" +suite;
 	}
+
+	//To string method to print cards with suite chracters
+	public String toString(boolean check){
+		
+		if(suite == 'S'){
+			return '\u2660'+" "+value;
+		}else if(suite == 'D'){
+			return '\u2666'+" "+value;
+		}else if(suite == 'C'){
+			return '\u2663'+" "+value;
+		}else {
+			return '\u2665'+ " "+value;
+		}		
+
+	}
 }
