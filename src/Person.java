@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Person{
 
@@ -6,12 +7,17 @@ public class Person{
 	private int points;
 	private String name;
 	private String playedcard;
+	private boolean isWinner = false;
+	private int trickWins;
+	private int handStrength;
 
 	Person(){
 		
 		this.hand = new ArrayList<Card>();
 		this.points = 0;
 		this.name = "";
+		this.trickWins = 0;
+		this.handStrength = 0;
 	}
 
 	Person(String name){
@@ -19,6 +25,8 @@ public class Person{
 		this.hand = new ArrayList<Card>();
 		this.name=name;
 		this.points = 0;
+		this.trickWins = 0;
+		this.handStrength = 0;
 
 	}	
 
@@ -33,22 +41,69 @@ public class Person{
 		this.name=name;
 	
 	}
+	//increases trick win by one
+	public void incrementTrickWins(){
+		this.trickWins++;
+	}
 
+	public int getTrickWins(){
+
+		return this.trickWins;	
+
+	}
+	
+	//set trick wins if need be (used in case of claim)
+	//When claim is done
+	//The person wins the remainder of the tricks playable
+	//i.e 13 - indexClaimedOn + pointsPlayerCurrentlyHas
+	public void setTrickWins(int num){
+		
+		this.trickWins=num;	
+
+	}
+	//Prints hand with suite characters
+	public void printNiceHand(){
+		for(Card card:hand){
+
+			System.out.print(card.toString(true)+" ");		
+	
+		}
+
+	}
+	//Sets the hand
 	public void setHand(ArrayList<Card> hand){
 
 		this.hand = new ArrayList<Card>(hand);
 
 	}
 
-	public String getPersonName(){
+	public String getPlayerName(){
 
 		return name;	
 
 	}
 
-	public ArrayList<Card> getPersonHand(){
+	public ArrayList<Card> getPlayerHand(){
 
 		return hand;
+
+	}
+	
+	public void setWinner(){
+
+		this.isWinner = true;
+
+	}
+
+	public boolean getWinner(){
+		
+		return this.isWinner;	
+
+	}
+
+	public void resetWinner(){
+		
+		this.isWinner = false;		
 
 	}
 
@@ -57,22 +112,22 @@ public class Person{
 		return points;	
 
 	}
-
+	//Method to be used later for hand strength functionality
 	public void incrementPoints(String card){
 		if(card.charAt(0)=='A'){
-			points+=4;
+			handStrength+=4;
 		}
 		else if(card.charAt(0)=='K'){
-			points+=3;
+			handStrength+=3;
 		}
 		else if(card.charAt(0)=='Q'){
-			points+=2;
+			handStrength+=2;
 		} 
 		else if(card.charAt(0)=='J'){
-			points+=1;
+			handStrength+=1;
 		}
 		else{
-			points+=0;
+			handStrength+=0;
 		}		
 
 	}
@@ -82,6 +137,16 @@ public class Person{
 
 	}
 
+	public void setPoints(int number){
+		
+		this.points = number;
+
+	}
+	
+	public void addPoints(int points){
+		this.points+=points;
+	}
+
 	public void recordplayedCard(String card){
 		this.playedcard = card;
 	}
@@ -89,6 +154,33 @@ public class Person{
 	public String getrecordplayedCard(){
 		return playedcard;
 	}
+	
+	//See if card is in the players hand
+	public boolean inHand(String card){
+		for(int i=0;i<hand.size();i++){
+			if(hand.get(i).toString().equals(card)){
+				hand.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+	public String bestCaseInHand(ArrayList<String> bestcard){
+		HashSet<String> hset = new HashSet<>();
+		for(int i=0;i< hand.size();i++){
+			hset.add(hand.get(i).toString());
+		}
+		//bestcardarray
+		for(int i=0;i<bestcard.size();i++){
+			if(hset.contains(bestcard.get(i))){
+				return bestcard.get(i);
+			}
+			
+		}
+		return "There is no best case";
+	}
+
+	
 
 	public void removePlayedCard(String card ){
 		//ArrayList<Card> hand = getPersonHand();
@@ -107,32 +199,6 @@ public class Person{
 		return check;
 	}
 
-	public boolean checksuit(String card,ArrayList<String> playedCards){
-		boolean check = true;
-		//Trick newbid = new Trick();
-		int no_suit_in_card = 0;
-		//System.out.println(Trick.getBid());
-		String firstcard = playedCards.get(0);
-		if(firstcard.charAt(1)==card.charAt(1)){	
-					check = false;
-		}
-		else if (card.charAt(1)==Trick.getBid().charAt(1)){
-			check = false;
-		}
-		else{
-			for(int i=0; i<hand.size();i++){
-				if(!(hand.get(i).toString().charAt(1)==firstcard.charAt(1))){
-					no_suit_in_card++;
-				}
-			}
-			if (hand.size()==no_suit_in_card){
-				check = false;
-			}
-
-		}
-		return check;
-	}
-
-
+	
 
 }
