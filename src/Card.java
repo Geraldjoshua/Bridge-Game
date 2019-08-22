@@ -13,7 +13,7 @@ public class Card{
 	Card(char suite, char value) throws IOException { 
 		this.suite = suite;
 		this.value = value;
-		this.cardImage = ImageIO.read(new File("cardImages/"+value+""+suite+".png"));
+		this.cardImage = ImageIO.read(new File("cardImages/AS.png"));
 		setPointValue(value);
 	}
 
@@ -46,6 +46,10 @@ public class Card{
 
 	public int getPointValue(){
 		return pointValue;	
+	}
+
+	public BufferedImage getCardImage(){
+		return cardImage;
 	}
 
 	public String toString(){
