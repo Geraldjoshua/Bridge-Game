@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Arrays;
+import javax.swing.JFrame;
 
 public class Game{
 	public static void main(String args[]) throws IOException, InterruptedException{
@@ -20,7 +21,13 @@ public class Game{
 		System.out.println("------------------------------------------------------------------\n");
 		
 		int playerTurn = 0;
-		
+
+		//Setting up gui for game
+
+		JFrame window = new JFrame();
+		window.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		window.setUndecorated(true);
+		window.setVisible(true);
 		//-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName()+" played: "+lesson.getFirstCardPlayed());
