@@ -1,12 +1,19 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 public class Card{
 
 	private char suite;
 	private char value;
 	private int pointValue;
+	private BufferedImage cardImage;
 
-	Card(char suite, char value){
+	Card(char suite, char value) throws IOException { 
 		this.suite = suite;
 		this.value = value;
+		this.cardImage = ImageIO.read(new File("cardImages/AS.png"));
 		setPointValue(value);
 	}
 
@@ -39,6 +46,10 @@ public class Card{
 
 	public int getPointValue(){
 		return pointValue;	
+	}
+
+	public BufferedImage getCardImage(){
+		return cardImage;
 	}
 
 	public String toString(){

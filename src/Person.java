@@ -46,6 +46,23 @@ public class Person{
 		this.trickWins++;
 	}
 
+	public Card getCard(int index){
+		
+		return hand.get(index);
+
+	}
+
+	public Card getCard(String card){
+
+		for(int i=0;i<hand.size();i++){
+			if(hand.get(i).toString().equals(card)){
+				
+				return hand.get(i);
+			}
+		}	
+		return null;
+	}
+
 	public int getTrickWins(){
 
 		return this.trickWins;	
