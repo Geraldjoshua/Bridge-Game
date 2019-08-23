@@ -82,7 +82,7 @@ public class Game{
 					}
 					System.out.print("\n\n");
 					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
-					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " Please play a card by typing the number and then the suite e.g 6D \n");
+					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " Please play a card by typing the number and then the suit e.g 6D \n");
 					lesson.getPlayers().get(playerTurn).printNiceHand();
 					System.out.println("\n");
 					System.out.println("------------------------------------------------------------------");
@@ -95,7 +95,7 @@ public class Game{
 							System.out.println("That card is not a valid play please play another card");
 							card = userinput.nextLine();
 						}
-					//else its the first turn we need to set the suite	
+					//else its the first turn we need to set the suit	
 					}else{
 						lesson.setFirstCardPlayed(card);
 						while(!lesson.isValid(card,lesson.getPlayers().get(playerTurn))){
