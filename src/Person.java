@@ -78,7 +78,7 @@ public class Person{
 		this.trickWins=num;	
 
 	}
-	//Prints hand with suite characters
+	//Prints hand with suit characters
 	public void printNiceHand(){
 		for(Card card:hand){
 
@@ -182,6 +182,25 @@ public class Person{
 		}
 		return false;
 	}
+
+	public void removeCard(String card){
+		for(int i=0;i<hand.size();i++){
+			if(hand.get(i).toString().equals(card)){
+				hand.remove(i);
+			}
+		}
+	}
+	public boolean noSuit(char suit){
+		
+		for(int i=0;i<hand.size();i++){
+			
+			if(hand.get(i).getSuit()==suit){
+				return false;	
+			}
+		}
+		return true;	
+	}
+
 	public String bestCaseInHand(ArrayList<String> bestcard){
 		HashSet<String> hset = new HashSet<>();
 		for(int i=0;i< hand.size();i++){

@@ -14,7 +14,8 @@ public class Lesson{
 	private ArrayList<Card> cardArray = new ArrayList<Card>(13);
 	private ArrayList<String[]> bestCase = new ArrayList<String[]>();
 	private String firstCardPlayed;
-	private char biddingSuite;
+	private char leadingSuit;
+	private char biddingSuit;
 
 	Lesson(String filename) throws IOException{	
 		players.add(new Person("West"));
@@ -39,10 +40,10 @@ public class Lesson{
 		while (number_of_hands<=3){
 			String hand = lesson.nextLine();
 			String[] hand_split = hand.split(",");
-			for (String specific_suit_cards  : hand_split){
-				int length = specific_suit_cards.length();
+			for (String specific_Suit_cards  : hand_split){
+				int length = specific_Suit_cards.length();
 				for(int i=1; i<length;i++){
-					Card card = new Card(specific_suit_cards.charAt(0),specific_suit_cards.charAt(i));
+					Card card = new Card(specific_Suit_cards.charAt(0),specific_Suit_cards.charAt(i));
 					cardArray.add(card);
 				}
 			}
@@ -52,7 +53,7 @@ public class Lesson{
 			cardArray.clear();
 		}
 
-		firstCardPlayed = lesson.nextLine();
+		setFirstCardPlayed(lesson.nextLine());
 
 		//Loop to get best possible plays into an array
 		int maxNumOfTricksLeft=13;
@@ -105,8 +106,14 @@ public class Lesson{
 		return BestCase;	
 
 	}
+	public void setLeadingSuit(char Suit){
+		this.leadingSuit = Suit;
+	}
+	public char getLeadingSuit(){
+		return leadingSuit;
+	}
 	
-	//first card of trick decides suite so we need this
+	//first card of trick decides Suit so we need this
 	public String getFirstCardPlayed(){
 		
 		return this.firstCardPlayed;		
@@ -115,8 +122,10 @@ public class Lesson{
 
 	//See if play is valid
 	public boolean isValid(String card , Person player){
-		//play can be suite from first play or trump suite
-		if(player.inHand(card) && (card.charAt(1) == getSuite() || card.charAt(1) == getBiddingSuite())){
+		//play can be Suit from first play or trump Suit
+		if(player.inHand(card) && (card.charAt(1) == getSuit())){
+			return true;
+		}else if(player.noSuit(getLeadingSuit())){
 			return true;
 		}else{
 			return false;
@@ -127,7 +136,7 @@ public class Lesson{
 	//Get points for card played
 	public int getPlayPoints(String card){
 		int points=0;
-		if(card.charAt(1)==getBiddingSuite()){
+		if(card.charAt(1)==getBiddingSuit()){
 			points+=15;
 		}
 		if(card.charAt(0)=='A'){
@@ -148,29 +157,24 @@ public class Lesson{
 
 	}
 	
-	//Sets bidding suite
+	//Sets bidding Suit
 	public void setBidding(String[] bidding){
-		//Bid always ends in 3PA so the suite just before that dictates the bid
+		//Bid always ends in 3PA so the Suit just before that dictates the bid
 		//Reverse the array since we can't predict the bid from the length of the array but from the 3PA at the end. 
 		//So the smarter way(i think) is to reverse it first it. 
 		ArrayList<String> biddingstring = new ArrayList<>(Arrays.asList(bidding));
 		Collections.reverse(biddingstring);
 		String card = biddingstring.get(3);
-		if(card.charAt(1)=='N'){
-			biddingSuite = card.charAt(1);
-		}
-		else{
-			biddingSuite = card.charAt(1);
-		}
+		biddingSuit = card.charAt(1);
 		// if(bidding.length>4){
 		// 	String card = bidding[bidding.length - 4];
-		// 	biddingSuite = card.charAt(1);
+		// 	biddingSuit = card.charAt(1);
 			
 		// }else{
 		// 	//Need to do special string parse for no bidding case in format:
 		// 	//S:NA NA NA NA;
 		// 	//Just set to no bid for now
-		// 	biddingSuite ='N';
+		// 	biddingSuit ='N';
 		// }		
 	
 	}
@@ -180,19 +184,19 @@ public class Lesson{
 	}
 
 	
-	public char getBiddingSuite(){
+	public char getBiddingSuit(){
 
-		return this.biddingSuite;		
+		return this.biddingSuit;		
 
 	}
 
 	public void setFirstCardPlayed(String card){
-		
+		setLeadingSuit(card.charAt(1));
 		this.firstCardPlayed = card;
 
 	}
 
-	public char getSuite(){
+	public char getSuit(){
 		
 		return this.firstCardPlayed.charAt(1);		
 	
