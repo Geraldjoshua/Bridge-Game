@@ -159,33 +159,12 @@ public class Person{
 	public boolean inHand(String card){
 		for(int i=0;i<hand.size();i++){
 			if(hand.get(i).toString().equals(card)){
-				
+				hand.remove(i);
 				return true;
 			}
 		}
 		return false;
 	}
-
-	public void removeCard(String card){
-		for(int i=0;i<hand.size();i++){
-			if(hand.get(i).toString().equals(card)){
-				hand.remove(i);
-			}
-		}
-	}
-
-	public boolean noSuit(char suit){
-		
-		for(int i=0;i<hand.size();i++){
-			System.out.println(hand.get(i).getSuit()+" "+suit);
-			if(hand.get(i).getSuit()==suit){
-				return false;	
-			}
-		}
-		return true;	
-
-	}
-
 	public String bestCaseInHand(ArrayList<String> bestcard){
 		HashSet<String> hset = new HashSet<>();
 		for(int i=0;i< hand.size();i++){

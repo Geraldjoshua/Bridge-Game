@@ -24,7 +24,6 @@ public class Game{
 		//-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName()+" played: "+lesson.getFirstCardPlayed());
-		
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " completed their turn."+"\n");
 		copyBestCase.remove(0);
 		lesson.isValid(lesson.getFirstCardPlayed(),lesson.getPlayers().get(playerTurn));
@@ -55,7 +54,7 @@ public class Game{
 					}
 					System.out.print("\n\n");
 					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
-					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " Please play a card by typing the number and then the suit e.g 6D \n");
+					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " Please play a card by typing the number and then the suite e.g 6D \n");
 					lesson.getPlayers().get(playerTurn).printNiceHand();
 					System.out.println("\n");
 					System.out.println("------------------------------------------------------------------");
@@ -79,8 +78,6 @@ public class Game{
 				
 						
 					}
-
-					lesson.getPlayers().get(playerTurn).removeCard(card);
 					
 					if(!card.equals(copyBestCase.get(0))){
 						String bestPlay = lesson.getPlayers().get(playerTurn).bestCaseInHand(copyBestCase);
