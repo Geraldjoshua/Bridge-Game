@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Arrays;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class Game{
 	public static void main(String args[]) throws IOException, InterruptedException{
@@ -29,23 +26,40 @@ public class Game{
 
 		//Setting up gui for game
 
-		JFrame window = new JFrame();
-		window.setSize(400,600); 
+		JFrame window = new JFrame("Bridge Tutor");
+		window.setExtendedState(JFrame.MAXIMIZED_BOTH);  
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		
+		/*A way to get the screens size will be used later
+		/*For UI components
+		*/
+		Toolkit tk = Toolkit.getDefaultToolkit();  
+		int xSize = ((int) tk.getScreenSize().getWidth());  
+		int ySize = ((int) tk.getScreenSize().getHeight()); 
 
 		//setting up panel - it is like the "glass" in the window
 
-		JPanel contentPane = new JPanel(new BorderLayout());//borderlayout for resizing purposes
-
-		//setting up JLabel
-
-		JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(playerTurn).getCard(0).getCardImage()));
-		cardLabel.setSize(300,437);
-
-		contentPane.add(cardLabel);
-		window.add(contentPane);
+		JPanel contentPane = new JPanel();
+		
+		//Array of Jlabels to act as gui hand
+		/*This is just code testing to
+			see how guis work
+			*/
+		ArrayList<JLabel> cardLabels = new ArrayList<JLabel>();
+		for(int i=0;i<13;i++){
+			JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(playerTurn).getCard(i).getCardImage()));
+			cardLabel.setSize(120,80);
+			cardLabels.add(cardLabel);
+		}
+		
+		for(JLabel j:cardLabels){
+    			contentPane.add(j);
+			
+		}
+		
+		
+		window.getContentPane().add(BorderLayout.SOUTH,contentPane);
+		window.getContentPane().setBackground(Color.green);
 
 		window.setVisible(true);
 
