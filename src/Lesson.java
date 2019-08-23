@@ -14,7 +14,8 @@ public class Lesson{
 	private ArrayList<Card> cardArray = new ArrayList<Card>(13);
 	private ArrayList<String[]> bestCase = new ArrayList<String[]>();
 	private String firstCardPlayed;
-	private char biddingSuite;
+	private char leadingSuit;
+	private char biddingSuit;
 
 	Lesson(String filename) throws IOException{	
 		players.add(new Person("West"));
@@ -52,7 +53,7 @@ public class Lesson{
 			cardArray.clear();
 		}
 
-		firstCardPlayed = lesson.nextLine();
+		setFirstCardPlayed(lesson.nextLine());
 
 		//Loop to get best possible plays into an array
 		int maxNumOfTricksLeft=13;
@@ -106,6 +107,13 @@ public class Lesson{
 
 	}
 	
+	public void setLeadingSuit(char suit){
+		this.leadingSuit = suit;
+	}
+
+	public char getLeadingSuit(){
+		return leadingSuit;
+	}
 	//first card of trick decides suite so we need this
 	public String getFirstCardPlayed(){
 		
@@ -115,8 +123,10 @@ public class Lesson{
 
 	//See if play is valid
 	public boolean isValid(String card , Person player){
-		//play can be suite from first play or trump suite
-		if(player.inHand(card) && (card.charAt(1) == getSuite() || card.charAt(1) == getBiddingSuite())){
+		//play can be suit from first play or trump suite
+		if(player.inHand(card) && (card.charAt(1) == getSuit())){
+			return true;
+		}else if(player.noSuit(getLeadingSuit())){
 			return true;
 		}else{
 			return false;
@@ -127,7 +137,7 @@ public class Lesson{
 	//Get points for card played
 	public int getPlayPoints(String card){
 		int points=0;
-		if(card.charAt(1)==getBiddingSuite()){
+		if(card.charAt(1)==getBiddingSuit()){
 			points+=15;
 		}
 		if(card.charAt(0)=='A'){
@@ -156,12 +166,11 @@ public class Lesson{
 		ArrayList<String> biddingstring = new ArrayList<>(Arrays.asList(bidding));
 		Collections.reverse(biddingstring);
 		String card = biddingstring.get(3);
-		if(card.charAt(1)=='N'){
-			biddingSuite = card.charAt(1);
-		}
-		else{
-			biddingSuite = card.charAt(1);
-		}
+		
+		biddingSuit = card.charAt(1);
+		
+	
+		
 		// if(bidding.length>4){
 		// 	String card = bidding[bidding.length - 4];
 		// 	biddingSuite = card.charAt(1);
@@ -180,19 +189,19 @@ public class Lesson{
 	}
 
 	
-	public char getBiddingSuite(){
+	public char getBiddingSuit(){
 
-		return this.biddingSuite;		
+		return this.biddingSuit;		
 
 	}
 
 	public void setFirstCardPlayed(String card){
-		
+		setLeadingSuit(card.charAt(1));
 		this.firstCardPlayed = card;
 
 	}
 
-	public char getSuite(){
+	public char getSuit(){
 		
 		return this.firstCardPlayed.charAt(1);		
 	
