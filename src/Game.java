@@ -1,63 +1,118 @@
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.ArrayList;
-
+import java.util.Scanner;
+import java.util.Arrays;
 
 public class Game{
-	
-	
-	public static void main(String[] args){
-		ArrayList<Card> cardArray = new ArrayList<>();
+	public static void main(String args[]) throws IOException, InterruptedException{
+
 		Scanner userinput = new Scanner(System.in);
 		System.out.println("Enter level: ");
 		String level = userinput.nextLine();
-		String lesson_file = "input"+level+".txt";
-		try{
-			Scanner lesson = new Scanner(new File(lesson_file));
-			System.out.println("The bidding is: ");
-			String bidding = lesson.nextLine();
-			System.out.println(bidding);
-			int number_of_hands=4;
-			
-			while (number_of_hands>0){
-				String hand = lesson.nextLine();
-				String[] hand_split = hand.split(",");
-				for (String specific_suit_cards  : hand_split){
-					int length = specific_suit_cards.length();
-					for(int i=1; i<length;i++){
-						Card card = new Card(specific_suit_cards.charAt(0),specific_suit_cards.charAt(i));
-						cardArray.add(card);
-						//System.out.println(card.toString());
-					}
-				}
-				switch(number_of_hands) {
-					case 4:
-						Person west = new Person(cardArray,"west");
-						break;
-					case 3:
-						Person north = new Person(cardArray,"north");
-						break;
-					case 2:
-						Person east = new Person(cardArray,"east");
-						break;
-					case 1:
-						Person south = new Person(cardArray,"south");
-						break;
-						}
-				number_of_hands--;
-				cardArray.clear();
-				
-			}
-		} catch (IOException e) 
-		{
-			e.printStackTrace();
-		}		
+		String lesson_file = "input/input"+level+".txt";
+		Lesson lesson = new Lesson(lesson_file);
 		
+		ArrayList<String> copyBestCase = lesson.getBestCase();
+		ArrayList<String> cardsPlayed = new ArrayList<String>();
 		
+		System.out.println("------------------------------------------------------------------\n");
+		
+		int playerTurn = 0;
+		
+		//-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
+		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
+		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName()+" played: "+lesson.getFirstCardPlayed());
+		
+		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " completed their turn."+"\n");
+		copyBestCase.remove(0);
+		lesson.isValid(lesson.getFirstCardPlayed(),lesson.getPlayers().get(playerTurn));
+		cardsPlayed.add(lesson.getFirstCardPlayed());
+		playerTurn++;
+		//-----FIRST PLAY OF THE GAME END----------------------------------------------------------------------//		
 	
+
+		//---------------------------------------------------------THE ACTUAL GAME-----------------------------------------------------///
+
+		//Variables to be tracked
+		int tricks = 0;			//tricks in the game (max is 13)	
+		boolean trickWinner = false;
+		boolean claim = false;		//If a person plays claim
+		
+		while(tricks < 13){ //max tricks is 13 unless claim played beforehand
+				if(tricks==0){
+					copyBestCase = lesson.getBestCase1(tricks);
+					copyBestCase.remove(0);
+				}
+				else{
+					copyBestCase = lesson.getBestCase1(tricks);
+				}
+				while(playerTurn<4){
+					System.out.print("Cards played: ");
+					for(String card:cardsPlayed){
+						System.out.print(card+" ");				
+					}
+					System.out.print("\n\n");
+					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
+					System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " Please play a card by typing the number and then the suit e.g 6D \n");
+					lesson.getPlayers().get(playerTurn).printNiceHand();
+					System.out.println("\n");
+					System.out.println("------------------------------------------------------------------");
+					
+					String card = userinput.nextLine();
+					//If not the first turn
+					if(playerTurn>0){
+
+						while(!lesson.isValid(card,lesson.getPlayers().get(playerTurn))){
+							System.out.println("That card is not a valid play please play another card");
+							card = userinput.nextLine();
+						}
+					//else its the first turn we need to set the suite	
+					}else{
+						lesson.setFirstCardPlayed(card);
+						while(!lesson.isValid(card,lesson.getPlayers().get(playerTurn))){
+
+							System.out.println("That card is not a valid play please play another card");
+							card = userinput.nextLine();
+						}
+				
+						
+					}
+
+					lesson.getPlayers().get(playerTurn).removeCard(card);
+					
+					if(!card.equals(copyBestCase.get(0))){
+						String bestPlay = lesson.getPlayers().get(playerTurn).bestCaseInHand(copyBestCase);
+						System.out.println("The card that should have been played was: "+bestPlay);
+						
+					}
+					//Add the points of the play to the player i.e playing an ACE adds 14 points to player
+					lesson.getPlayers().get(playerTurn).addPoints(lesson.getPlayPoints(card));
+					cardsPlayed.add(card);
+
+					//Only let the person claim if it is in fact a stage in the game where claiming will actually win them the game
+					if(card.equals("CLAIM") && copyBestCase.equals("CLAIM")){
+						claim=true;
+						break;
+					}
+					copyBestCase.remove(0);
+					playerTurn++;
+				}
+
+			//If they claimed
+			if(claim){
+				lesson.getPlayers().get(playerTurn).setTrickWins(13 - tricks + lesson.getPlayers().get(playerTurn).getTrickWins());
+			}
+			lesson.decideWinner();
+			lesson.reorderPlayers();
+			cardsPlayed.clear();
+			playerTurn=0;
+			tricks++;
+			
+		}
+
+		lesson.decideGameWinner();
+						
 	}
-
-
 }
