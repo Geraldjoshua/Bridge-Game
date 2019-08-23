@@ -1,12 +1,19 @@
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+
 public class Card{
 
 	private char suit;
 	private char value;
 	private int pointValue;
+	private BufferedImage cardImage;
 
-	Card(char suit, char value){
+	Card(char suit, char value) throws IOException { 
 		this.suit = suit;
 		this.value = value;
+		this.cardImage = ImageIO.read(new File("cardImages/AS.png"));
 		setPointValue(value);
 	}
 
@@ -41,11 +48,15 @@ public class Card{
 		return pointValue;	
 	}
 
+	public BufferedImage getCardImage(){
+		return cardImage;
+	}
+
 	public String toString(){
 		return value + "" +suit;
 	}
 
-	//To string method to print cards with suite chracters
+	//To string method to print cards with suit chracters
 	public String toString(boolean check){
 		
 		if(suit == 'S'){

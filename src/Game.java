@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Arrays;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import javax.swing.JLabel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 public class Game{
 	public static void main(String args[]) throws IOException, InterruptedException{
@@ -20,11 +26,32 @@ public class Game{
 		System.out.println("------------------------------------------------------------------\n");
 		
 		int playerTurn = 0;
+
+		//Setting up gui for game
+
+		JFrame window = new JFrame();
+		window.setSize(400,600); 
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		
+
+		//setting up panel - it is like the "glass" in the window
+
+		JPanel contentPane = new JPanel(new BorderLayout());//borderlayout for resizing purposes
+
+		//setting up JLabel
+
+		JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(playerTurn).getCard(0).getCardImage()));
+		cardLabel.setSize(300,437);
+
+		contentPane.add(cardLabel);
+		window.add(contentPane);
+
+		window.setVisible(true);
+
 		//-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName()+" played: "+lesson.getFirstCardPlayed());
-		
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " completed their turn."+"\n");
 		copyBestCase.remove(0);
 		lesson.isValid(lesson.getFirstCardPlayed(),lesson.getPlayers().get(playerTurn));
@@ -68,7 +95,7 @@ public class Game{
 							System.out.println("That card is not a valid play please play another card");
 							card = userinput.nextLine();
 						}
-					//else its the first turn we need to set the suite	
+					//else its the first turn we need to set the suit	
 					}else{
 						lesson.setFirstCardPlayed(card);
 						while(!lesson.isValid(card,lesson.getPlayers().get(playerTurn))){
@@ -79,8 +106,6 @@ public class Game{
 				
 						
 					}
-
-					lesson.getPlayers().get(playerTurn).removeCard(card);
 					
 					if(!card.equals(copyBestCase.get(0))){
 						String bestPlay = lesson.getPlayers().get(playerTurn).bestCaseInHand(copyBestCase);

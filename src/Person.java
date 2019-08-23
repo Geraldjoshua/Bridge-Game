@@ -46,6 +46,23 @@ public class Person{
 		this.trickWins++;
 	}
 
+	public Card getCard(int index){
+		
+		return hand.get(index);
+
+	}
+
+	public Card getCard(String card){
+
+		for(int i=0;i<hand.size();i++){
+			if(hand.get(i).toString().equals(card)){
+				
+				return hand.get(i);
+			}
+		}	
+		return null;
+	}
+
 	public int getTrickWins(){
 
 		return this.trickWins;	
@@ -61,7 +78,7 @@ public class Person{
 		this.trickWins=num;	
 
 	}
-	//Prints hand with suite characters
+	//Prints hand with suit characters
 	public void printNiceHand(){
 		for(Card card:hand){
 
@@ -159,7 +176,7 @@ public class Person{
 	public boolean inHand(String card){
 		for(int i=0;i<hand.size();i++){
 			if(hand.get(i).toString().equals(card)){
-				
+				hand.remove(i);
 				return true;
 			}
 		}
@@ -173,17 +190,15 @@ public class Person{
 			}
 		}
 	}
-
 	public boolean noSuit(char suit){
 		
 		for(int i=0;i<hand.size();i++){
-			//System.out.println(hand.get(i).getSuit()+" "+suit);
+			
 			if(hand.get(i).getSuit()==suit){
 				return false;	
 			}
 		}
 		return true;	
-
 	}
 
 	public String bestCaseInHand(ArrayList<String> bestcard){
