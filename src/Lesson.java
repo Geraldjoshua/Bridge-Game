@@ -24,8 +24,20 @@ public class Lesson{
 		players.add(new Person("South"));	
 		loadInput(filename);	
 	}
+	Lesson(){
+		players.add(new Person("West"));
+		players.add(new Person("North"));
+		players.add(new Person("East"));
+		players.add(new Person("South"));
+	}
 
-	//function to parse in input - only goes till best plays no hints yet
+	/**
+ 	 * <p>function to parse in input</p>
+	 * @param filename the file to be parsed
+	 * 
+	 * @throws java.io.IOException when the file does not match the lesson files
+	 * 
+	 */
 	public void loadInput(String filename) throws IOException{
 
 		Scanner lesson = new Scanner(new File(filename));
@@ -123,9 +135,9 @@ public class Lesson{
 	//See if play is valid
 	public boolean isValid(String card , Person player){
 		//play can be Suit from first play or trump Suit
-		if(player.inHand(card) && (card.charAt(1) == getSuit())){
+		if(player.inHand(card) && (card.charAt(1) == getSuit())){			
 			return true;
-		}else if(player.noSuit(getLeadingSuit())){
+		}else if((player.getPlayerHand().size()!=0)&&(player.noSuit(getLeadingSuit()))){
 			return true;
 		}else{
 			return false;
@@ -133,7 +145,12 @@ public class Lesson{
 
 	}
 
-	//Get points for card played
+	/**
+ 	 * <p>translates a card to it equivalent points: Get points for card played </p>
+	 * @param card The card that needs to be translated to it equivalent points
+	 * @return returns int points
+	 * 
+	 */
 	public int getPlayPoints(String card){
 		int points=0;
 		if(card.charAt(1)==getBiddingSuit()){
@@ -157,7 +174,13 @@ public class Lesson{
 
 	}
 	
-	//Sets bidding Suit
+	/**
+ 	 * <p>Sets bidding Suit by reversing the array 
+	 * and sets bid equal to third element in the array</p>
+	 * @param bidding The string that contains the bid
+	 * 
+	 * 
+	 */
 	public void setBidding(String[] bidding){
 		//Bid always ends in 3PA so the Suit just before that dictates the bid
 		//Reverse the array since we can't predict the bid from the length of the array but from the 3PA at the end. 
@@ -166,16 +189,7 @@ public class Lesson{
 		Collections.reverse(biddingstring);
 		String card = biddingstring.get(3);
 		biddingSuit = card.charAt(1);
-		// if(bidding.length>4){
-		// 	String card = bidding[bidding.length - 4];
-		// 	biddingSuit = card.charAt(1);
-			
-		// }else{
-		// 	//Need to do special string parse for no bidding case in format:
-		// 	//S:NA NA NA NA;
-		// 	//Just set to no bid for now
-		// 	biddingSuit ='N';
-		// }		
+				
 	
 	}
 

@@ -8,6 +8,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
+/**
+* Driver class used to run the game(Bridge game) . . .
+* 
+* @author Chris Cushway
+* @author Gerald Ngumbulu
+* @author Blessed Chitamba
+*
+*/
+
 public class Game{
 	public static void main(String args[]) throws IOException, InterruptedException{
 
@@ -120,7 +130,7 @@ public class Game{
 				
 						
 					}
-					
+					lesson.getPlayers().get(playerTurn).removeCard(card);
 					if(!card.equals(copyBestCase.get(0))){
 						String bestPlay = lesson.getPlayers().get(playerTurn).bestCaseInHand(copyBestCase);
 						System.out.println("The card that should have been played was: "+bestPlay);
