@@ -7,6 +7,8 @@ import java.util.Arrays;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class Game{
 	public static void main(String args[]) throws IOException, InterruptedException{
@@ -27,7 +29,8 @@ public class Game{
 		//Setting up gui for game
 
 		JFrame window = new JFrame("Bridge Tutor");
-		window.setExtendedState(JFrame.MAXIMIZED_BOTH);  
+		
+ 
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		/*A way to get the screens size will be used later
@@ -36,11 +39,12 @@ public class Game{
 		Toolkit tk = Toolkit.getDefaultToolkit();  
 		int xSize = ((int) tk.getScreenSize().getWidth());  
 		int ySize = ((int) tk.getScreenSize().getHeight()); 
-
+		window.setSize(xSize,ySize);
+		
 		//setting up panel - it is like the "glass" in the window
 
 		JPanel contentPane = new JPanel();
-		
+		contentPane.setLayout(null);
 		//Array of Jlabels to act as gui hand
 		/*This is just code testing to
 			see how guis work
@@ -48,19 +52,105 @@ public class Game{
 		ArrayList<JLabel> cardLabels = new ArrayList<JLabel>();
 		for(int i=0;i<13;i++){
 			JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(playerTurn).getCard(i).getCardImage()));
-			cardLabel.setSize(120,80);
+			cardLabel.setSize(80,120);
+			cardLabel.addMouseListener(new MouseAdapter() {
+
+			    @Override
+			    public void mouseEntered(MouseEvent evt) {
+				Point pt = cardLabel.getLocation();
+				int x = pt.x;
+				int y = pt.y;
+				cardLabel.setLocation(x,y-20);
+			    }
+
+			    @Override
+			    public void mouseExited(MouseEvent evt) {
+				Point pt = cardLabel.getLocation();
+				int x = pt.x;
+				int y = pt.y;
+				cardLabel.setLocation(x,y+20);
+			    }
+			
+			});
 			cardLabels.add(cardLabel);
 		}
-		
+		contentPane.setPreferredSize(new Dimension(xSize, 160));
+		final int xDim = 40;
+		System.out.println(contentPane.getPreferredSize().getHeight());
+		int marginX=xSize/2 - (40*13)/2 - 40;
 		for(JLabel j:cardLabels){
     			contentPane.add(j);
 			
+			j.setLocation(marginX,30);
+			marginX+=xDim;
 		}
 		
-		
-		window.getContentPane().add(BorderLayout.SOUTH,contentPane);
-		window.getContentPane().setBackground(Color.green);
 
+		
+		JPanel topPanel = new JPanel();
+		topPanel.setLayout(null);
+		topPanel.setPreferredSize(new Dimension(xSize, 160));
+		topPanel.setBackground(Color.red);
+		
+		playerTurn++;
+		ArrayList<JLabel> cardLabels2 = new ArrayList<JLabel>();
+		for(int i=0;i<13;i++){
+			JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(playerTurn).getCard(i).getCardImage()));
+			cardLabel.setSize(80,120);
+			cardLabel.addMouseListener(new MouseAdapter() {
+
+			    @Override
+			    public void mouseEntered(MouseEvent evt) {
+				Point pt = cardLabel.getLocation();
+				int x = pt.x;
+				int y = pt.y;
+				cardLabel.setLocation(x,y-20);
+			    }
+
+			    @Override
+			    public void mouseExited(MouseEvent evt) {
+				Point pt = cardLabel.getLocation();
+				int x = pt.x;
+				int y = pt.y;
+				cardLabel.setLocation(x,y+20);
+			    }
+			
+			});
+			cardLabels2.add(cardLabel);
+		}
+		marginX=xSize/2 - (40*13)/2 - 40;
+		for(JLabel j:cardLabels2){
+    			topPanel.add(j);
+			
+			j.setLocation(marginX,30);
+			marginX+=xDim;
+		}
+
+		JPanel leftPanel = new JPanel();
+		leftPanel.setPreferredSize(new Dimension(400, ySize));
+		leftPanel.setBackground(Color.blue);
+
+		JPanel centerPanel = new JPanel();
+		centerPanel.setPreferredSize(new Dimension(600, 600));
+        	centerPanel.setMinimumSize(new Dimension(600, 600));
+		centerPanel.setBackground(Color.green);
+
+		JPanel rightPanel = new JPanel();
+		rightPanel.setPreferredSize(new Dimension(400, ySize));
+		rightPanel.setBackground(Color.orange);
+		
+		
+		
+		
+		
+	   	window.add(topPanel, BorderLayout.NORTH);
+        	window.add(leftPanel, BorderLayout.WEST);
+        	window.add(centerPanel, BorderLayout.CENTER);
+        	window.add(rightPanel, BorderLayout.EAST);
+        	window.add(contentPane, BorderLayout.SOUTH);
+
+		window.pack();
+        	window.setLocationRelativeTo(null);
 		window.setVisible(true);
 
 		//-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
