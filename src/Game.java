@@ -42,9 +42,9 @@ public class Game{
 		window.setSize(xSize,ySize);
 		
 		//setting up panel - it is like the "glass" in the window
-
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(null);
+		
 		//Array of Jlabels to act as gui hand
 		/*This is just code testing to
 			see how guis work
@@ -125,7 +125,8 @@ public class Game{
 			j.setLocation(marginX,30);
 			marginX+=xDim;
 		}
-
+		
+		
 		JPanel leftPanel = new JPanel();
 		leftPanel.setPreferredSize(new Dimension(400, ySize));
 		leftPanel.setBackground(Color.blue);
@@ -136,11 +137,58 @@ public class Game{
 		centerPanel.setBackground(Color.green);
 
 		JPanel rightPanel = new JPanel();
+		rightPanel.setLayout(null);
 		rightPanel.setPreferredSize(new Dimension(400, ySize));
 		rightPanel.setBackground(Color.orange);
-		
-		
-		
+		playerTurn++;
+		ArrayList<JLabel> cardLabels3 = new ArrayList<JLabel>();
+		for(int i=0;i<13;i++){
+			JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(playerTurn).getCard(i).getCardImage()));
+			cardLabel.setSize(80,120);
+			cardLabel.addMouseListener(new MouseAdapter() {
+
+			    @Override
+			    public void mouseEntered(MouseEvent evt) {
+				Point pt = cardLabel.getLocation();
+				int x = pt.x;
+				int y = pt.y;
+				cardLabel.setLocation(x-20,y);
+			    }
+
+			    @Override
+			    public void mouseExited(MouseEvent evt) {
+				Point pt = cardLabel.getLocation();
+				int x = pt.x;
+				int y = pt.y;
+				cardLabel.setLocation(x+20,y);
+			    }
+
+				@Override
+				public void mouseClicked(MouseEvent evt){
+
+					
+					
+					Container parent = cardLabel.getParent();
+					parent.remove(cardLabel);
+					parent.validate();
+					parent.repaint();
+					centerPanel.add(cardLabel);
+					cardLabel.setLocation(0,0);
+
+				}
+			
+			});
+			cardLabels3.add(cardLabel);
+		}
+				
+		final int yDim = 30;
+		int marginY=0;
+		for(JLabel j:cardLabels3){
+    			rightPanel.add(j);
+			marginY+=10;
+			j.setLocation(20,marginY);
+			marginY+=yDim;
+		}
 		
 		
 	   	window.add(topPanel, BorderLayout.NORTH);
