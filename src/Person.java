@@ -258,7 +258,7 @@ public class Person{
 	}
 
 	/**
- 	 * <p>sets points </p>
+ 	 * <p>sets points: used for testing purposes </p>
 	 * @param number of points to be set.
 	 * 
 	 */
@@ -366,7 +366,7 @@ public class Person{
 	/**
  	 * <p>checks if card in hand </p>
 	 * @param card The card to be checked with cards in player's hand
-	 * @return boolean False if not in hand else true
+	 * @return boolean False if in hand else true
 	 * 
 	 */
 	public boolean checkhand(String card){
