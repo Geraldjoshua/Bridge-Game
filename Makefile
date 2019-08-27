@@ -50,9 +50,10 @@ doc:
 
 
 # Rules for unit testing
-test_classes: all PersonTest.class
+test_classes: all PersonTest.class LessonTest.class
 
 test: test_classes
+	java -ea -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore LessonTest
 	java -ea -cp $(BINDIR):$(JUNIT) org.junit.runner.JUnitCore PersonTest
 	
 # Rules for generating tests coverage

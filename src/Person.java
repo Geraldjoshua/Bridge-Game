@@ -176,7 +176,7 @@ public class Person{
 	public boolean inHand(String card){
 		for(int i=0;i<hand.size();i++){
 			if(hand.get(i).toString().equals(card)){
-				hand.remove(i);
+				//hand.remove(i);
 				return true;
 			}
 		}
