@@ -10,12 +10,11 @@ import java.awt.event.*;
 
 
 /**
-* Driver class used to run the game(Bridge game) . . .
-* 
+* Driver class used to run the game(Bridge game).
 * @author Chris Cushway
 * @author Gerald Ngumbulu
 * @author Blessed Chitamba
-*
+* @version 1.0
 */
 
 public class Game{
@@ -130,7 +129,7 @@ public class Game{
 				
 						
 					}
-					lesson.getPlayers().get(playerTurn).removeCard(card);
+					lesson.getPlayers().get(playerTurn).removePlayedCard(card);
 					if(!card.equals(copyBestCase.get(0))){
 						String bestPlay = lesson.getPlayers().get(playerTurn).bestCaseInHand(copyBestCase);
 						System.out.println("The card that should have been played was: "+bestPlay);
