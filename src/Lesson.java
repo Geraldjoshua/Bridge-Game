@@ -347,7 +347,7 @@ public class Lesson{
 				winner = player;			
 			}
 		}
-		System.out.println("\n" + winner.getPlayerName() + " IS THE WINNER OF THE GAME");
+		System.out.println("------------------------------\n" + winner.getPlayerName() + " IS THE WINNER OF THE GAME");
 
 	}
 

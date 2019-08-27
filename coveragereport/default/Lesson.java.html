@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Lesson.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">.</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Lesson.java</span></div><h1>Lesson.java</h1><pre class="source lang-java linenums">
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+
+/**
+* lesson class to instantiate lessons(tutor) of the bridgeGame
+* @author Chris Cushway
+* @author Gerald Ngumbulu
+* @author Blessed Chitamba
+* @version 1.0
+*/
+
+public class Lesson{
+
+<span class="fc" id="L22">	private ArrayList&lt;Person&gt; players = new ArrayList&lt;Person&gt;(4);</span>
+<span class="fc" id="L23">	private ArrayList&lt;Card&gt; cardArray = new ArrayList&lt;Card&gt;(13);</span>
+<span class="fc" id="L24">	private ArrayList&lt;String[]&gt; bestCase = new ArrayList&lt;String[]&gt;();</span>
+	private String firstCardPlayed;
+	private char leadingSuit;
+	private char biddingSuit;
+
+
+	/**
+ 	 * &lt;p&gt;contstructor&lt;/p&gt;
+	 * @param filename the file to be parsed
+	 * 
+	 * @throws java.io.IOException when the file does not match the lesson files
+	 * 
+	 */
+<span class="fc" id="L37">	Lesson(String filename) throws IOException{	</span>
+<span class="fc" id="L38">		players.add(new Person(&quot;West&quot;));</span>
+<span class="fc" id="L39">		players.add(new Person(&quot;North&quot;));</span>
+<span class="fc" id="L40">		players.add(new Person(&quot;East&quot;));</span>
+<span class="fc" id="L41">		players.add(new Person(&quot;South&quot;));	</span>
+<span class="nc" id="L42">		loadInput(filename);	</span>
+<span class="nc" id="L43">	}</span>
+
+	/**
+ 	 * &lt;p&gt;another contstructor for testing purposes&lt;/p&gt;
+	 * 
+	 */
+<span class="fc" id="L49">	Lesson(){</span>
+<span class="fc" id="L50">		players.add(new Person(&quot;West&quot;));</span>
+<span class="fc" id="L51">		players.add(new Person(&quot;North&quot;));</span>
+<span class="fc" id="L52">		players.add(new Person(&quot;East&quot;));</span>
+<span class="fc" id="L53">		players.add(new Person(&quot;South&quot;));</span>
+<span class="fc" id="L54">	}</span>
+
+	/**
+ 	 * &lt;p&gt;function to parse in input&lt;/p&gt;
+	 * @param filename the file to be parsed
+	 * 
+	 * @throws java.io.IOException when the file does not match the lesson files
+	 * 
+	 */
+	public void loadInput(String filename) throws IOException{
+
+<span class="nc" id="L65">		Scanner lesson = new Scanner(new File(filename));</span>
+<span class="nc" id="L66">		System.out.println(&quot;The bidding is: &quot;);</span>
+<span class="nc" id="L67">		String bidding = lesson.nextLine();</span>
+<span class="nc" id="L68">		String[] Bidding = bidding.split(&quot; &quot;);</span>
+<span class="nc" id="L69">		setBidding(Bidding);</span>
+<span class="nc" id="L70">		System.out.println(bidding);</span>
+		//number of hands is number of players
+<span class="nc" id="L72">		int number_of_hands=0;</span>
+		//Loop to initialise number of players in the game
+<span class="nc bnc" id="L74" title="All 2 branches missed.">		while (number_of_hands&lt;=3){</span>
+<span class="nc" id="L75">			String hand = lesson.nextLine();</span>
+<span class="nc" id="L76">			String[] hand_split = hand.split(&quot;,&quot;);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">			for (String specific_Suit_cards  : hand_split){</span>
+<span class="nc" id="L78">				int length = specific_Suit_cards.length();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">				for(int i=1; i&lt;length;i++){</span>
+<span class="nc" id="L80">					Card card = new Card(specific_Suit_cards.charAt(0),specific_Suit_cards.charAt(i));</span>
+<span class="nc" id="L81">					cardArray.add(card);</span>
+				}
+			}
+<span class="nc" id="L84">			players.get(number_of_hands).setHand(cardArray);</span>
+			//System.out.println(players.get(number_of_hands).getPlayerHand());
+<span class="nc" id="L86">			number_of_hands++;</span>
+<span class="nc" id="L87">			cardArray.clear();</span>
+<span class="nc" id="L88">		}</span>
+
+<span class="nc" id="L90">		setFirstCardPlayed(lesson.nextLine());</span>
+
+		//Loop to get best possible plays into an array
+<span class="nc" id="L93">		int maxNumOfTricksLeft=13;</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		while(maxNumOfTricksLeft&gt;0){</span>
+<span class="nc" id="L95">			String trick = lesson.nextLine();</span>
+<span class="nc" id="L96">			String[] singleTrick = trick.split(&quot;,&quot;);</span>
+			//System.out.println(Arrays.toString(singleTrick));
+
+			//Check if claim has been played or invalid input (Will only happen before all 13 tricks have been played)
+<span class="nc bnc" id="L100" title="All 2 branches missed.">			if(singleTrick.length==1){</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">				if(singleTrick[0].equals(&quot;CLAIM&quot;)){</span>
+<span class="nc" id="L102">					bestCase.add(singleTrick);</span>
+				}
+				break;
+			}
+
+<span class="nc" id="L107">			bestCase.add(singleTrick);</span>
+<span class="nc" id="L108">			maxNumOfTricksLeft--;</span>
+			
+<span class="nc" id="L110">		}</span>
+
+		/*Rest of input will be parsed here*/
+	
+<span class="nc" id="L114">	}</span>
+
+	//Method to return best case to be played
+	public ArrayList&lt;String&gt; getBestCase(){
+<span class="nc" id="L118">		ArrayList&lt;String&gt; BestCase = new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">		for(String[] trick:bestCase){</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">			for(String card:trick){</span>
+<span class="nc" id="L121">				BestCase.add(card);			</span>
+			}
+<span class="nc" id="L123">		}</span>
+<span class="nc" id="L124">		return BestCase;	</span>
+
+	}
+
+	public ArrayList&lt;String&gt; getBestCase1(int trick){
+<span class="nc" id="L129">		ArrayList&lt;String&gt; BestCase = new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">		if(trick&lt;bestCase.size()){</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">			for(String card:bestCase.get(trick)){</span>
+<span class="nc" id="L132">					BestCase.add(card);	</span>
+
+				}
+			
+		}
+		else{
+<span class="nc" id="L138">			BestCase.add(&quot;No tricks!!&quot;);</span>
+		}
+<span class="nc" id="L140">		return BestCase;	</span>
+
+	}
+
+	/**
+ 	 * &lt;p&gt;sets leading suit&lt;/p&gt;
+	 * 
+	 */
+	public void setLeadingSuit(char Suit){
+<span class="fc" id="L149">		this.leadingSuit = Suit;</span>
+<span class="fc" id="L150">	}</span>
+
+	/**
+ 	 * &lt;p&gt;gets the leading suit of the trick which decides the suit for that trick&lt;/p&gt;
+	 * @return char Contains the first card's suit played for that specific trick
+	 * 
+	 */
+	public char getLeadingSuit(){
+<span class="fc" id="L158">		return leadingSuit;</span>
+	}
+	
+
+	/**
+ 	 * &lt;p&gt;gets the first card of the trick which decides the suit for that trick&lt;/p&gt;
+	 * @return String Contains the first card played for that specific trick
+	 * 
+	 */
+	public String getFirstCardPlayed(){
+		
+<span class="fc" id="L169">		return this.firstCardPlayed;		</span>
+
+	}
+
+
+	/**
+ 	 * &lt;p&gt;checks if the play is valid &lt;/p&gt;
+	 * @param card The card that needs to be checked if it is in player's hand
+	 * @param player the player who played that card
+	 * @return boolean That states if the play is valid(true) or not(false)
+	 * 
+	 */
+	public boolean isValid(String card , Person player){
+		//play can be Suit from first play or trump Suit
+<span class="pc bpc" id="L183" title="3 of 4 branches missed.">		if(player.inHand(card) &amp;&amp; (card.charAt(1) == getSuit())){			</span>
+<span class="nc" id="L184">			return true;</span>
+<span class="pc bpc" id="L185" title="3 of 4 branches missed.">		}else if((player.getPlayerHand().size()!=0)&amp;&amp;(player.noSuit(getLeadingSuit()))){</span>
+<span class="nc" id="L186">			return true;</span>
+		}else{
+<span class="fc" id="L188">			return false;</span>
+		}	
+
+	}
+
+	/**
+ 	 * &lt;p&gt;translates a card to it equivalent points: Get points for card played &lt;/p&gt;
+	 * @param card The card that needs to be translated to it equivalent points
+	 * @return int Points for the played card
+	 * 
+	 */
+	public int getPlayPoints(String card){
+<span class="fc" id="L200">		int points=0;</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">		if(card.charAt(1)==getBiddingSuit()){</span>
+<span class="nc" id="L202">			points+=15;</span>
+		}
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">		if(card.charAt(0)=='A'){</span>
+<span class="nc" id="L205">			points+=14;</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">		}else if(card.charAt(0)=='K'){</span>
+<span class="nc" id="L207">			points+=13;</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">		}else if(card.charAt(0)=='Q'){</span>
+<span class="nc" id="L209">			points+=12;</span>
+<span class="pc bpc" id="L210" title="1 of 2 branches missed.">		}else if(card.charAt(0)=='J'){</span>
+<span class="nc" id="L211">			points+=11;</span>
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">		}else if(card.charAt(0)=='T'){</span>
+<span class="fc" id="L213">			points+=10;</span>
+		}else{
+<span class="nc" id="L215">			points+=Character.getNumericValue(card.charAt(0)); </span>
+		}
+
+<span class="fc" id="L218">		return points;</span>
+
+	}
+	
+	/**
+ 	 * &lt;p&gt;Sets bidding Suit by reversing the array 
+	 * and sets bid equal to third element in the array&lt;/p&gt;
+	 * @param bidding The string that contains the bid
+	 * 
+	 * 
+	 */
+	public void setBidding(String[] bidding){
+<span class="fc" id="L230">		ArrayList&lt;String&gt; biddingstring = new ArrayList&lt;&gt;(Arrays.asList(bidding));</span>
+<span class="fc" id="L231">		Collections.reverse(biddingstring);</span>
+<span class="fc" id="L232">		String card = biddingstring.get(3);</span>
+<span class="fc" id="L233">		biddingSuit = card.charAt(1);</span>
+				
+	
+<span class="fc" id="L236">	}</span>
+
+	
+	public void checkClaim(String card){
+		//To Do
+<span class="nc" id="L241">	}</span>
+
+	/**
+ 	 * &lt;p&gt;getter to get the bidding suit from the start of the game  &lt;/p&gt;
+	 * @return char containing the bidding suit
+	 * 
+	 */
+	public char getBiddingSuit(){
+
+<span class="fc" id="L250">		return this.biddingSuit;		</span>
+
+	}
+
+	/**
+ 	 * &lt;p&gt;sets the first card played 
+	 * and the leading suit&lt;/p&gt;
+	 * @param card sets the first card played
+	 * 
+	 * 
+	 */
+	public void setFirstCardPlayed(String card){
+<span class="fc" id="L262">		setLeadingSuit(card.charAt(1));</span>
+<span class="fc" id="L263">		this.firstCardPlayed = card;</span>
+
+<span class="fc" id="L265">	}</span>
+
+
+	/**
+ 	 * &lt;p&gt;getter to get the suit from the first card played the first card played &lt;/p&gt;
+	 * @return char containing the starting suit in a trick
+	 * 
+	 */
+	public char getSuit(){
+		
+<span class="nc" id="L275">		return this.firstCardPlayed.charAt(1);		</span>
+	
+	}
+
+	/**
+ 	 * &lt;p&gt;getter to get the suit from the first card played the first card played &lt;/p&gt;
+	 * @return ArrayList&lt;Person&gt; containing all the players
+	 * 
+	 */
+	public ArrayList&lt;Person&gt; getPlayers(){
+
+<span class="fc" id="L286">		return this.players;</span>
+
+	}
+	
+	/**
+ 	 * &lt;p&gt;gets Winner of trick based on boolean inside person class 
+	 * and set it back to false after trick to prevent more than one winner scenario&lt;/p&gt;
+	 * 
+	 */
+	public void resetWinner(){
+		
+<span class="fc bfc" id="L297" title="All 2 branches covered.">		for(Person player : players ){</span>
+<span class="fc" id="L298">			player.resetWinner();</span>
+<span class="fc" id="L299">		}		</span>
+
+<span class="fc" id="L301">	}</span>
+
+	/**
+ 	 * &lt;p&gt;Sets winner and incrementing that players trick wins &lt;/p&gt;
+	 * @param playername of the player who won. 
+	 */
+	public void setWinner(String playername){
+
+<span class="fc bfc" id="L309" title="All 2 branches covered.">		for(Person player : players){</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">			if(player.getPlayerName().equals(playername)){</span>
+<span class="fc" id="L311">				player.setWinner();</span>
+<span class="fc" id="L312">				player.incrementTrickWins();</span>
+			}
+<span class="fc" id="L314">		}</span>
+		
+<span class="fc" id="L316">	}</span>
+
+
+	/**
+ 	 * &lt;p&gt;Decides winner of trick based on points from cards played &lt;/p&gt;
+	 *
+	 */
+	public void decideWinner(){
+<span class="fc" id="L324">		Person winner = new Person();</span>
+<span class="fc" id="L325">		int points=0;</span>
+<span class="fc bfc" id="L326" title="All 2 branches covered.">		for(Person player:players){</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">			if(player.getPoints()&gt;points){</span>
+<span class="fc" id="L328">				points=player.getPoints();</span>
+<span class="fc" id="L329">				winner = player;			</span>
+			}
+<span class="fc" id="L331">		}</span>
+<span class="fc" id="L332">		System.out.println(winner.getPlayerName() + &quot; Wins the trick!&quot;);</span>
+<span class="fc" id="L333">		setWinner(winner.getPlayerName());</span>
+<span class="fc" id="L334">		resetPoints();</span>
+<span class="fc" id="L335">	}</span>
+	
+	/**
+ 	 * &lt;p&gt;Decides winner of entire game by counting trick points &lt;/p&gt;
+	 *
+	 */
+	public void decideGameWinner(){
+<span class="fc" id="L342">		Person winner = new Person();</span>
+<span class="fc" id="L343">		int trickWins=0;</span>
+<span class="fc bfc" id="L344" title="All 2 branches covered.">		for(Person player:players){</span>
+<span class="fc bfc" id="L345" title="All 2 branches covered.">			if(player.getTrickWins()&gt;trickWins){</span>
+<span class="fc" id="L346">				trickWins=player.getTrickWins();</span>
+<span class="fc" id="L347">				winner = player;			</span>
+			}
+<span class="fc" id="L349">		}</span>
+<span class="fc" id="L350">		System.out.println(&quot;------------------------------\n&quot; + winner.getPlayerName() + &quot; IS THE WINNER OF THE GAME&quot;);</span>
+
+<span class="fc" id="L352">	}</span>
+
+	/**
+ 	 * &lt;p&gt;Resets points for a trick so points don't carry over&lt;/p&gt;
+	 *
+	 */
+	public void resetPoints(){
+<span class="fc bfc" id="L359" title="All 2 branches covered.">		for(Person player : players){</span>
+<span class="fc" id="L360">			player.setPoints(0);</span>
+<span class="fc" id="L361">		}</span>
+
+<span class="fc" id="L363">	}</span>
+
+	/**
+ 	 * &lt;p&gt;displays all players in the game&lt;/p&gt;
+	 *
+	 */
+	public void printPlayers(){
+<span class="nc bnc" id="L370" title="All 2 branches missed.">		for(int i=0;i&lt;players.size();i++){</span>
+<span class="nc" id="L371">			System.out.println(players.get(i).getPlayerName());</span>
+		}
+<span class="nc" id="L373">	}</span>
+
+
+	/**
+ 	 * &lt;p&gt;reorder players based on the who won the previous trick&lt;/p&gt;
+	 *
+	 */
+	public void reorderPlayers(){
+
+<span class="fc bfc" id="L382" title="All 2 branches covered.">		for(int i=0;i&lt;players.size();i++){</span>
+<span class="fc" id="L383">			Person tempPlayer = players.get(0);</span>
+<span class="fc bfc" id="L384" title="All 2 branches covered.">			if(!players.get(0).getWinner()){</span>
+<span class="fc" id="L385">				players.remove(0);</span>
+<span class="fc" id="L386">				players.add(tempPlayer);</span>
+			}
+		
+		}
+<span class="fc" id="L390">		resetWinner();</span>
+
+<span class="fc" id="L392">	}</span>
+
+	
+
+
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

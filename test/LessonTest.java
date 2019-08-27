@@ -17,8 +17,38 @@ public class LessonTest{
 		}
 
 		@Test
+		public void testResetPoints(){
+			System.out.println("Test 1:resetPoints() method: should reset every player's points to zero(0).");
+			Lesson test = new Lesson();
+			test.resetPoints();
+			ArrayList<Person> players = test.getPlayers();
+			assertEquals(0,players.get(1).getPersonPoints());
+			 
+		}
+
+		@Test
+		public void testResetWinner(){
+			System.out.println("Test 2:resetWinner() method: should be false since it's winner is been reset to false.");
+			Lesson test = new Lesson();
+			test.resetWinner();
+			ArrayList<Person> players = test.getPlayers();
+			assertEquals(false,players.get(0).getWinner());
+			 
+		}
+
+		@Test
+		public void testsetWinner(){
+			System.out.println("Test 3:setWinner() method: should be true for the player that won the trick.");
+			Lesson test = new Lesson();
+			ArrayList<Person> players = test.getPlayers();
+			test.setWinner("North");
+			assertEquals(true,players.get(1).getWinner());
+			 
+		}
+
+		@Test
 		public void testValidPlay(){
-			System.out.println("Test 1:isValid() method: should return false:");
+			System.out.println("Test 4:isValid() method: should return false if the play is not valid:");
 			Lesson test = new Lesson();
 			ArrayList<Person> players = test.getPlayers();
 			test.setFirstCardPlayed("5D");
@@ -28,8 +58,19 @@ public class LessonTest{
 		}
 
 		@Test
+		public void testGetPlayers(){
+			System.out.println("Test 5:getPlayers() method: returns 4 players present.");
+			Lesson test = new Lesson();
+			ArrayList<Person> players = test.getPlayers();
+			assertEquals(4,players.size());
+			
+			
+		    
+		}
+
+		@Test
 		public void testGetLeadingSuit(){
-			System.out.println("Test 2:getLeadingSuit method: returns suit:");
+			System.out.println("Test 6:getLeadingSuit method: returns leading suit.");
 			Lesson test = new Lesson();
 			test.setFirstCardPlayed("5D");
 			assertEquals('D',test.getLeadingSuit());
@@ -40,7 +81,7 @@ public class LessonTest{
 
 		@Test
 		public void testReadFile() throws IOException {
-			System.out.println("Test 3:LoadInput method: should return file not found:");
+			System.out.println("Test 7:LoadInput method: should return file not found:");
 			try{
 				Lesson test = new Lesson("input/test.txt");
 			}catch (IOException e) {
@@ -51,8 +92,31 @@ public class LessonTest{
 		}
 
 		@Test
+		public void testGameWinner(){
+			System.out.println("Test 8:decideGameWinner() method: should display north won the game.");
+			Lesson test = new Lesson();
+			ArrayList<Person> players = test.getPlayers();
+			players.get(1).setTrickWins(2);
+			test.decideGameWinner();
+			assertEquals(2,players.get(1).getTrickWins());
+			 
+		}
+
+		@Test
+		public void testReorderPlayer(){
+			System.out.println("Test 9:decideGameWinner() method:tests if north starts after winning a trick.");
+			Lesson test = new Lesson();
+			ArrayList<Person> players = test.getPlayers();
+			players.get(1).setWinner();
+			test.reorderPlayers();
+			players = test.getPlayers();
+			assertEquals("North",players.get(0).getPlayerName());
+			 
+		}
+
+		@Test
 		public void testPlayedPoints(){
-			System.out.println("Test 4:getPlayPoints(String card) method: asserts to true:");
+			System.out.println("Test 10:getPlayPoints(String card) method, checks playedcards points: asserts to true.");
 			Lesson test = new Lesson();
 			test.setFirstCardPlayed("5D");
 			assertEquals(10,test.getPlayPoints("TD"));
@@ -60,10 +124,21 @@ public class LessonTest{
 			
 		    
 		}
+
+		@Test
+		public void testdecideWinner(){
+			System.out.println("Test 11:decideWinner() method: should be true for the player who wins the game.");
+			Lesson test = new Lesson();
+			ArrayList<Person> players = test.getPlayers();
+			players.get(1).setPoints(4);
+			test.decideWinner();
+			assertEquals(true,players.get(1).getWinner());
+			 
+		}
 		
 		@Test
 		public void testSetBid(){
-			System.out.println("Test 5:setBidding(String[] bidding) method: assert true if bid set:");
+			System.out.println("Test 12:setBidding(String[] bidding) method: assert true if bid set");
 			Lesson test = new Lesson();
 			String bid_str = "1S PA 2C PA 2H PA 2N PA 3H PA 4H PA PA PA";
 			String[] Bidding = bid_str.split(" ");
@@ -74,20 +149,12 @@ public class LessonTest{
 		
 		@Test
 		public void GettingFirstCardPlayed(){
-			System.out.println("Test 6:getFirstCardPlayed method: returns card:");
+			System.out.println("Test 13:getFirstCardPlayed method: returns first card played.");
 			Lesson test = new Lesson();
 			test.setFirstCardPlayed("5D");
-			assertEquals("5D",test.getFirstCardPlayed());
-			
-			
+			assertEquals("5D",test.getFirstCardPlayed());	
 		    
 		}
-
-
-
-		
-
-
 
 
 }
