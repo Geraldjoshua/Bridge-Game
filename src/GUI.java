@@ -41,6 +41,7 @@ public class GUI{
 	private JLabel score;
 	private JButton getHints;
 	private JButton getTips;
+	private JLabel playLogHeader;
 
 	GUI(Lesson lesson) throws IOException{
 		
@@ -70,6 +71,7 @@ public class GUI{
 		window.getContentPane().setSize(xSize,ySize);
 		window.setLocationRelativeTo(null);
 		System.out.println("wind size" + window.getContentPane().getWidth());
+		window.setUndecorated(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		for(int i=0;i<panels.length;i++){
@@ -155,8 +157,13 @@ public class GUI{
 		    }
 		    cardLabels.clear();
 		}
-
+				
 		
+
+		score = makeScore();
+		window.add(score);
+		score.setLocation(xSize - 200 - (int)score.getPreferredSize().getWidth(),framePadding);		
+
 		JButton exit = makeExitButton();
 		window.add(exit);
 		exit.setLocation(40,40);
@@ -173,6 +180,12 @@ public class GUI{
 		playLog = makePlayLog();
 		window.add(playLog);
 		playLog.setLocation(framePadding,ySize - 200 - framePadding);
+
+		playLogHeader = new JLabel("<html><h1 style='color:white;text-decoration:underline;' >Play Log</h1></html>");
+		playLogHeader.setLayout(null);
+		playLogHeader.setSize(playLogHeader.getPreferredSize());
+		window.add(playLogHeader);
+		playLogHeader.setLocation(playLog.getX(),playLog.getY() - (int)playLogHeader.getPreferredSize().getHeight());
 		
 		window.add(panels[1], BorderLayout.NORTH);
 		window.add(panels[0], BorderLayout.WEST);
@@ -219,6 +232,14 @@ public class GUI{
 		tips.setBackground(new Color(226,172,44));
 		tips.setForeground(new Color(0, 134, 64));
 		return tips;
+	}
+
+	private JLabel makeScore(){
+		JLabel scr = new JLabel("<html><h1>N + S Score: "+lesson.getPlayers().get(currentPlayer).getTrickWins()+"</h1><h2>W + E Score: "+lesson.getPlayers().get(currentPlayer).getTrickWins()+"</h2></html>");
+		scr.setLayout(null);
+		scr.setSize(scr.getPreferredSize());
+		scr.setForeground(Color.white);
+		return scr;
 	}
 
 	private JButton makeExitButton(){
@@ -288,6 +309,7 @@ public class GUI{
 		playLog.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));
 		playerTurn = new JLabel("<html><p>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" Played a " + lesson.getFirstCardPlayed()+"</p></html>");
 		playerTurn.setSize(300,50);
+		playerTurn.setForeground(Color.white);
 		playerTurn.setLocation(20,20);
 		playLog.setSize(300,150);
 		playLog.add(playerTurn);
