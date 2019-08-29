@@ -53,6 +53,8 @@ public class Lesson{
 		players.add(new Person("South"));
 	}
 
+	
+	
 	/**
  	 * <p>function to parse in input</p>
 	 * @param filename the file to be parsed
