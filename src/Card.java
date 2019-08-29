@@ -2,7 +2,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-
+import java.awt.*;
 
 /**
 * card class to instantiate cards used in the game
@@ -27,11 +27,23 @@ public class Card{
 	 * 
 	 */
 	Card(char suit, char value) throws IOException {
-        this.suit = suit;
-        this.value = value;
-        this.cardImage = ImageIO.read(new File("cardImages/"+value+""+suit+".png"));
-        setPointValue(value);
-    }
+		this.suit = suit;
+		this.value = value;
+		BufferedImage img = ImageIO.read(new File("cardImages/"+value+""+suit+".png"));
+		this.cardImage = resize(img,72,96);
+		setPointValue(value);
+    	}
+
+	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
+	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+	    Graphics2D g2d = dimg.createGraphics();
+	    g2d.drawImage(tmp, 0, 0, null);
+	    g2d.dispose();
+
+	    return dimg;
+	}  
 
 
 	/**
