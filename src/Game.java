@@ -7,6 +7,27 @@ import java.util.Arrays;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Arrays;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+
+/**
+* Driver class used to run the game(Bridge game).
+* @author Chris Cushway
+* @author Gerald Ngumbulu
+* @author Blessed Chitamba
+* @version 1.0
+*/
 
 
 /**
@@ -33,46 +54,116 @@ public class Game{
 		
 		int playerTurn = 0;
 
-		//Setting up gui for game
+        //Setting up gui for game
 
-		JFrame window = new JFrame("Bridge Tutor");
-		window.setExtendedState(JFrame.MAXIMIZED_BOTH);  
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JFrame window = new JFrame("Bridge Tutor");
+
+        window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		/*A way to get the screens size will be used later
 		/*For UI components
 		*/
-		Toolkit tk = Toolkit.getDefaultToolkit();  
-		int xSize = ((int) tk.getScreenSize().getWidth());  
-		int ySize = ((int) tk.getScreenSize().getHeight()); 
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        int xSize = ((int) tk.getScreenSize().getWidth());
+        int ySize = ((int) tk.getScreenSize().getHeight());
+        //window.setSize(xSize,ySize);
 
-		//setting up panel - it is like the "glass" in the window
 
-		JPanel contentPane = new JPanel();
-		
-		//Array of Jlabels to act as gui hand
-		/*This is just code testing to
-			see how guis work
-			*/
-		ArrayList<JLabel> cardLabels = new ArrayList<JLabel>();
-		for(int i=0;i<13;i++){
-			JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(playerTurn).getCard(i).getCardImage()));
-			cardLabel.setSize(120,80);
-			cardLabels.add(cardLabel);
-		}
-		
-		for(JLabel j:cardLabels){
-    			contentPane.add(j);
-			
-		}
-		
-		
-		window.getContentPane().add(BorderLayout.SOUTH,contentPane);
-		window.getContentPane().setBackground(Color.green);
+        ArrayList<JLabel> cardLabels = new ArrayList<JLabel>();
+        JPanel[] panels = new JPanel[4];
+        for(int i=0;i<panels.length;i++){
+            panels[i] = new JPanel();
+            panels[i].setOpaque(false);
+            panels[i].setLayout(null);
+            if(i%2 == 0) {
 
-		window.setVisible(true);
+                panels[i].setPreferredSize(new Dimension(xSize,200));
+            } else{
+                panels[i].setPreferredSize(new Dimension(400, ySize));
+            }
 
-		//-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
+        }
+
+        
+        for(int i=0;i<panels.length;i++){
+            for(int j=0;j<13;j++){
+                final JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(i).getCard(j).getCardImage()));
+                cardLabel.setSize(120,140);
+                cardLabel.addMouseListener(new MouseAdapter() {
+
+                    @Override
+                    public void mouseEntered(MouseEvent evt) {
+                        Point pt = cardLabel.getLocation();
+                        int x = pt.x;
+                        int y = pt.y;
+                        cardLabel.setLocation(x,y-20);
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent evt) {
+                        Point pt = cardLabel.getLocation();
+                        int x = pt.x;
+                        int y = pt.y;
+                        cardLabel.setLocation(x,y+20);
+                    }
+
+                });
+                cardLabels.add(cardLabel);
+            }
+            double panelWidth = panels[i].getPreferredSize().getWidth();
+            System.out.println(panelWidth);
+            int xDim;
+            int startMargin=60;
+            int marginX;
+            if(i%2 == 0){
+                startMargin=(int)panelWidth/2 - (50*13)/2 - 50;
+                xDim = 50;
+            }else{
+                xDim=40;
+            }
+            marginX=startMargin;
+            System.out.println(marginX);
+            int marginY = 30;
+            for(JLabel j:cardLabels){
+                panels[i].add(j);
+                j.setLocation(marginX,marginY);
+                marginX+=xDim;
+                if(marginX+120>=panelWidth){
+
+                    marginX=startMargin;
+                    marginY+=130;
+
+                }
+            }
+            cardLabels.clear();
+        }
+
+
+        JPanel centerPanel = new JPanel();
+
+        centerPanel.setLayout(null);
+        centerPanel.setPreferredSize(new Dimension(600,600));
+        centerPanel.setMinimumSize(new Dimension(600, 600));
+        centerPanel.setOpaque(false);
+
+        window.add(panels[2], BorderLayout.NORTH);
+        window.add(panels[3], BorderLayout.WEST);
+        window.add(centerPanel, BorderLayout.CENTER);
+        window.add(panels[1], BorderLayout.EAST);
+        window.add(panels[0], BorderLayout.SOUTH);
+        
+        window.pack();
+        window.setLocationRelativeTo(null);
+
+        window.getContentPane().setBackground(new Color(0, 134, 64));
+	
+
+		
+        //window.repaint();
+        window.setVisible(true);
+
+       //-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName()+" played: "+lesson.getFirstCardPlayed());
 		System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " completed their turn."+"\n");
