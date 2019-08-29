@@ -26,12 +26,12 @@ public class Card{
 	 * @throws java.io.IOException when card image does not exist
 	 * 
 	 */
-	Card(char suit, char value) throws IOException { 
-		this.suit = suit;
-		this.value = value;
-		this.cardImage = ImageIO.read(new File("cardImages/AS.png"));
-		setPointValue(value);
-	}
+	Card(char suit, char value) throws IOException {
+        this.suit = suit;
+        this.value = value;
+        this.cardImage = ImageIO.read(new File("cardImages/"+value+""+suit+".png"));
+        setPointValue(value);
+    }
 
 
 	/**
