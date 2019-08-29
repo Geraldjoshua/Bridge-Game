@@ -30,11 +30,12 @@ vpath %.class $(BINDIR)
 
 #default rule - will be invoked by make
 
-all: 				GUI.class \
-				Card.class \
+all: 				Card.class \
 				Person.class \
 				Lesson.class \
+				GUI.class \
 				Game.class 
+				 
 					
 
 # rule to run the class

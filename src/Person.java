@@ -18,6 +18,7 @@ public class Person{
 	private boolean isWinner = false;
 	private int trickWins;
 	private int handStrength;
+	private boolean canPlay;
 
 
 	/**
@@ -31,6 +32,7 @@ public class Person{
 		this.name = "";
 		this.trickWins = 0;
 		this.handStrength = 0;
+		this.canPlay = true;
 	}
 
 	/**
@@ -45,7 +47,7 @@ public class Person{
 		this.points = 0;
 		this.trickWins = 0;
 		this.handStrength = 0;
-
+		this.canPlay = true;
 	}	
 
 	/**
@@ -58,6 +60,7 @@ public class Person{
 		this.hand = new ArrayList<Card>(hand);
 		this.points = 0;
 		this.name = name;
+		this.canPlay = true;
 	}
 
 	/**
@@ -89,6 +92,14 @@ public class Person{
 		
 		return hand.get(index);
 
+	}
+
+	public void setCanPlay(boolean canPlay){
+		this.canPlay = canPlay;
+	}
+
+	public boolean getCanPlay(){
+		return canPlay;
 	}
 
 	/**
