@@ -1,0 +1,22 @@
+S:1S PA 2D PA 3C PA 3S PA 4H PA 5C PA 6S PA PA PA
+SA32,HJ5,DQ963,C1T87
+ST94,HQ764,DAJ75,CK5
+S65,HT932,DKT84,CJ96
+SKQJ87,HAK8,D2,CA432
+3D
+3D,AD,4D,2D
+KC,6C,2C,7C
+5C,9C,AC,8C
+3C,TC,9S,JC
+4H,2H,AH,5H
+4C,QC,TS,8D
+4S,5S,KS,AS
+CLAIM
+10
+dummy has D and C losers, you have H and C losers.
+you can avoid losers in each hand by ruffing them in partner's hand because you have all the top trumps except AS, and you will need to cross-ruff because each hand has losers and these are in different suits.
+there is no danger suit.
+there is no danger hand.
+you do not know anything from the bidding.
+You have to cross-ruff, so must play your other suit winners first, so they aren't trumped later. When you ruff you must ruff with a high card, not the 4, otherwise the opposition may play a higher trump.
+END

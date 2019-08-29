@@ -1,0 +1,23 @@
+N:1C PA 1S PA 2S PA 4N PA 5H PA 6S PA PA PA
+S76,HQ752,DT87,CQT32
+SAKJ,HA96,D43,C98764
+S432,HKJ684,DQJ95,CJ
+SQT985,H3,DAK62,CAK5
+6S
+6S,AS,2S,5S
+3D,5D,AD,7D
+3H,2H,AH,4H
+4D,JD,KD,8D
+2D,TD,K2,9D
+4C,JC,AC,2C
+6D,5H,JS,QD
+6H,KH,8S,7H
+CLAIM
+10
+losing C and D tricks.
+you can ruff D losers in dummy.
+there is no danger suit.
+there is no danger hand.
+you do not know anything from the bidding.
+Plan to ruff your low D cards in the dummy; You must do this before you play any trump tricks, else you won't have any S in dummy to ruff your losers with; And you must be able to get to your hand to play those D cards, so keep the C winners in your hand for this purpose; thus play the AH and then another H so you can ruff it in your hand and play the AD and KD and then ruff the 3rd D in dummy; repeat this by reaching your hand with AK and ruffing your last D in diamond before playing all the remaining trumps.
+END
