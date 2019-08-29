@@ -10,21 +10,40 @@ import java.awt.event.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Arrays;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+
+/**
+* Driver class used to run the game(Bridge game).
+* @author Chris Cushway
+* @author Gerald Ngumbulu
+* @author Blessed Chitamba
+* @version 1.0
+*/
+
 public class Game{
-    public static void main(String args[]) throws IOException, InterruptedException{
+	public static void main(String args[]) throws IOException, InterruptedException{
 
-        Scanner userinput = new Scanner(System.in);
-        System.out.println("Enter level: ");
-        String level = userinput.nextLine();
-        String lesson_file = "input/input"+level+".txt";
-        Lesson lesson = new Lesson(lesson_file);
-
-        ArrayList<String> copyBestCase = lesson.getBestCase();
-        ArrayList<String> cardsPlayed = new ArrayList<String>();
-
-        System.out.println("------------------------------------------------------------------\n");
-
-        int playerTurn = 0;
+		Scanner userinput = new Scanner(System.in);
+		System.out.println("Enter level: ");
+		String level = userinput.nextLine();
+		String lesson_file = "input/input"+level+".txt";
+		Lesson lesson = new Lesson(lesson_file);
+		
+		ArrayList<String> copyBestCase = lesson.getBestCase();
+		ArrayList<String> cardsPlayed = new ArrayList<String>();
+		
+		System.out.println("------------------------------------------------------------------\n");
+		
+		int playerTurn = 0;
 
         //Setting up gui for game
 
