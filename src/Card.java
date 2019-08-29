@@ -3,6 +3,14 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+/**
+* card class to instantiate cards used in the game
+* @author Chris Cushway
+* @author Gerald Ngumbulu
+* @author Blessed Chitamba
+* @version 1.0
+*/
+
 public class Card{
 
     private char suit;
