@@ -3,7 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.*;
-
+import javax.swing.*;
 /**
 * card class to instantiate cards used in the game
 * @author Chris Cushway
@@ -18,6 +18,7 @@ public class Card{
 	private char value;
 	private int pointValue;
 	private BufferedImage cardImage;
+	private JLabel cardLabel;
 
 	/**
  	 * <p>constructor for the card class </p>
@@ -32,6 +33,8 @@ public class Card{
 		BufferedImage img = ImageIO.read(new File("cardImages/"+value+""+suit+".png"));
 		this.cardImage = resize(img,72,96);
 		setPointValue(value);
+		this.cardLabel = new JLabel(new ImageIcon(cardImage));
+		cardLabel.setSize(72,96);
     	}
 
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
@@ -44,6 +47,10 @@ public class Card{
 
 	    return dimg;
 	}  
+
+	public JLabel getCardLabel(){
+		return this.cardLabel;
+	}
 
 
 	/**

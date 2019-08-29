@@ -182,9 +182,11 @@ public class Lesson{
 	 */
 	public boolean isValid(String card , Person player){
 		//play can be Suit from first play or trump Suit
-		if(player.inHand(card) && (card.charAt(1) == getSuit())){			
+		if(player.inHand(card) && (card.charAt(1) == getSuit())){
+			player.setCanPlay(false);			//For gui purposes	
 			return true;
 		}else if((player.getPlayerHand().size()!=0)&&(player.noSuit(getLeadingSuit()))){
+			player.setCanPlay(false);
 			return true;
 		}else{
 			return false;
