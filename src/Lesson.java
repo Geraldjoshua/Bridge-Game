@@ -27,6 +27,7 @@ public class Lesson{
 	private char leadingSuit;
 	private char biddingSuit;
 	private LinkedHashMap<String,String> hints;
+	private LinkedHashMap<Integer,String> tips;
 	private String [] questions = {"How many winners/losers do you have?","What threats do you see?",
 									"What opportunities do you see?","Is there a danger suit?",
 									"Is there a danger hand?","What do you know from the bidding?","What is your plan?"};
@@ -44,7 +45,8 @@ public class Lesson{
 		players.add(new Person("North"));
 		players.add(new Person("East"));
 		players.add(new Person("South"));	
-		loadInput(filename);	
+		loadInput(filename);
+		loadTips("input/tips.txt");	
 	}
 
 	/**
@@ -77,6 +79,27 @@ public class Lesson{
 	 */
 	public LinkedHashMap<String,String> getHints(){
 		return hints;
+	}
+
+	/**
+ 	 * <p>setter to set tips</p>
+	 * @param tips Map that contains tips
+	 * 
+	 * 
+	 */
+	public void setTips(LinkedHashMap<Integer,String> tips){
+		this.tips = tips;
+		
+	}
+
+	/**
+ 	 * <p>getter to get tips</p>
+	 * @return tips Map that contains tips
+	 * 
+	 * 
+	 */
+	public LinkedHashMap<Integer,String> getTips(){
+		return tips;
 	}
 	
 	/**
@@ -143,10 +166,29 @@ public class Lesson{
 		setHints(hint);
 
 		
-
-
 	
 	}
+
+	/**
+ 	 * <p>function to parse in tipinput</p>
+	 * @param filename the file to be parsed
+	 * 
+	 * @throws java.io.IOException when the file does not match the lesson files
+	 * 
+	 */
+	public void loadTips(String filename) throws IOException{
+		LinkedHashMap<Integer,String> tip = new LinkedHashMap<>();
+		Scanner tipfile = new Scanner(new File(filename));
+		int counter = 0;
+		while(tipfile.hasNext()){
+			tip.put(counter,tipfile.nextLine());
+			counter++;
+		}
+		setTips(tip);
+
+	}
+
+
 
 	//Method to return best case to be played
 	public ArrayList<String> getBestCase(){

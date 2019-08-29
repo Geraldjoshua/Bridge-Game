@@ -1,0 +1,21 @@
+S:2C PA 2D PA 2S PA 3S PA 4S PA 6S PA PA PA
+ST8,HJT932,DJT52,C32
+SA75,H54,D873,CK9765 
+SQJ3,H876,DQ96,CQJT8
+SK9642,HAKQ,DAK4,CA4
+JH
+JH,4H,GH,AH
+2S,8S,AS,3S
+5S,JS,KS,TS
+KH,2H,5H,7H
+QH,3H,3D,8D
+7S,QS,4S,2C
+CLAIM
+11
+opponents have 5 trumps and you have lots of top cards in other suits which might be trumped by the opposition.
+you only have 2 losers in your hand, one S and one D, so can ruff the D in dummy.
+there is no danger suit.
+there is no danger hand.
+you do not know anything from the bidding.
+You have many winners so you need to draw trumps to avoid these winners being trumped, but don't draw the last trump because it is the highest.
+END
