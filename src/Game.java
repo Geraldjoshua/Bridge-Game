@@ -10,26 +10,6 @@ import java.awt.event.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Arrays;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-
-
-/**
-* Driver class used to run the game(Bridge game).
-* @author Chris Cushway
-* @author Gerald Ngumbulu
-* @author Blessed Chitamba
-* @version 1.0
-*/
-
-
 /**
 * Driver class used to run the game(Bridge game).
 * @author Chris Cushway
@@ -144,67 +124,13 @@ public class Game{
             cardLabels.clear();
         }
 
-
         JPanel centerPanel = new JPanel();
 
         centerPanel.setLayout(null);
         centerPanel.setPreferredSize(new Dimension(600,600));
         centerPanel.setMinimumSize(new Dimension(600, 600));
         centerPanel.setOpaque(false);
-
-        window.add(panels[2], BorderLayout.NORTH);
-        window.add(panels[3], BorderLayout.WEST);
-        window.add(centerPanel, BorderLayout.CENTER);
-        window.add(panels[1], BorderLayout.EAST);
-        window.add(panels[0], BorderLayout.SOUTH);
-        
-        window.pack();
-        window.setLocationRelativeTo(null);
-
-        window.getContentPane().setBackground(new Color(0, 134, 64));
-	
-
-		
-
-
-                });
-                cardLabels.add(cardLabel);
-            }
-            double panelWidth = panels[i].getPreferredSize().getWidth();
-            System.out.println(panelWidth);
-            int xDim;
-            int startMargin=60;
-            int marginX;
-            if(i%2 == 0){
-                startMargin=(int)panelWidth/2 - (50*13)/2 - 50;
-                xDim = 50;
-            }else{
-                xDim=40;
-            }
-            marginX=startMargin;
-            System.out.println(marginX);
-            int marginY = 30;
-            for(JLabel j:cardLabels){
-                panels[i].add(j);
-                j.setLocation(marginX,marginY);
-                marginX+=xDim;
-                if(marginX+120>=panelWidth){
-
-                    marginX=startMargin;
-                    marginY+=130;
-
-                }
-            }
-            cardLabels.clear();
-        }
-
-
-        JPanel centerPanel = new JPanel();
-
-        centerPanel.setLayout(null);
-        centerPanel.setPreferredSize(new Dimension(600,600));
-        centerPanel.setMinimumSize(new Dimension(600, 600));
-        centerPanel.setOpaque(false);
+	centerPanel.setBorder(BorderFactory.createLineBorder(new Color(226,172,44)));
 
         window.add(panels[2], BorderLayout.NORTH);
         window.add(panels[3], BorderLayout.WEST);
