@@ -18,7 +18,10 @@ public class Card{
 	private char value;
 	private int pointValue;
 	private BufferedImage cardImage;
+	private BufferedImage backSide;
 	private JLabel cardLabel;
+	private boolean flipped;
+	private JLabel flippedCard;
 
 	/**
  	 * <p>constructor for the card class </p>
@@ -31,8 +34,12 @@ public class Card{
 		this.suit = suit;
 		this.value = value;
 		BufferedImage img = ImageIO.read(new File("cardImages/"+value+""+suit+".png"));
+		BufferedImage img2 = ImageIO.read(new File("cardImages/backOfCard.png"));
+		this.backSide = resize(img2,72,96);
 		this.cardImage = resize(img,72,96);
 		setPointValue(value);
+		this.flipped = false;
+		this.flippedCard = new JLabel(new ImageIcon(backSide));
 		this.cardLabel = new JLabel(new ImageIcon(cardImage));
 		cardLabel.setSize(72,96);
     	}
@@ -49,9 +56,30 @@ public class Card{
 	}  
 
 	public JLabel getCardLabel(){
-		return this.cardLabel;
+		if(this.flipped){
+			System.out.println("flipped is true");
+			return this.flippedCard;
+		}else{
+			System.out.println("flipped is false");
+			return this.cardLabel;
+		}
+		
+	}
+	public void setFlipped(boolean flip){
+		this.flipped = flip;
 	}
 
+	public ImageIcon getImageIcon(){
+		if(flipped){
+			return new ImageIcon(backSide);		
+		}else{
+			return new ImageIcon(cardImage);
+		}
+		
+	}
+	public boolean getFlipped(){
+		return this.flipped;
+	}
 
 	/**
  	 * <p>getter to get to the suit of a card </p>

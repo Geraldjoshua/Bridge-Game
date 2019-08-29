@@ -42,6 +42,10 @@ public class GUI{
 	private JButton getHints;
 	private JButton getTips;
 	private JLabel playLogHeader;
+	private JButton flipCards;
+	private ArrayList<JLabel> cards = new ArrayList<JLabel>();
+	private int timesClicked = 0;
+	private int count=0;
 
 	GUI(Lesson lesson) throws IOException{
 		
@@ -88,7 +92,14 @@ public class GUI{
 
 		for(int i=0;i<panels.length;i++){
 		    for(int j=0;j<13;j++){
-		        JLabel cardLabel = lesson.getPlayers().get(i).getCard(j).getCardLabel();
+			JLabel cardLabel;
+			if(i<3){
+				lesson.getPlayers().get(i).getCard(j).setFlipped(true);
+				cardLabel = lesson.getPlayers().get(i).getCard(j).getCardLabel();
+			}else{
+				cardLabel = lesson.getPlayers().get(i).getCard(j).getCardLabel();
+			}
+		        
 		        cardLabel.setSize(72,96);
 		        cardLabel.addMouseListener(new MouseAdapter() {
 				
@@ -119,8 +130,12 @@ public class GUI{
 				}
 
 		        });
+			
 			if(lesson.getPlayers().get(i).getCard(j).toString().equals(lesson.getFirstCardPlayed())){
+				lesson.getPlayers().get(i).getCard(j).setFlipped(false);
+				cardLabel.setIcon(lesson.getPlayers().get(i).getCard(j).getImageIcon());
 				centerPanel.add(cardLabel);
+				
 				//cardLabel.setLocation((int)(centerPanel.getPreferredSize().getWidth()/2),(int)(centerPanel.getPreferredSize().getHeight()/2));
 				cardLabel.setLocation(400,250);
 				System.out.print("dimensions of screen: ("+xSize+","+ ySize+")");
@@ -128,7 +143,7 @@ public class GUI{
 			}else{
 				cardLabels.add(cardLabel);
 			}
-		        
+		        cards.add(cardLabel);
 		    }
 		    double panelWidth = panels[i].getPreferredSize().getWidth();
 		    
@@ -156,7 +171,9 @@ public class GUI{
 		        }
 		    }
 		    cardLabels.clear();
+		
 		}
+		System.out.println("size" + cards.size());
 				
 		
 
@@ -171,7 +188,10 @@ public class GUI{
 		getHints = makeGetHintsButton();
 		window.add(getHints);
 		getHints.setLocation(xSize-(int)getHints.getPreferredSize().getWidth()-120,770 - getHints.getHeight());
-
+		
+		flipCards = makeFlipCards();
+		window.add(flipCards);
+		flipCards.setLocation(100,50);
 
 		getTips = makeGetTipsButton();
 		window.add(getTips);
@@ -201,6 +221,54 @@ public class GUI{
 		System.out.println("wind size h " + window.getContentPane().getHeight());
 		//window.repaint();
 		window.setVisible(true);		
+
+	}
+
+	private JButton makeFlipCards(){
+		JButton flip = new JButton( new AbstractAction("EXIT") {
+			
+			@Override
+			public void actionPerformed( ActionEvent e ) {
+					count=0;
+					int j=0;
+					timesClicked++;
+					System.out.println("times: " +timesClicked);
+					for(int i=0;i<3;i++){
+						
+						for(Component card:panels[i].getComponents()){
+						
+							if(timesClicked%2==0){
+								
+								lesson.getPlayers().get(i).getCard(j).setFlipped(true);
+								//cards.get(count).setIcon(lesson.getPlayers().get(i).getCard(j).getImageIcon());
+								if(card instanceof JLabel){
+									((JLabel)card).setIcon(lesson.getPlayers().get(i).getCard(j).getImageIcon());
+								}
+								
+								 
+							}else{
+								
+								lesson.getPlayers().get(i).getCard(j).setFlipped(false);
+								//cards.get(count).setIcon(lesson.getPlayers().get(i).getCard(j).getImageIcon());
+								if(card instanceof JLabel){
+									((JLabel)card).setIcon(lesson.getPlayers().get(i).getCard(j).getImageIcon());
+								}
+								
+							}
+							j++;
+							count++;							
+						}
+						j=0;
+					}
+						
+			}
+		});
+		flip.setText("<html><h3>Flip Cards</h3></html>");
+		flip.setLayout(null);
+		flip.setSize(flip.getPreferredSize());
+		flip.setBackground(new Color(226,172,44));
+		flip.setForeground(new Color(0, 134, 64));
+		return flip;
 
 	}
 
@@ -273,6 +341,8 @@ public class GUI{
 				break;
 			}
 		}
+
+		
 		if(lesson.getPlayers().get(index).getCanPlay()){
 			
 			parent.remove(source);
@@ -281,6 +351,7 @@ public class GUI{
 			centerPanel.add(source);
 			source.setLocation(0,0);
 			lesson.getPlayers().get(index).setCanPlay(false);
+			
 			nextPlayerTurn();		
 		}
 
