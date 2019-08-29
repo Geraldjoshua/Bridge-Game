@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.LinkedHashMap;
 
 
 /**
@@ -25,6 +26,10 @@ public class Lesson{
 	private String firstCardPlayed;
 	private char leadingSuit;
 	private char biddingSuit;
+	private LinkedHashMap<String,String> hints;
+	private String [] questions = {"How many winners/losers do you have?","What threats do you see?",
+									"What opportunities do you see?","Is there a danger suit?",
+									"Is there a danger hand?","What do you know from the bidding?","What is your plan?"};
 
 
 	/**
@@ -53,7 +58,26 @@ public class Lesson{
 		players.add(new Person("South"));
 	}
 
-	
+	/**
+ 	 * <p>setter to set hints</p>
+	 * @param hints Map that contains hints and their corresponding questions
+	 * 
+	 * 
+	 */
+	public void setHints(LinkedHashMap<String,String> hints){
+		this.hints = hints;
+		
+	}
+
+	/**
+ 	 * <p>getter to get hints</p>
+	 * @return hints Map that contains hints and their corresponding questions
+	 * 
+	 * 
+	 */
+	public LinkedHashMap<String,String> getHints(){
+		return hints;
+	}
 	
 	/**
  	 * <p>function to parse in input</p>
@@ -110,8 +134,17 @@ public class Lesson{
 			maxNumOfTricksLeft--;
 			
 		}
-
+		//System.out.println(lesson.nextLine());
 		/*Rest of input will be parsed here*/
+		LinkedHashMap<String,String> hint = new LinkedHashMap<>();
+		 for(int i=0;i<questions.length;i++){	
+		  	hint.put(questions[i],lesson.nextLine());
+		  }
+		setHints(hint);
+
+		
+
+
 	
 	}
 
