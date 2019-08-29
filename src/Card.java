@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+
 /**
 * card class to instantiate cards used in the game
 * @author Chris Cushway
@@ -13,10 +14,10 @@ import javax.imageio.ImageIO;
 
 public class Card{
 
-    private char suit;
-    private char value;
-    private int pointValue;
-    private BufferedImage cardImage;
+	private char suit;
+	private char value;
+	private int pointValue;
+	private BufferedImage cardImage;
 
 	/**
  	 * <p>constructor for the card class </p>
@@ -25,13 +26,13 @@ public class Card{
 	 * @throws java.io.IOException when card image does not exist
 	 * 
 	 */
-
-    Card(char suit, char value) throws IOException {
+	Card(char suit, char value) throws IOException {
         this.suit = suit;
         this.value = value;
         this.cardImage = ImageIO.read(new File("cardImages/"+value+""+suit+".png"));
         setPointValue(value);
     }
+
 
 	/**
  	 * <p>getter to get to the suit of a card </p>
