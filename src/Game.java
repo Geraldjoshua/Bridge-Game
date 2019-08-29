@@ -85,7 +85,11 @@ public class Game{
 
         }
 
-        
+
+        panels[0].setBackground(Color.RED);
+        panels[1].setBackground(Color.BLACK);
+        panels[2].setBackground(Color.YELLOW);
+        panels[3].setBackground(Color.BLUE);
         for(int i=0;i<panels.length;i++){
             for(int j=0;j<13;j++){
                 final JLabel cardLabel = new JLabel(new ImageIcon(lesson.getPlayers().get(i).getCard(j).getCardImage()));
@@ -107,6 +111,7 @@ public class Game{
                         int y = pt.y;
                         cardLabel.setLocation(x,y+20);
                     }
+
 
                 });
                 cardLabels.add(cardLabel);
@@ -160,6 +165,58 @@ public class Game{
 	
 
 		
+
+
+                });
+                cardLabels.add(cardLabel);
+            }
+            double panelWidth = panels[i].getPreferredSize().getWidth();
+            System.out.println(panelWidth);
+            int xDim;
+            int startMargin=60;
+            int marginX;
+            if(i%2 == 0){
+                startMargin=(int)panelWidth/2 - (50*13)/2 - 50;
+                xDim = 50;
+            }else{
+                xDim=40;
+            }
+            marginX=startMargin;
+            System.out.println(marginX);
+            int marginY = 30;
+            for(JLabel j:cardLabels){
+                panels[i].add(j);
+                j.setLocation(marginX,marginY);
+                marginX+=xDim;
+                if(marginX+120>=panelWidth){
+
+                    marginX=startMargin;
+                    marginY+=130;
+
+                }
+            }
+            cardLabels.clear();
+        }
+
+
+        JPanel centerPanel = new JPanel();
+
+        centerPanel.setLayout(null);
+        centerPanel.setPreferredSize(new Dimension(600,600));
+        centerPanel.setMinimumSize(new Dimension(600, 600));
+        centerPanel.setOpaque(false);
+
+        window.add(panels[2], BorderLayout.NORTH);
+        window.add(panels[3], BorderLayout.WEST);
+        window.add(centerPanel, BorderLayout.CENTER);
+        window.add(panels[1], BorderLayout.EAST);
+        window.add(panels[0], BorderLayout.SOUTH);
+        
+        window.pack();
+        window.setLocationRelativeTo(null);
+
+        window.getContentPane().setBackground(new Color(0, 134, 64));
+
         //window.repaint();
         window.setVisible(true);
 
