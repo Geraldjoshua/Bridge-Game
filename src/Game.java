@@ -29,6 +29,15 @@ import java.awt.event.*;
 * @version 1.0
 */
 
+
+/**
+* Driver class used to run the game(Bridge game).
+* @author Chris Cushway
+* @author Gerald Ngumbulu
+* @author Blessed Chitamba
+* @version 1.0
+*/
+
 public class Game{
 	public static void main(String args[]) throws IOException, InterruptedException{
 

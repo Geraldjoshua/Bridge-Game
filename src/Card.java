@@ -34,6 +34,8 @@ public class Card{
     }
 
 
+
+
 	/**
  	 * <p>getter to get to the suit of a card </p>
 	 * @return char Contains card's suite
