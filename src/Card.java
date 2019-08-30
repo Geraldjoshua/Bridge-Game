@@ -57,10 +57,10 @@ public class Card{
 
 	public JLabel getCardLabel(){
 		if(this.flipped){
-			System.out.println("flipped is true");
+			
 			return this.flippedCard;
 		}else{
-			System.out.println("flipped is false");
+			
 			return this.cardLabel;
 		}
 		
