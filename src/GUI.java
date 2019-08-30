@@ -23,7 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-
+import java.awt.Component;
 
 public class GUI{
 	
@@ -47,19 +47,31 @@ public class GUI{
 	private int timesClicked = 0;
 	private int count=0;
 
+
 	GUI(Lesson lesson) throws IOException{
 		
 		this.lesson = lesson;
 		this.window = new JFrame("Bridge Tutor");
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		this.xSize = ((int) tk.getScreenSize().getWidth());
-		this.ySize = ((int) tk.getScreenSize().getHeight());
+		//this.xSize = ((int) tk.getScreenSize().getWidth());
+		//this.ySize = ((int) tk.getScreenSize().getHeight());
 		this.centerPanel = new JPanel();
 		this.playLog = new JPanel();
 		this.currentPlayer = 0;
+		Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(window.getGraphicsConfiguration());
+		
+//window.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height-taskBarSize));
+		this.xSize = Toolkit.getDefaultToolkit().getScreenSize().width-scnMax.right - scnMax.left;
+		this.ySize = Toolkit.getDefaultToolkit().getScreenSize().height-scnMax.bottom-scnMax.top;
+		System.out.println("r"+scnMax.right+" l"+scnMax.left+" t"+scnMax.top+" b"+scnMax.bottom);
+		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		
+		window.setLocationRelativeTo(null);
+		window.setLayout(null);
+
+		window.setUndecorated(true);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		centerPanel.setLayout(null);
-		centerPanel.setPreferredSize(new Dimension(600,600));
-		centerPanel.setMinimumSize(new Dimension(600, 600));
 		centerPanel.setOpaque(false);
 		centerPanel.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));
 	}
@@ -71,25 +83,26 @@ public class GUI{
     		Image newimg = img.getScaledInstance( 100, 100,  Image.SCALE_SMOOTH ) ; 
 		
 
-		window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		window.getContentPane().setSize(xSize,ySize);
-		window.setLocationRelativeTo(null);
-		System.out.println("wind size" + window.getContentPane().getWidth());
-		window.setUndecorated(true);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 
 		for(int i=0;i<panels.length;i++){
 		    panels[i] = new JPanel();
 		    panels[i].setOpaque(false);
 		    panels[i].setLayout(null);
-		    if(i%2 != 0) {
-		        panels[i].setPreferredSize(new Dimension(xSize,200));
-		    } else{
-		        panels[i].setPreferredSize(new Dimension(400, ySize));
-		    }
-
 		}
 
+		panels[0].setBackground(Color.blue);
+		panels[1].setBackground(Color.green);
+		panels[2].setBackground(Color.yellow);
+		panels[3].setBackground(Color.red);
+			
+		panels[0].setBounds(0,(int)(ySize/4),(int)(xSize/4),(int)(ySize/2));
+		panels[1].setBounds(0,0,xSize,(int)(ySize/4));
+		panels[2].setBounds((int)((3*xSize)/4),(int)(ySize/4),(int)(xSize/4),(int)(ySize/2));
+		panels[3].setBounds(0,(int)((3*ySize)/4),xSize,(int)(ySize/4));
+		centerPanel.setBounds((int)(xSize/4),(int)(ySize/4),(int)(xSize/2),(int)(ySize/2));
+		
+		
 		for(int i=0;i<panels.length;i++){
 		    for(int j=0;j<13;j++){
 			JLabel cardLabel;
@@ -101,35 +114,38 @@ public class GUI{
 			}
 		        
 		        cardLabel.setSize(72,96);
-		        cardLabel.addMouseListener(new MouseAdapter() {
-				
-				
-		            	@Override
-		            	public void mouseEntered(MouseEvent evt) {
-		                	Point pt = cardLabel.getLocation();
-		                	int x = pt.x;
-		                	int y = pt.y;
-		                	cardLabel.setLocation(x,y-20);
-					cardLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		            	}
-
-		            	@Override
-		            	public void mouseExited(MouseEvent evt) {
-		                	Point pt = cardLabel.getLocation();
-		                	int x = pt.x;
-		                	int y = pt.y;
-		                	cardLabel.setLocation(x,y+20);
-		            	}
-				
-				@Override
-				public void mouseClicked(MouseEvent evt){
+			
+				cardLabel.addMouseListener(new MouseAdapter() {
 					
-
-					findPlayer((JLabel)evt.getSource());					
 					
-				}
+				    	@Override
+				    	public void mouseEntered(MouseEvent evt) {
+				        	Point pt = cardLabel.getLocation();
+				        	int x = pt.x;
+				        	int y = pt.y;
+				        	cardLabel.setLocation(x,y-20);
+						cardLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				    	}
 
-		        });
+				    	@Override
+				    	public void mouseExited(MouseEvent evt) {
+				        	Point pt = cardLabel.getLocation();
+				        	int x = pt.x;
+				        	int y = pt.y;
+				        	cardLabel.setLocation(x,y+20);
+				    	}
+					
+					@Override
+					public void mouseClicked(MouseEvent evt){
+						
+
+						findPlayer((JLabel)evt.getSource());					
+						
+					}
+
+		        	});
+			
+		        
 			
 			if(lesson.getPlayers().get(i).getCard(j).toString().equals(lesson.getFirstCardPlayed())){
 				lesson.getPlayers().get(i).getCard(j).setFlipped(false);
@@ -137,15 +153,14 @@ public class GUI{
 				centerPanel.add(cardLabel);
 				
 				//cardLabel.setLocation((int)(centerPanel.getPreferredSize().getWidth()/2),(int)(centerPanel.getPreferredSize().getHeight()/2));
-				cardLabel.setLocation(400,250);
-				System.out.print("dimensions of screen: ("+xSize+","+ ySize+")");
-				System.out.println("panel width in loop:" + centerPanel.getWidth() + " panel height in loop: " +centerPanel.getHeight());
+				cardLabel.setLocation(centerPanel.getWidth()/2 - 72 ,centerPanel.getHeight()/2 - 36);
+				
 			}else{
 				cardLabels.add(cardLabel);
 			}
 		        cards.add(cardLabel);
 		    }
-		    double panelWidth = panels[i].getPreferredSize().getWidth();
+		    double panelWidth = panels[i].getWidth();
 		    
 		    int xDim;
 		    int startMargin=60;
@@ -157,7 +172,7 @@ public class GUI{
 		        xDim=40;
 		    }
 		    marginX=startMargin;
-		    System.out.println(marginX);
+		   
 		    int marginY = 30;
 		    for(JLabel j:cardLabels){
 		        panels[i].add(j);
@@ -173,7 +188,7 @@ public class GUI{
 		    cardLabels.clear();
 		
 		}
-		System.out.println("size" + cards.size());
+		
 				
 		
 
@@ -207,32 +222,31 @@ public class GUI{
 		window.add(playLogHeader);
 		playLogHeader.setLocation(playLog.getX(),playLog.getY() - (int)playLogHeader.getPreferredSize().getHeight());
 		
-		window.add(panels[1], BorderLayout.NORTH);
-		window.add(panels[0], BorderLayout.WEST);
-		window.add(centerPanel, BorderLayout.CENTER);
-		window.add(panels[2], BorderLayout.EAST);
-		window.add(panels[3], BorderLayout.SOUTH);
-		System.out.println("panel width after add:" + centerPanel.getWidth() + " panel height after add: " +centerPanel.getHeight());
 		
-		window.pack();
-		System.out.println("panel width after pack:" + centerPanel.getWidth() + " panel height after pack: " +centerPanel.getHeight());
+		window.add(centerPanel);
+		window.add(panels[0]);
+		window.add(panels[1]);
+		window.add(panels[2]);
+		window.add(panels[3]);
+		//window.pack();
+		
 		
 		window.getContentPane().setBackground(new Color(0, 134, 64));
-		System.out.println("wind size h " + window.getContentPane().getHeight());
-		//window.repaint();
+		
+		
 		window.setVisible(true);		
 
 	}
 
 	private JButton makeFlipCards(){
-		JButton flip = new JButton( new AbstractAction("EXIT") {
+		JButton flip = new JButton( new AbstractAction("FLIP") {
 			
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 					count=0;
 					int j=0;
 					timesClicked++;
-					System.out.println("times: " +timesClicked);
+					
 					for(int i=0;i<3;i++){
 						
 						for(Component card:panels[i].getComponents()){
@@ -273,7 +287,7 @@ public class GUI{
 	}
 
 	private JButton	makeGetHintsButton(){
-		JButton hints = new JButton( new AbstractAction("EXIT") {
+		JButton hints = new JButton( new AbstractAction("HINTS") {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 					
@@ -288,7 +302,7 @@ public class GUI{
 	}
 
 	private JButton	makeGetTipsButton(){
-		JButton tips = new JButton( new AbstractAction("EXIT") {
+		JButton tips = new JButton( new AbstractAction("TIPS") {
 			@Override
 			public void actionPerformed( ActionEvent e ) {
 					
@@ -333,6 +347,7 @@ public class GUI{
 	public void findPlayer(JLabel source){
 
 		int index=0;
+		int jIndex = 0;
 		Container parent = source.getParent();
 		for(int i=0;i<panels.length;i++){
 			if(panels[i] == parent){
@@ -341,7 +356,16 @@ public class GUI{
 				break;
 			}
 		}
+		
 
+		for(Component card:panels[index].getComponents()){
+			if(source == card){
+				lesson.getPlayers().get(index).getCard(jIndex).setFlipped(false);
+				((JLabel)card).setIcon(lesson.getPlayers().get(index).getCard(jIndex).getImageIcon());
+			}
+			jIndex++;
+		}
+		
 		
 		if(lesson.getPlayers().get(index).getCanPlay()){
 			
@@ -349,7 +373,14 @@ public class GUI{
 			parent.validate();
 			parent.repaint();
 			centerPanel.add(source);
-			source.setLocation(0,0);
+			
+			if(index==1 || index==3){
+				source.setLocation(centerPanel.getWidth()/2 - 36,centerPanel.getHeight()/2 + (((index-2)*36)-36)-20);
+				
+			}else{
+				source.setLocation(centerPanel.getWidth()/2 - 72 + index*36,centerPanel.getHeight()/2 - 36 - 20);
+			}
+			
 			lesson.getPlayers().get(index).setCanPlay(false);
 			
 			nextPlayerTurn();		
