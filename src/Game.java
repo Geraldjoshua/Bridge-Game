@@ -39,7 +39,7 @@ public class Game{
         GUI gui = new GUI(lesson);
 
 
-        //-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
+       /* //-----FIRST PLAY OF THE GAME----------------------------------------------------------------------//
         System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " is now playing.");
         System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName()+" played: "+lesson.getFirstCardPlayed());
         System.out.println(lesson.getPlayers().get(playerTurn).getPlayerName() + " completed their turn."+"\n");
@@ -128,6 +128,6 @@ public class Game{
         }
 
         lesson.decideGameWinner();
-
+        */
     }
 }

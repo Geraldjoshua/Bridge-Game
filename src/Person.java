@@ -367,9 +367,9 @@ public class Person{
      *
      */
     public void removePlayedCard(String card ){
-        for(int i=0;i<hand.size();i++){
-            if(hand.get(i).toString().equals(card)){
-                hand.remove(i);
+        for(int i=0;i<this.hand.size();i++){
+            if(this.hand.get(i).toString().equals(card)){
+                this.hand.remove(i);
             }
         }
     }

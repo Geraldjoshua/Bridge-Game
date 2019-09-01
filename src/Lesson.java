@@ -258,10 +258,10 @@ public class Lesson{
     public boolean isValid(String card , Person player){
         //play can be Suit from first play or trump Suit
         if(player.inHand(card) && (card.charAt(1) == getSuit())){
-            player.setCanPlay(false);			//For gui purposes
+            			//For gui purposes
             return true;
         }else if((player.getPlayerHand().size()!=0)&&(player.noSuit(getLeadingSuit()))){
-            player.setCanPlay(false);
+
             return true;
         }else{
             return false;
@@ -366,6 +366,8 @@ public class Lesson{
 
     }
 
+
+
     /**
      * <p>gets Winner of trick based on boolean inside person class
      * and set it back to false after trick to prevent more than one winner scenario</p>
@@ -399,7 +401,7 @@ public class Lesson{
      * <p>Decides winner of trick based on points from cards played </p>
      *
      */
-    public void decideWinner(){
+    public String decideWinner(){
         Person winner = new Person();
         int points=0;
         for(Person player:players){
@@ -408,9 +410,9 @@ public class Lesson{
                 winner = player;
             }
         }
-        System.out.println(winner.getPlayerName() + " Wins the trick!");
-        setWinner(winner.getPlayerName());
-        resetPoints();
+       // System.out.println(winner.getPlayerName() + " Wins the trick!");
+        //setWinner(winner.getPlayerName());
+        return winner.getPlayerName();
     }
 
     /**
