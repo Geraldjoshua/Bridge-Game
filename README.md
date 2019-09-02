@@ -1,2 +1,2 @@
 # bridge Game
-BLESSED'S CHANGES
+Working progress
