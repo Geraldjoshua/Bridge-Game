@@ -39,9 +39,10 @@ public class Card{
         this.cardImage = resize(img,72,96);
         setPointValue(value);
         this.flipped = false;
-        this.flippedCard = new JLabel(new ImageIcon(backSide));
+        
         this.cardLabel = new JLabel(new ImageIcon(cardImage));
         cardLabel.setSize(72,96);
+	
     }
 
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
@@ -56,17 +57,20 @@ public class Card{
     }
 
     public JLabel getCardLabel(){
-        if(this.flipped){
-
-            return this.flippedCard;
-        }else{
-
-            return this.cardLabel;
-        }
+        return cardLabel;
 
     }
     public void setFlipped(boolean flip){
-        this.flipped = flip;
+        if(flip){
+		cardLabel.setIcon(new ImageIcon(backSide));
+		cardLabel.validate();
+		cardLabel.repaint();
+	}else{
+		cardLabel.setIcon(new ImageIcon(cardImage));
+		cardLabel.validate();
+		cardLabel.repaint();
+	}
+	
     }
 
     public ImageIcon getImageIcon(){

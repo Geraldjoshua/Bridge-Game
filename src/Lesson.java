@@ -31,6 +31,7 @@ public class Lesson{
     private String [] questions = {"How many winners/losers do you have?","What threats do you see?",
             "What opportunities do you see?","Is there a danger suit?",
             "Is there a danger hand?","What do you know from the bidding?","What is your plan?"};
+	private String biddingString;
 
 
     /**
@@ -102,6 +103,13 @@ public class Lesson{
         return tips;
     }
 
+	public void setBiddingString(String bidding){
+		this.biddingString = bidding;
+	}
+
+	public String getBiddingString(){
+		return this.biddingString;
+	}
     /**
      * <p>function to parse in input</p>
      * @param filename the file to be parsed
@@ -114,6 +122,7 @@ public class Lesson{
         Scanner lesson = new Scanner(new File(filename));
         System.out.println("The bidding is: ");
         String bidding = lesson.nextLine();
+		setBiddingString(bidding);
         String[] Bidding = bidding.split(" ");
         setBidding(Bidding);
         System.out.println(bidding);

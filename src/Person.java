@@ -113,7 +113,7 @@ public class Person{
         for(int i=0;i<hand.size();i++){
             if(hand.get(i).toString().equals(card)){
 
-                return hand.get(i);
+                return this.hand.get(i);
             }
         }
         return null;
