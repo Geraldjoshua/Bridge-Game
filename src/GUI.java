@@ -5,11 +5,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.Component;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GUI{
 
     private Lesson lesson;
     private final int framePadding = 40;
+    private final int ySpaceing = 10;
     private JFrame window;
     private ArrayList<JLabel> cardLabels = new ArrayList<JLabel>();
     private JPanel[] panels = new JPanel[4];
@@ -27,15 +30,19 @@ public class GUI{
     private JButton exit;
     private JButton claim;
     private JLabel score;
-	private JLabel playLogHeader;
+    private JLabel playLogHeader;
     private ArrayList<Component> components = new ArrayList<Component>();
-    private ArrayList<JLabel> cards = new ArrayList<JLabel>();
+    private ArrayList<JLabel> cards = new ArrayList<>();
     private int timesClicked = 0;
     private int count=0;
     private MouseListener ml;
     private MouseListener hover;
     private int tricks;
-	private JLabel biddingLabel;
+    private JLabel biddingLabel;
+    private ArrayList <String> hintQuestions;
+    private int timesHintClicked=0;
+    private int hintAnswerNumber=0;
+    private int hintQuestionNumber;
 
     GUI(Lesson lesson) throws IOException, InterruptedException {
         this.played=false;
@@ -155,52 +162,37 @@ public class GUI{
     private void makeLessonScreen() throws IOException, InterruptedException {
         initPlayerPanels();
         initCenterPanel();
+        int x = testCardX(72,72);
         for(int i=0;i<panels.length;i++){
             for(int j=0;j<13;j++){
-                //JLabel cardLabel;
-                //cardLabel = lesson.getPlayers().get(i).getCard(j).getCardLabel();
-				
+
                 if(!lesson.getPlayers().get(i).getPlayerName().toLowerCase().equals("south") && !lesson.getPlayers().get(i).getPlayerName().toLowerCase().equals("north")){
                     lesson.getPlayers().get(i).getCard(j).setFlipped(true);
-                    //cardLabel.setIcon(lesson.getPlayers().get(i).getCard(j).getImageIcon());
-					//cardLabel.validate();
-					//cardLabel.repaint();
+                    lesson.getPlayers().get(i).getCard(j).resizeCard(x,(int)calcY(x),true);
                 }else{
                     lesson.getPlayers().get(i).getCard(j).setFlipped(false);
-                    /*cardLabel.setIcon(lesson.getPlayers().get(i).getCard(j).getImageIcon());
-					cardLabel.validate();
-					cardLabel.repaint();*/
+                    lesson.getPlayers().get(i).getCard(j).resizeCard(x,(int)calcY(x),false);
                 }
 
-               // cardLabel.setSize(72,96);
-				//System.out.println(cardLabel);
-				
                 cardLabels.add(lesson.getPlayers().get(i).getCard(j).getCardLabel());
 
                 cards.add(lesson.getPlayers().get(i).getCard(j).getCardLabel());
             }
-            double panelWidth = panels[i].getWidth();
-            int xDim;
-            int startMargin=60;
-            int marginX;
-            if(i%2 != 0){
-                startMargin=(int)panelWidth/2 - (50*13)/2 - 50;
-                xDim = 50;
-            }else{
-                xDim=40;
+            int xCoord=framePadding;
+            int yCoord=0;
+            if(i%2 !=0) {
+                xCoord = panels[i].getWidth() / 2 - ((13 / 2) * x)/2 - x/2;
+                yCoord=framePadding;
             }
-            marginX=startMargin;
-            int marginY = 30;
             for(JLabel j:cardLabels){
                 panels[i].add(j);
-                j.setLocation(marginX,marginY);
-                marginX+=xDim;
-                if(marginX+120>=panelWidth){
 
-                    marginX=startMargin;
-                    marginY+=130;
-
+                    if(xCoord+j.getWidth()+framePadding>=panels[i].getWidth()){
+                    xCoord = framePadding;
+                    yCoord+=j.getHeight()+15;
                 }
+                j.setLocation(xCoord,yCoord);
+                xCoord+=j.getWidth()/2;
             }
             cardLabels.clear();
         }
@@ -218,6 +210,7 @@ public class GUI{
         }
         window.getContentPane().setBackground(new Color(0, 134, 64));
         window.setVisible(true);
+        hintQuestions = new ArrayList<>(lesson.getHints().keySet());
         startGame();
 
     }
@@ -229,11 +222,11 @@ public class GUI{
                 played = false;
                 System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerHand() + " before");
                 lesson.getPlayers().get(currentPlayer).setCanPlay(true);
-				playerTurn.setText("<html><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
-				
+                playerTurn.setText("<html><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
+
                 System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerName() + " can play");
                 if (!lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("south") && !lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("north")) {
-					Thread.sleep(2000);
+                    Thread.sleep(2000);
                     autoPlay();
                 } else {
                     addMouseListeners();
@@ -307,10 +300,39 @@ public class GUI{
                 }
                 jIndex++;
             }
-
-
             played=true;
         }
+    }
+
+    public int testCardX(double testX,double testY){
+
+        int panelHeight = panels[0].getHeight()-2*ySpaceing;
+        int panelWidth = panels[0].getWidth()-2*framePadding;
+        System.out.println("x: "+testX+" y: "+testY);
+        int cardsX	= (int)(panelWidth/testX);
+        int cardsY = (int)(panelHeight/testY);
+        cardsX*=2;
+        cardsY = (int)((panelHeight - ySpaceing*cardsY)/testY);
+        int area = cardsX*cardsY;
+        if(area<13){
+            testX-=1;
+            System.out.println(panelWidth+"x"+panelHeight+" "+"testx -10: " +testX+" calc: "+calcY(testX)+"cardsX :"+cardsX+" cardsY: "+cardsY+"area is: "+area);
+            return testCardX(testX-1,calcY(testX));
+        }else if(area>18){
+            testX+=1;
+           // testY = calcY(testX);
+            System.out.println(panelWidth+"x"+panelHeight+" "+"testx +10: "+testX+10 +" calc: "+calcY(testX+10)+"cardsX :"+cardsX+" cardsY: "+cardsY+"area is: "+area);
+            return testCardX(testX+1,calcY(testX));
+        }else{
+            System.out.println("area "+area+"new x dim is: " + testX);
+            return (int)testX;
+        }
+
+    }
+
+    public double calcY(double x){
+        x=(x/72) *96;
+        return x;
     }
 
     public void autoPlay() throws InterruptedException {
@@ -330,7 +352,7 @@ public class GUI{
                     /*((JLabel)card).setIcon(lesson.getPlayers().get(index).getCard(jIndex).getImageIcon());
                     ((JLabel)card).validate();
                     ((JLabel)card).repaint();*/
-			//System.out.println(((JLabel)c).toString()+" end"+lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel());
+                    //System.out.println(((JLabel)c).toString()+" end"+lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel());
                     if(((JLabel)c) == lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel()){
                         System.out.println("hello");
 
@@ -437,7 +459,7 @@ public class GUI{
         centerPanel.repaint();
 
     }
-    
+
     private JLabel makePlayLogHeader(){
         playLogHeader = new JLabel("<html><h2 style='color:white;text-decoration:underline;' >Play Log</h2></html>");
         playLogHeader.setLayout(null);
@@ -455,16 +477,16 @@ public class GUI{
                 timesClicked++;
                 for(int i=0;i<3;i+=2){
                     for(Component card:panels[i].getComponents()){
-						if(card instanceof JLabel){
-							if(timesClicked%2==0){
-                            	lesson.getPlayers().get(i).getCard(j).setFlipped(true);
-                            
-		                    }else{
-		                        lesson.getPlayers().get(i).getCard(j).setFlipped(false);
-		                        
-		                    }
-						}
-                        
+                        if(card instanceof JLabel){
+                            if(timesClicked%2==0){
+                                lesson.getPlayers().get(i).getCard(j).setFlipped(true);
+
+                            }else{
+                                lesson.getPlayers().get(i).getCard(j).setFlipped(false);
+
+                            }
+                        }
+
                         j++;
                         count++;
                     }
@@ -481,19 +503,35 @@ public class GUI{
         return flip;
     }
 
-	private JLabel makeBiddingLabel(){
-		biddingLabel=new JLabel("<html><p style='color:white;'>The Bidding is: "+lesson.getBiddingString()+"<br>The Bidding Suit is: <span style='color:red;font-size:200%;'>"+ '\u2665'+"</span></p></html>");
-		biddingLabel.setLayout(null);
-		biddingLabel.setSize(biddingLabel.getPreferredSize());
-		biddingLabel.setLocation(centerPanel.getLocation().x + 5, centerPanel.getLocation().y +5);
-		return biddingLabel;
-	}
+    private JLabel makeBiddingLabel(){
+        biddingLabel=new JLabel("<html><p style='color:white;'>The Bidding is: "+lesson.getBiddingString()+"<br>The Bidding Suit is: <span style='font-size:150%;'>"+ lesson.getBiddingSuit()+"</span></p></html>");
+        biddingLabel.setLayout(null);
+        biddingLabel.setSize(biddingLabel.getPreferredSize());
+        biddingLabel.setLocation(centerPanel.getLocation().x + 5, centerPanel.getLocation().y +5);
+        return biddingLabel;
+    }
 
-    private JButton	makeGetHintsButton(){
+    private JButton makeGetHintsButton (){
         hints = new JButton( new AbstractAction("HINTS") {
             @Override
             public void actionPerformed( ActionEvent e ) {
-
+                if(hintAnswerNumber<hintQuestions.size()){
+                    if(timesHintClicked%2==0){
+                        playerTurn.setText("<html><p>Hint Question : " + hintQuestions.get(hintQuestionNumber) + " (click hints for more) </p></html>");
+                        hintQuestionNumber++;
+                        timesHintClicked++;
+                    }
+                    else{
+                        playerTurn.setText("<html><p>Answer : " + lesson.getHintasked(hintQuestions.get(hintAnswerNumber)) + " (click hints for more) </p></html>");
+                        hintAnswerNumber++;
+                        timesHintClicked++;
+                    }
+                }
+                else{
+                    //playerTurn.setText("<html><p>No more questions!! keep playing!!</p></html>");
+                    System.out.println(hintQuestions.size());
+                    playerTurn.setText("<html><p>No more questions! </p><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
+                }
             }
         });
         hints.setText("<html><h3>GETS HINTS</h3></html>");

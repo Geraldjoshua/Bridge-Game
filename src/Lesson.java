@@ -47,7 +47,7 @@ public class Lesson{
         players.add(new Person("East"));
         players.add(new Person("South"));
         loadInput(filename);
-        loadTips("input/tips.txt");
+        loadTips("tips.txt");
     }
 
     /**
@@ -80,6 +80,16 @@ public class Lesson{
      */
     public LinkedHashMap<String,String> getHints(){
         return hints;
+    }
+    
+    public String getHintasked(String key){
+        String hint = hints.get(key);
+        return hint;
+    }
+
+    public String getTipsasked(int key){
+        String tip = tips.get(key);
+        return tip;
     }
 
     /**

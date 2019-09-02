@@ -41,9 +41,17 @@ public class Card{
         this.flipped = false;
         
         this.cardLabel = new JLabel(new ImageIcon(cardImage));
-        cardLabel.setSize(72,96);
+        this.cardLabel.setSize(72,96);
 	
     }
+
+	public void resizeCard(int width,int height,boolean flipped){
+		
+		backSide=resize(backSide,width,height);
+		cardImage=resize(cardImage,width,height);
+		this.setFlipped(flipped);
+		this.cardLabel.setSize(width,height);
+	}
 
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
