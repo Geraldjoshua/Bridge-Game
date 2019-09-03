@@ -1,8 +1,8 @@
-Remember the highest card that’s out or hasn’t been played yet in each suit
-Remember how many cards have already been played in each suit
-Remember how many cards have already been played in each suit by each player
-Remember how many cards each player started with in each suit
-Remember how many points each player started with
-Remember how many points each player has left in their hand
-Remember what your partner has signalled to you (applies to E and W only)
-Remember what you need to signal to your partner (applies to E and W only
+Remember the highest card that is out or hasn't been played yet in each suit.
+always remember how many cards have already been played in each suit.
+remember how many cards have already been played in each suit by each player.
+always keep in mind how many cards each player started with in each suit.
+remember how many points each player started with
+keep in mind how many points each player has left in their hand
+Remember what your partner has signalled to you
+Remeber what you need to signal to your partner.
