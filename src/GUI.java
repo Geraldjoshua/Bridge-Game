@@ -520,17 +520,21 @@ public class GUI{
                         playerTurn.setText("<html><p>Hint Question : " + hintQuestions.get(hintQuestionNumber) + " (click hints for more) </p></html>");
                         hintQuestionNumber++;
                         timesHintClicked++;
+						playerTurn.setSize(200,50);
                     }
                     else{
                         playerTurn.setText("<html><p>Answer : " + lesson.getHintasked(hintQuestions.get(hintAnswerNumber)) + " (click hints for more) </p></html>");
                         hintAnswerNumber++;
                         timesHintClicked++;
+						playerTurn.setSize(200,50);
+
                     }
                 }
                 else{
                     //playerTurn.setText("<html><p>No more questions!! keep playing!!</p></html>");
                     System.out.println(hintQuestions.size());
                     playerTurn.setText("<html><p>No more questions! </p><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
+		    playerTurn.setSize(300,50);
                 }
             }
         });
@@ -616,7 +620,7 @@ public class GUI{
         }
     }
 
-    public JPanel makePlayLog() throws IOException{
+    public JScrollPane makePlayLog() throws IOException{
         playLog.setOpaque(false);
         playLog.setLayout(null);
         playLog.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));
@@ -627,7 +631,13 @@ public class GUI{
         playLog.setSize(300,150);
         playLog.add(playerTurn);
         playLog.setLocation(framePadding,panels[0].getLocation().y + panels[0].getHeight() + playLogHeader.getHeight() + 10);
-        return playLog;
+		JScrollPane scroller = new JScrollPane(playLog,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scroller.setOpaque(false);
+		scroller.setLayout(null);
+		scroller.setSize(xSize/4-2*framePadding,ySize/4-2*framePadding);
+		scroller.setLocation(framePadding,panels[0].getLocation().y + panels[0].getHeight() + playLogHeader.getHeight() + 10);
+		scroller.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));   
+        return scroller;
     }
 
 

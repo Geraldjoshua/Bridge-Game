@@ -47,7 +47,7 @@ public class Lesson{
         players.add(new Person("East"));
         players.add(new Person("South"));
         loadInput(filename);
-        loadTips("tips.txt");
+        loadTips("input/tips.txt");
     }
 
     /**

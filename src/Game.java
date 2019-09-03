@@ -24,7 +24,7 @@ public class Game{
         Scanner userinput = new Scanner(System.in);
         System.out.println("Enter level: ");
         String level = userinput.nextLine();
-        String lesson_file = "input"+level+".txt";
+        String lesson_file = "input/input"+level+".txt";
         Lesson lesson = new Lesson(lesson_file);
 
         ArrayList<String> copyBestCase = lesson.getBestCase();
