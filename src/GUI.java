@@ -43,12 +43,16 @@ public class GUI{
     private int timesHintClicked=0;
     private int hintAnswerNumber=0;
     private int hintQuestionNumber;
+    private JScrollPane scroller; 
+    private boolean doneHints=false;
+    private int timesTipClicked=0;
 
     GUI(Lesson lesson) throws IOException, InterruptedException {
         this.played=false;
         this.lesson = lesson;
         this.copyBestCase = lesson.getBestCase();
-        this.playLog = new JPanel();
+        
+        
         this.currentPlayer = 0;
         this.tricks = 0;
         this.play = 0;
@@ -200,7 +204,7 @@ public class GUI{
         components.add(makeScore());components.add(makeExitButton());components.add(makeFlipCards());
         components.add(makeGetTipsButton());components.add(makeGetHintsButton());
         components.add(makePlayLogHeader());components.add(makePlayLog());components.add(makeClaim());components.add(makeBiddingLabel());
-
+        
         for(Component c:components){
             if(c instanceof JButton){
                 c.addMouseListener(hover);
@@ -515,26 +519,27 @@ public class GUI{
         hints = new JButton( new AbstractAction("HINTS") {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if(hintAnswerNumber<hintQuestions.size()){
+                if(hintAnswerNumber<hintQuestions.size()&& doneHints==false){
                     if(timesHintClicked%2==0){
                         playerTurn.setText("<html><p>Hint Question : " + hintQuestions.get(hintQuestionNumber) + " (click hints for more) </p></html>");
                         hintQuestionNumber++;
                         timesHintClicked++;
-						playerTurn.setSize(200,50);
+						//playerTurn.setSize(200,50);
                     }
                     else{
                         playerTurn.setText("<html><p>Answer : " + lesson.getHintasked(hintQuestions.get(hintAnswerNumber)) + " (click hints for more) </p></html>");
                         hintAnswerNumber++;
                         timesHintClicked++;
-						playerTurn.setSize(200,50);
+						//playerTurn.setSize(200,50);
 
                     }
                 }
                 else{
                     //playerTurn.setText("<html><p>No more questions!! keep playing!!</p></html>");
-                    System.out.println(hintQuestions.size());
                     playerTurn.setText("<html><p>No more questions! </p><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
 		    playerTurn.setSize(300,50);
+                    doneHints=true;
+                    
                 }
             }
         });
@@ -546,11 +551,22 @@ public class GUI{
         hints.setLocation((int) tips.getLocation().x-hints.getWidth()-framePadding/2,ySize - hints.getHeight() - 2*framePadding);
         return hints;
     }
-
     private JButton	makeGetTipsButton(){
         tips = new JButton( new AbstractAction("TIPS") {
             @Override
             public void actionPerformed( ActionEvent e ) {
+                
+                if(timesTipClicked<lesson.getTips().size()){
+                    
+                        playerTurn.setText("<html><p>Tip: " + lesson.getTipsasked(timesTipClicked) + " (click Tips for more) </p></html>");
+                        timesTipClicked++;
+                }
+                else{
+                    
+                    playerTurn.setText("<html><p>No more Tips! </p><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
+		    playerTurn.setSize(300,50);
+                    
+                }
 
             }
         });
@@ -621,22 +637,19 @@ public class GUI{
     }
 
     public JScrollPane makePlayLog() throws IOException{
-        playLog.setOpaque(false);
-        playLog.setLayout(null);
-        playLog.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));
+        playLog = new JPanel();
         playerTurn = new JLabel();
-        playerTurn.setSize(300,50);
         playerTurn.setForeground(Color.white);
         playerTurn.setLocation(20,20);
-        playLog.setSize(300,150);
+        playerTurn.setSize(300,50);
         playLog.add(playerTurn);
-        playLog.setLocation(framePadding,panels[0].getLocation().y + panels[0].getHeight() + playLogHeader.getHeight() + 10);
-		JScrollPane scroller = new JScrollPane(playLog,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scroller.setOpaque(false);
-		scroller.setLayout(null);
-		scroller.setSize(xSize/4-2*framePadding,ySize/4-2*framePadding);
-		scroller.setLocation(framePadding,panels[0].getLocation().y + panels[0].getHeight() + playLogHeader.getHeight() + 10);
-		scroller.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));   
+        playLog.setSize(300,150);
+        playLog.setBackground(new Color(0, 134, 64));
+        scroller = new JScrollPane(playLog);
+        scroller.setOpaque(false);
+        scroller.setSize(xSize/4-2*framePadding,ySize/4-2*framePadding);
+        scroller.setLocation(framePadding,panels[0].getLocation().y + panels[0].getHeight() + playLogHeader.getHeight() + 10);
+        scroller.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));
         return scroller;
     }
 

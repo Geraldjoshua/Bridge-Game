@@ -196,10 +196,11 @@ public class Lesson{
      *
      */
     public void loadTips(String filename) throws IOException{
-        LinkedHashMap<Integer,String> tip = new LinkedHashMap<Integer,String>();
+        LinkedHashMap<Integer,String> tip = new LinkedHashMap<>();
         Scanner tipfile = new Scanner(new File(filename));
         int counter = 0;
         while(tipfile.hasNext()){
+            //System.out.println(tipfile.nextLine());
             tip.put(counter,tipfile.nextLine());
             counter++;
         }
