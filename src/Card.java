@@ -45,14 +45,27 @@ public class Card{
 	
     }
 
-	public void resizeCard(int width,int height,boolean flipped){
+    /**
+     * <p> resizes a card</p>
+     * @param width
+     * @param height
+     * @param flipped 
+     */
+    public void resizeCard(int width,int height,boolean flipped){
 		
-		backSide=resize(backSide,width,height);
-		cardImage=resize(cardImage,width,height);
-		this.setFlipped(flipped);
-		this.cardLabel.setSize(width,height);
-	}
+	backSide=resize(backSide,width,height);
+	cardImage=resize(cardImage,width,height);
+	this.setFlipped(flipped);
+	this.cardLabel.setSize(width,height);
+    }
 
+    /**
+     * <p> resize image</p>
+     * @param img
+     * @param newW
+     * @param newH
+     * @return BufferedImage 
+     */
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -64,10 +77,18 @@ public class Card{
         return dimg;
     }
 
+    /**
+     * <p>getter for the cardLabel</p>
+     * @return JLabel 
+     */
     public JLabel getCardLabel(){
         return cardLabel;
 
     }
+    /**
+     * <p> sets boolean true for flip else false</p>
+     * @param flip 
+     */
     public void setFlipped(boolean flip){
         if(flip){
 		cardLabel.setIcon(new ImageIcon(backSide));
@@ -81,6 +102,10 @@ public class Card{
 	
     }
 
+    /**
+     * <p> Image icon of the card</p>
+     * @return ImageIcon
+     */
     public ImageIcon getImageIcon(){
         if(flipped){
             return new ImageIcon(backSide);
@@ -162,6 +187,7 @@ public class Card{
      * @return String displaying the card with its value and suit
      *
      */
+    @Override
     public String toString(){
         return value + "" +suit;
     }

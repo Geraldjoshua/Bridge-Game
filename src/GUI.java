@@ -47,6 +47,13 @@ public class GUI{
     private boolean doneHints=false;
     private int timesTipClicked=0;
 
+    
+    /**
+     * <p> constructor </p>
+     * @param lesson
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     GUI(Lesson lesson) throws IOException, InterruptedException {
         this.played=false;
         this.lesson = lesson;
@@ -57,21 +64,25 @@ public class GUI{
         this.tricks = 0;
         this.play = 0;
         initComponents();
-        //initPlayerPanels();
         Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(window.getGraphicsConfiguration());
         this.xSize = Toolkit.getDefaultToolkit().getScreenSize().width-scnMax.right - scnMax.left;
         this.ySize = Toolkit.getDefaultToolkit().getScreenSize().height-scnMax.bottom-scnMax.top;
-        //System.out.println("r"+scnMax.right+" l"+scnMax.left+" t"+scnMax.top+" b"+scnMax.bottom);
 
         makeLessonScreen();
     }
 
+    /**
+     * <p> initializes components</p>
+     */
     private void initComponents(){
         initFrame();
         initCardListeners();
         initHoverListener();
     }
 
+    /**
+     * <p> initializes card listeners
+     */
     private void initCardListeners(){
         this.ml = new MouseAdapter() {
             @Override
@@ -93,6 +104,9 @@ public class GUI{
         };
     }
 
+    /**		
+     * <p> initializes Hover on cards listeners</p>		
+     */
     private void initHoverListener(){
         this.hover = new MouseAdapter() {
             @Override
@@ -107,6 +121,9 @@ public class GUI{
         };
     }
 
+    /**		
+     * <p> initializes the j-frame</p>		
+     */
     private void initFrame(){
         this.window = new JFrame("Bridge Tutor");
         this.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -117,6 +134,11 @@ public class GUI{
 
     }
 
+    /**		
+     * <p> changes button color</p>		
+     * @param entered		
+     * @param source 		
+     */
     public void changeButtonColour(boolean entered,JButton source){
         if(entered){
             source.setBackground(new Color(0, 134, 64));
@@ -129,6 +151,9 @@ public class GUI{
         }
     }
 
+    /**		
+     * <p> initializes the centrePanel</p>		
+     */
     private void initCenterPanel(){
         centerPanel.setLayout(null);
         centerPanel.setOpaque(false);
@@ -138,6 +163,10 @@ public class GUI{
     }
 
 
+    		
+    /**		
+     * <p> initializes playerPanels</p>		
+     */
     private void initPlayerPanels(){
         for(int i=0;i<panels.length;i++){
             panels[i] = new JPanel();
@@ -157,12 +186,21 @@ public class GUI{
         panels[3].setBounds(0,(int)((3*ySize)/4),xSize,(int)(ySize/4));
     }
 
+    /**		
+     * <p> sets the hover option</p>		
+     * @param source 		
+     */
     public void setHover(JButton source){
 
         source.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
     }
 
+    /**		
+     * <p> creates the lesson screen</p>		
+     * @throws IOException		
+     * @throws InterruptedException 		
+     */
     private void makeLessonScreen() throws IOException, InterruptedException {
         initPlayerPanels();
         initCenterPanel();
@@ -219,6 +257,10 @@ public class GUI{
 
     }
 
+     /**		
+     * <p> starts the game</p>		
+     * @throws InterruptedException 		
+     */
     public void startGame() throws InterruptedException {
 
         for(int i=0;i<13;i++) {
@@ -273,6 +315,13 @@ public class GUI{
         }
     }
 
+    			
+    /**		
+     * <p> searching for the player currently playing</p>		
+     * @param source		
+     * @return integer		
+     * @throws InterruptedException 		
+     */
     public int findPlayer(JLabel source) throws InterruptedException {
 
         Container parent = source.getParent();
@@ -284,6 +333,13 @@ public class GUI{
         return -1;
     }
 
+    /**		
+     * <p> handles the playing of cards</p>		
+     * @param source		
+     * @param index		
+     * @param play		
+     * @throws InterruptedException 		
+     */
     public void makePlay(JLabel source,int index,int play) throws InterruptedException {
         int jIndex=0;
         if(lesson.getPlayers().get(index).getCanPlay()){
@@ -308,6 +364,12 @@ public class GUI{
         }
     }
 
+    /**		
+     * <p> handles the placement of the card on the panel</p>		
+     * @param testX		
+     * @param testY		
+     * @return integer		
+     */
     public int testCardX(double testX,double testY){
 
         int panelHeight = panels[0].getHeight()-2*ySpaceing;
@@ -334,11 +396,20 @@ public class GUI{
 
     }
 
+    /**		
+     * <p> used to resize cards to fit on the screen</p>		
+     * @param x		
+     * @return double		
+     */
     public double calcY(double x){
         x=(x/72) *96;
         return x;
     }
 
+    /**		
+     * <p> handles automatic play for west and east hand</p>		
+     * @throws InterruptedException 		
+     */
     public void autoPlay() throws InterruptedException {
 
         boolean noValid=false;
@@ -406,10 +477,17 @@ public class GUI{
         System.out.println("removing from hand of "+lesson.getPlayers().get(currentPlayer).getPlayerName()+ "with "+lesson.getPlayers().get(currentPlayer).getPoints()+"points");
 
     }
+    
+    /**		
+     * <p> handles score update</p>		
+     */
     public void updateScoreBoard(){
         score.setText("<html><h1>N + S Score: "+(lesson.getPlayers().get(1).getTrickWins()+lesson.getPlayers().get(3).getTrickWins())+"</h1><h2>W + E Score: "+(lesson.getPlayers().get(0).getTrickWins()+lesson.getPlayers().get(2).getTrickWins())+"</h2></html>");
     }
 
+    /**		
+     * <p> adds mouse listeners on elements</p>		
+     */
     public void addMouseListeners(){
         for(int i =0;i<panels[currentPlayer].getComponents().length;i++){
             if(panels[currentPlayer].getComponent(i) instanceof JLabel){
@@ -427,6 +505,9 @@ public class GUI{
         }
     }
 
+    /**		
+     * <p> removes mouseListeners on elements</p>		
+     */
     public void removeMouseListeners(){
         for(int i = 0;i<panels[currentPlayer].getComponents().length;i++){
             if(panels[currentPlayer].getComponent(i) instanceof JLabel ){
@@ -435,6 +516,11 @@ public class GUI{
             }
         }
     }
+    
+    /**		
+     * <p> handles removing of cards from center panel</p>		
+     * @throws InterruptedException 		
+     */
     public void removeCenterCards() throws InterruptedException {
         Thread.sleep(2000);
         System.out.println(centerPanel.getComponents().length);
@@ -447,6 +533,11 @@ public class GUI{
         }
     }
 
+    /**		
+     * <p> handles moving of the card to the center</p>		
+     * @param source		
+     * @param index 		
+     */
     public void moveCard(JLabel source,int index){
         source.setBorder(null);
         panels[index].remove(source);
@@ -464,6 +555,10 @@ public class GUI{
 
     }
 
+    /**		
+     * <p> PlayLogheader</p>		
+     * @return JLabel		
+     */
     private JLabel makePlayLogHeader(){
         playLogHeader = new JLabel("<html><h2 style='color:white;text-decoration:underline;' >Play Log</h2></html>");
         playLogHeader.setLayout(null);
@@ -472,6 +567,10 @@ public class GUI{
         return playLogHeader;
     }
 
+    /**		
+     * <p> handles flipping of cards</p>		
+     * @return JButton		
+     */
     private JButton makeFlipCards(){
         JButton flip = new JButton( new AbstractAction("FLIP") {
             @Override
@@ -507,6 +606,10 @@ public class GUI{
         return flip;
     }
 
+    /**		
+     * <p> displays bidding string</p>		
+     * @return JLabel 		
+     */
     private JLabel makeBiddingLabel(){
         biddingLabel=new JLabel("<html><p style='color:white;'>The Bidding is: "+lesson.getBiddingString()+"<br>The Bidding Suit is: <span style='font-size:150%;'>"+ lesson.getBiddingSuit()+"</span></p></html>");
         biddingLabel.setLayout(null);
@@ -515,6 +618,10 @@ public class GUI{
         return biddingLabel;
     }
 
+    /**		
+     * <p> displays hints</p>		
+     * @return JButton		
+     */
     private JButton makeGetHintsButton (){
         hints = new JButton( new AbstractAction("HINTS") {
             @Override
@@ -551,6 +658,10 @@ public class GUI{
         hints.setLocation((int) tips.getLocation().x-hints.getWidth()-framePadding/2,ySize - hints.getHeight() - 2*framePadding);
         return hints;
     }
+    /**		
+     * <p> displays Tips on clicking</p>		
+     * @return JButton		
+     */
     private JButton	makeGetTipsButton(){
         tips = new JButton( new AbstractAction("TIPS") {
             @Override
@@ -579,6 +690,10 @@ public class GUI{
         return tips;
     }
 
+    /**		
+     * <p> claim remaining of the game</p>		
+     * @return JButton		
+     */
     private JButton makeClaim(){
         claim = new JButton( new AbstractAction("CLAIM") {
             @Override
@@ -595,6 +710,10 @@ public class GUI{
         return claim;
     }
 
+    /**		
+     * <p> sets the layout and how the score is displayed</p>		
+     * @return JLabel		
+     */
     private JLabel makeScore(){
         score = new JLabel("<html><h1>N + S Score: "+(lesson.getPlayers().get(1).getTrickWins()+lesson.getPlayers().get(3).getTrickWins())+"</h1><h2>W + E Score: "+(lesson.getPlayers().get(0).getTrickWins()+lesson.getPlayers().get(2).getTrickWins())+"</h2></html>");
         score.setLayout(null);
@@ -604,6 +723,10 @@ public class GUI{
         return score;
     }
 
+    /**		
+     * <p>exit lesson</p>		
+     * @return JBUtton		
+     */
     private JButton makeExitButton(){
 
         exit = new JButton( new AbstractAction("EXIT") {
@@ -626,6 +749,11 @@ public class GUI{
 
 
 
+    /**		
+     * <p> corrects display on different monitors</p>		
+     * @param source		
+     * @param offset 		
+     */
     public void offSet(JLabel source,int offset){
         Point pt = source.getLocation();
         int x = pt.x;
@@ -636,15 +764,21 @@ public class GUI{
         }
     }
 
+    /**		
+     * <p> makes the play log scroll-able and shows the progress of the game</p>		
+     * @return JScrollPane		
+     * @throws IOException 		
+     */
     public JScrollPane makePlayLog() throws IOException{
         playLog = new JPanel();
         playerTurn = new JLabel();
         playerTurn.setForeground(Color.white);
         playerTurn.setLocation(20,20);
-        playerTurn.setSize(300,50);
-        playLog.add(playerTurn);
+        playerTurn.setSize(300,50);     
+        playLog.add(playerTurn); 
         playLog.setSize(300,150);
         playLog.setBackground(new Color(0, 134, 64));
+        playLog.setLocation(framePadding,panels[0].getLocation().y + panels[0].getHeight() + playLogHeader.getHeight() + 10);
         scroller = new JScrollPane(playLog);
         scroller.setOpaque(false);
         scroller.setSize(xSize/4-2*framePadding,ySize/4-2*framePadding);
