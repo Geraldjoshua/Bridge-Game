@@ -40,8 +40,6 @@ public class GUI{
     private int tricks;
     private JLabel biddingLabel;
     private ArrayList <String> hintQuestions;
-    private int timesHintClicked=0;
-    private int hintAnswerNumber=0;
     private int hintQuestionNumber;
     private JScrollPane scroller; 
     private boolean doneHints=false;
@@ -266,11 +264,11 @@ public class GUI{
         for(int i=0;i<13;i++) {
             for (play = 0; play < 4; play++) {
                 played = false;
-                System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerHand() + " before");
+                
                 lesson.getPlayers().get(currentPlayer).setCanPlay(true);
                 playerTurn.setText("<html><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
 
-                System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerName() + " can play");
+               
                 if (!lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("south") && !lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("north")) {
                     Thread.sleep(2000);
                     autoPlay();
@@ -287,9 +285,8 @@ public class GUI{
                 }
 
                 lesson.getPlayers().get(currentPlayer).setCanPlay(false);
-                //System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerName() + " has played");
-                //System.out.println("The leading suit is " + lesson.getLeadingSuit());
-                System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerHand() + " after");
+             
+              
 
                 currentPlayer++;
                 if (currentPlayer > 3) {
@@ -374,7 +371,7 @@ public class GUI{
 
         int panelHeight = panels[0].getHeight()-2*ySpaceing;
         int panelWidth = panels[0].getWidth()-2*framePadding;
-        System.out.println("x: "+testX+" y: "+testY);
+    
         int cardsX	= (int)(panelWidth/testX);
         int cardsY = (int)(panelHeight/testY);
         cardsX*=2;
@@ -382,15 +379,11 @@ public class GUI{
         int area = cardsX*cardsY;
         if(area<13){
             testX-=1;
-            System.out.println(panelWidth+"x"+panelHeight+" "+"testx -10: " +testX+" calc: "+calcY(testX)+"cardsX :"+cardsX+" cardsY: "+cardsY+"area is: "+area);
             return testCardX(testX-1,calcY(testX));
         }else if(area>18){
             testX+=1;
-           // testY = calcY(testX);
-            System.out.println(panelWidth+"x"+panelHeight+" "+"testx +10: "+testX+10 +" calc: "+calcY(testX+10)+"cardsX :"+cardsX+" cardsY: "+cardsY+"area is: "+area);
-            return testCardX(testX+1,calcY(testX));
+           return testCardX(testX+1,calcY(testX));
         }else{
-            System.out.println("area "+area+"new x dim is: " + testX);
             return (int)testX;
         }
 
@@ -422,35 +415,24 @@ public class GUI{
             if(panels[currentPlayer].getComponent(i) instanceof JLabel) {
 
                 if (!copyBestCase.isEmpty() && (lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)) != null && lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).toString(), lesson.getPlayers().get(currentPlayer)))) {
-                    System.out.println("Best case is in our hand and valid to play and the card we are looking at is "+lesson.getPlayers().get(currentPlayer).getCard(i).getFlipped()+"and the actual card is"+ lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getFlipped());
-
-                    /*((JLabel)card).setIcon(lesson.getPlayers().get(index).getCard(jIndex).getImageIcon());
-                    ((JLabel)card).validate();
-                    ((JLabel)card).repaint();*/
-                    //System.out.println(((JLabel)c).toString()+" end"+lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel());
                     if(((JLabel)c) == lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel()){
-                        System.out.println("hello");
-
+                       
                         noValid = false;
                         break;
                     }else{
-                        System.out.println("But not at this index, the card here is "+lesson.getPlayers().get(currentPlayer).getCard(i).toString()+" at index "+i);
                         noValid=true;
                     }
 
                 } else if (lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(i).toString(), lesson.getPlayers().get(currentPlayer))) {
-                    System.out.println("Best case is not in our hand or not valid to play and card at index "+i+" is valid card is "+lesson.getPlayers().get(currentPlayer).getCard(i).toString());
                     noValid = false;
                     break;
 
                 } else {
-                    System.out.println("Best case is not in our hand or not valid to play and card at index "+i+" is valid");
                     noValid = true;
                 }
             }
             i++;
         }
-        System.out.println("INDEX OF CARD BEING PLAYED IS "+i);
         if(noValid){
             lesson.getPlayers().get(currentPlayer).getCard(0).setFlipped(false);
 
@@ -474,8 +456,7 @@ public class GUI{
         }
 
 
-        System.out.println("removing from hand of "+lesson.getPlayers().get(currentPlayer).getPlayerName()+ "with "+lesson.getPlayers().get(currentPlayer).getPoints()+"points");
-
+       
     }
     
     /**		
@@ -523,7 +504,6 @@ public class GUI{
      */
     public void removeCenterCards() throws InterruptedException {
         Thread.sleep(2000);
-        System.out.println(centerPanel.getComponents().length);
         for(Component c:centerPanel.getComponents()){
             if(c instanceof JLabel ){
                 centerPanel.remove(((JLabel)c));
@@ -623,28 +603,31 @@ public class GUI{
      * @return JButton		
      */
     private JButton makeGetHintsButton (){
+        JTextPane jtp = new JTextPane();
+        jtp.setEditable(false);
+        jtp.setSize(new Dimension(300, 100));
+        jtp.setPreferredSize(new Dimension(300,100));
         hints = new JButton( new AbstractAction("HINTS") {
+            
             @Override
             public void actionPerformed( ActionEvent e ) {
-                if(hintAnswerNumber<hintQuestions.size()&& doneHints==false){
-                    if(timesHintClicked%2==0){
-                        playerTurn.setText("<html><p>Hint Question : " + hintQuestions.get(hintQuestionNumber) + " (click hints for more) </p></html>");
-                        hintQuestionNumber++;
-                        timesHintClicked++;
-						//playerTurn.setSize(200,50);
+                if(hintQuestionNumber<hintQuestions.size()&& doneHints==false){
+                    if (hintQuestionNumber==6){
+                        jtp.setSize(new Dimension(300, 300));
+                        jtp.setPreferredSize(new Dimension(300,300));
+                        jtp.setText(lesson.getHintasked(hintQuestions.get(hintQuestionNumber)));
+                        JOptionPane.showMessageDialog(window,jtp, hintQuestions.get(hintQuestionNumber), 1);
+                        
+                        
                     }
                     else{
-                        playerTurn.setText("<html><p>Answer : " + lesson.getHintasked(hintQuestions.get(hintAnswerNumber)) + " (click hints for more) </p></html>");
-                        hintAnswerNumber++;
-                        timesHintClicked++;
-						//playerTurn.setSize(200,50);
-
+                        jtp.setText(lesson.getHintasked(hintQuestions.get(hintQuestionNumber)));
+                        JOptionPane.showMessageDialog(window,jtp, hintQuestions.get(hintQuestionNumber), 1);
+                        hintQuestionNumber++;
                     }
                 }
                 else{
-                    //playerTurn.setText("<html><p>No more questions!! keep playing!!</p></html>");
-                    playerTurn.setText("<html><p>No more questions! </p><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
-		    playerTurn.setSize(300,50);
+                    JOptionPane.showMessageDialog(window,"No more Hints to give!");
                     doneHints=true;
                     
                 }
@@ -668,14 +651,17 @@ public class GUI{
             public void actionPerformed( ActionEvent e ) {
                 
                 if(timesTipClicked<lesson.getTips().size()){
-                    
-                        playerTurn.setText("<html><p>Tip: " + lesson.getTipsasked(timesTipClicked) + " (click Tips for more) </p></html>");
+                        JOptionPane.showMessageDialog(window,
+                        "Tip: " + lesson.getTipsasked(timesTipClicked) + " (click Tips for more)");
                         timesTipClicked++;
+                        
                 }
                 else{
+                    JOptionPane.showMessageDialog(window,
+                    "No more Tips!"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...");
+                    tips.setEnabled(false);
+                    tips.setBackground(Color.GRAY);
                     
-                    playerTurn.setText("<html><p>No more Tips! </p><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
-		    playerTurn.setSize(300,50);
                     
                 }
 
