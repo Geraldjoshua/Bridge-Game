@@ -94,10 +94,18 @@ public class Person{
 
     }
 
+    /**
+     * <p> set if a player can play</p>
+     * @param canPlay 
+     */
     public void setCanPlay(boolean canPlay){
         this.canPlay = canPlay;
     }
 
+    /**
+     * <p> set if a player can play</p>
+     * @return 
+     */
     public boolean getCanPlay(){
         return canPlay;
     }
@@ -163,7 +171,7 @@ public class Person{
      */
     public void setHand(ArrayList<Card> hand){
 
-        this.hand = new ArrayList<Card>(hand);
+        this.hand = new ArrayList<>(hand);
 
     }
 
@@ -313,8 +321,8 @@ public class Person{
      *
      */
     public boolean inHand(String card){
-        for(int i=0;i<hand.size();i++){
-            if(hand.get(i).toString().equals(card)){
+        for (Card hand1 : hand) {
+            if (hand1.toString().equals(card)) {
                 //hand.remove(i);
                 return true;
             }
@@ -330,9 +338,8 @@ public class Person{
      */
     public boolean noSuit(char suit){
 
-        for(int i=0;i<hand.size();i++){
-
-            if(hand.get(i).getSuit()==suit){
+        for (Card hand1 : hand) {
+            if (hand1.getSuit() == suit) {
                 return false;
             }
         }
@@ -346,16 +353,15 @@ public class Person{
      *
      */
     public String bestCaseInHand(ArrayList<String> bestcard){
-        HashSet<String> hset = new HashSet<String>();
-        for(int i=0;i< hand.size();i++){
-            hset.add(hand.get(i).toString());
+        HashSet<String> hset = new HashSet<>();
+        for (Card hand1 : hand) {
+            hset.add(hand1.toString());
         }
         //bestcardarray
-        for(int i=0;i<bestcard.size();i++){
-            if(hset.contains(bestcard.get(i))){
-                return bestcard.get(i);
+        for (String bestcard1 : bestcard) {
+            if (hset.contains(bestcard1)) {
+                return bestcard1;
             }
-
         }
         return "There is no best case";
     }
@@ -374,6 +380,10 @@ public class Person{
         }
     }
 
+    /**
+     * <p> removes played card</p>
+     * @param index 
+     */
     public void removePlayerCard(int index){
         hand.remove(index);
     }
@@ -385,9 +395,10 @@ public class Person{
      */
     public boolean checkhand(String card){
         boolean check = true;
-        for(int i=0;i<hand.size();i++){
-            if(hand.get(i).toString().equals(card))
+        for (Card hand1 : hand) {
+            if (hand1.toString().equals(card)) {
                 check = false;
+            }
         }
         return check;
     }
