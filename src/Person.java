@@ -74,6 +74,10 @@ public class Person{
 
     }
 
+    public void addTrickWins(int tricks){
+        trickWins+=tricks;
+    }
+
     /**
      * <p>increases trick win by one </p>
      *
