@@ -267,6 +267,7 @@ public class GUI extends java.lang.Thread{
         bgPanel.setOpaque(false);
         bgPanel.setSize(xSize,ySize);
         bgPanel.add(bg);
+		hintQuestions = new ArrayList<>(lesson.getHints().keySet());
         window.setBackground(null);
         window.getContentPane().add(bgPanel);
         window.setVisible(true);
