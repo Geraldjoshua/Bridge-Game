@@ -28,10 +28,11 @@ public class Lesson{
     private char biddingSuit;
     private LinkedHashMap<String,String> hints;
     private LinkedHashMap<Integer,String> tips;
+    private int helpLevel;
     private String [] questions = {"How many winners/losers do you have?","What threats do you see?",
             "What opportunities do you see?","Is there a danger suit?",
             "Is there a danger hand?","What do you know from the bidding?","What is your plan?"};
-	private String biddingString;
+    private String biddingString;
 
 
     /**
@@ -41,13 +42,15 @@ public class Lesson{
      * @throws java.io.IOException when the file does not match the lesson files
      *
      */
-    Lesson(String filename) throws IOException{
+    Lesson(String filename,int level) throws IOException{
         players.add(new Person("West"));
         players.add(new Person("North"));
         players.add(new Person("East"));
         players.add(new Person("South"));
         loadInput(filename);
         loadTips("input/tips.txt");
+        this.helpLevel=level;
+
     }
 
     /**
@@ -81,13 +84,13 @@ public class Lesson{
     public LinkedHashMap<String,String> getHints(){
         return hints;
     }
-    
+
     /**
      * <p> Obtains hints a player needs for a lesson</p>
      * @param key
      * @return String
      */
-    
+
     public String getHintasked(String key){
         String hint = hints.get(key);
         return hint;
@@ -124,13 +127,13 @@ public class Lesson{
         return tips;
     }
 
-	public void setBiddingString(String bidding){
-		this.biddingString = bidding;
-	}
+    public void setBiddingString(String bidding){
+        this.biddingString = bidding;
+    }
 
-	public String getBiddingString(){
-		return this.biddingString;
-	}
+    public String getBiddingString(){
+        return this.biddingString;
+    }
     /**
      * <p>function to parse in input</p>
      * @param filename the file to be parsed
@@ -143,7 +146,10 @@ public class Lesson{
         Scanner lesson = new Scanner(new File(filename));
         System.out.println("The bidding is: ");
         String bidding = lesson.nextLine();
-	setBiddingString(bidding);
+
+
+        setBiddingString(bidding);
+
         String[] Bidding = bidding.split(" ");
         setBidding(Bidding);
         System.out.println(bidding);
@@ -275,7 +281,6 @@ public class Lesson{
     public boolean isValid(String card , Person player){
         //play can be Suit from first play or trump Suit
         if(player.inHand(card) && (card.charAt(1) == getSuit())){
-            			//For gui purposes
             return true;
         }else return (!player.getPlayerHand().isEmpty())&&(player.noSuit(getLeadingSuit()));
 
@@ -423,6 +428,10 @@ public class Lesson{
                 winner = player;
             }
         }
+
+        // System.out.println(winner.getPlayerName() + " Wins the trick!");
+        //setWinner(winner.getPlayerName());
+
         return winner.getPlayerName();
     }
 
@@ -430,7 +439,7 @@ public class Lesson{
      * <p>Decides winner of entire game by counting trick points </p>
      *
      */
-    public void decideGameWinner(){
+    public String decideGameWinner(){
         Person winner = new Person();
         int trickWins=0;
         for(Person player:players){
@@ -439,10 +448,17 @@ public class Lesson{
                 winner = player;
             }
         }
-        System.out.println("------------------------------\n" + winner.getPlayerName() + " IS THE WINNER OF THE GAME");
-
+        return winner.getPlayerName();
     }
 
+
+    public void setHelpLevel(int level){
+        this.helpLevel=level;
+    }
+
+    public int getHelpLevel(){
+        return helpLevel;
+    }
     /**
      * <p>Resets points for a trick so points don't carry over</p>
      *
@@ -487,5 +503,6 @@ public class Lesson{
 
 
 }
+
 
 

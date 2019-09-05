@@ -1,44 +1,44 @@
-import java.sql.SQLOutput;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.Component;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class GUI{
+public class GUI extends java.lang.Thread{
 
     private Lesson lesson;
-    private final int framePadding = 40;
-    private final int ySpaceing = 10;
-    private JFrame window;
-    private ArrayList<JLabel> cardLabels = new ArrayList<JLabel>();
+    private final int framePadding = 40,ySpaceing=10;
+    static JFrame window;
+    private ArrayList<JLabel> cardLabels = new ArrayList<JLabel>(),cards=new ArrayList<JLabel>();
     private JPanel[] panels = new JPanel[4];
-    private final int xSize;
-    private final int ySize;
+    private final int xSize,ySize;
+    private BufferedImage bgPicture;
     private JPanel centerPanel;
-    private int currentPlayer;
+    private int currentPlayer,play,tricks;
     private JPanel playLog;
     private JLabel playerTurn;
     private JButton tips;
-    private volatile boolean played;
+    private boolean played;
     private JButton hints;
-    private int play;
+
     private ArrayList<String> copyBestCase;
     private JButton exit;
     private JButton claim;
     private JLabel score;
     private JLabel playLogHeader;
     private ArrayList<Component> components = new ArrayList<Component>();
-    private ArrayList<JLabel> cards = new ArrayList<>();
+
     private int timesClicked = 0;
     private int count=0;
-    private MouseListener ml;
-    private MouseListener hover;
-    private int tricks;
+    private MouseListener ml,hover;
+
+
     private JLabel biddingLabel;
+
     private ArrayList <String> hintQuestions;
     private int hintQuestionNumber;
     private JScrollPane scroller; 
@@ -52,27 +52,34 @@ public class GUI{
      * @throws IOException
      * @throws InterruptedException 
      */
+
     GUI(Lesson lesson) throws IOException, InterruptedException {
+        this.bgPicture=ImageIO.read(new File("images/background3.jpg"));
         this.played=false;
+
+        this.lesson=lesson;
+        this.playLog = new JPanel();
+
         this.lesson = lesson;
         this.copyBestCase = lesson.getBestCase();
-        
         
         this.currentPlayer = 0;
         this.tricks = 0;
         this.play = 0;
+        this.copyBestCase = lesson.getBestCase();
         initComponents();
         Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(window.getGraphicsConfiguration());
         this.xSize = Toolkit.getDefaultToolkit().getScreenSize().width-scnMax.right - scnMax.left;
         this.ySize = Toolkit.getDefaultToolkit().getScreenSize().height-scnMax.bottom-scnMax.top;
 
-        makeLessonScreen();
+        bgPicture = resize(bgPicture,xSize+100,ySize);
     }
 
     /**
      * <p> initializes components</p>
      */
     private void initComponents(){
+
         initFrame();
         initCardListeners();
         initHoverListener();
@@ -123,14 +130,16 @@ public class GUI{
      * <p> initializes the j-frame</p>		
      */
     private void initFrame(){
-        this.window = new JFrame("Bridge Tutor");
-        this.window.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.window.setLocationRelativeTo(null);
-        this.window.setLayout(null);
-        this. window.setUndecorated(true);
+        window = new JFrame("Bridge Tutor");
+        window.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        window.setLocationRelativeTo(null);
+        window.setLayout(null);
+        window.setUndecorated(true);
+
         this.centerPanel = new JPanel();
 
     }
+
 
     /**		
      * <p> changes button color</p>		
@@ -155,7 +164,7 @@ public class GUI{
     private void initCenterPanel(){
         centerPanel.setLayout(null);
         centerPanel.setOpaque(false);
-        centerPanel.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));
+        centerPanel.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),5));
         centerPanel.setBounds((int)(xSize/4),(int)(ySize/4),(int)(xSize/2),(int)(ySize/2));
         components.add(centerPanel);
     }
@@ -199,10 +208,12 @@ public class GUI{
      * @throws IOException		
      * @throws InterruptedException 		
      */
-    private void makeLessonScreen() throws IOException, InterruptedException {
+
+    public void makeLessonScreen() throws IOException, InterruptedException {
+
         initPlayerPanels();
         initCenterPanel();
-        int x = testCardX(72,72);
+        int x = testCardX(85,85);
         for(int i=0;i<panels.length;i++){
             for(int j=0;j<13;j++){
 
@@ -227,7 +238,7 @@ public class GUI{
             for(JLabel j:cardLabels){
                 panels[i].add(j);
 
-                    if(xCoord+j.getWidth()+framePadding>=panels[i].getWidth()){
+                if(xCoord+j.getWidth()+framePadding>=panels[i].getWidth()){
                     xCoord = framePadding;
                     yCoord+=j.getHeight()+15;
                 }
@@ -248,11 +259,41 @@ public class GUI{
             }
             window.add(c);
         }
-        window.getContentPane().setBackground(new Color(0, 134, 64));
+        JLabel bg = new JLabel(new ImageIcon(bgPicture));
+        bg.setLayout(null);
+        bg.setSize(bg.getPreferredSize());
+        JPanel bgPanel = new JPanel(null);
+        bgPanel.setSize(bg.getPreferredSize());
+        bgPanel.setOpaque(false);
+        bgPanel.setSize(xSize,ySize);
+        bgPanel.add(bg);
+        window.setBackground(null);
+        window.getContentPane().add(bgPanel);
         window.setVisible(true);
-        hintQuestions = new ArrayList<>(lesson.getHints().keySet());
-        startGame();
 
+    }
+
+
+
+    public static BufferedImage resize(BufferedImage img, int newW, int newH) {
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return dimg;
+    }
+
+    public JFrame getWindow(){
+        return this.window;
+    }
+    public void run(){
+
+        try {
+            startGame();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
      /**		
@@ -261,7 +302,7 @@ public class GUI{
      */
     public void startGame() throws InterruptedException {
 
-        for(int i=0;i<13;i++) {
+        for(;tricks<13;tricks++) {
             for (play = 0; play < 4; play++) {
                 played = false;
                 
@@ -280,7 +321,7 @@ public class GUI{
                     removeMouseListeners();
                 }
 
-                if(!copyBestCase.isEmpty()){
+                if(!copyBestCase.isEmpty() && !copyBestCase.get(0).equals("CLAIM")){
                     copyBestCase.remove(0);
                 }
 
@@ -310,6 +351,7 @@ public class GUI{
             removeCenterCards();
             updateScoreBoard();
         }
+        playerTurn.setText("<html><h1>"+lesson.decideGameWinner()+"won<h1><html>");
     }
 
     			
@@ -330,6 +372,7 @@ public class GUI{
         return -1;
     }
 
+
     /**		
      * <p> handles the playing of cards</p>		
      * @param source		
@@ -342,23 +385,90 @@ public class GUI{
         if(lesson.getPlayers().get(index).getCanPlay()){
             for(Component card:panels[index].getComponents()){
                 if(source == card){
-                    lesson.getPlayers().get(index).getCard(jIndex).setFlipped(false);
-                    ((JLabel)card).setIcon(lesson.getPlayers().get(index).getCard(jIndex).getImageIcon());
-                    ((JLabel)card).validate();
-                    ((JLabel)card).repaint();
-                    moveCard((JLabel)card,currentPlayer);
-
-                    if(play ==0){
-                        lesson.setFirstCardPlayed(lesson.getPlayers().get(index).getCard(jIndex).toString());
+                    if(lesson.getHelpLevel()==1){
+                        if(lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer))){
+                            playCard( lesson.getPlayers().get(index).getCard(jIndex),(JLabel)card,index);
+                            moveCard((JLabel)card,currentPlayer);
+                        }else{
+                            JOptionPane.showMessageDialog(window,
+                                    "That is not a valid move please choose another card");
+                            break;
+                        }
+                    }else if(lesson.getHelpLevel()==2){
+                        if(lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer))){
+                            playCard( lesson.getPlayers().get(index).getCard(jIndex),(JLabel)card,index);
+                            moveCard((JLabel)card,currentPlayer);
+                            break;
+                        }
+                    }else if(lesson.getHelpLevel()==3){
+                        if(lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer)) && lesson.getPlayers().get(currentPlayer).getCard(jIndex).toString().equals(copyBestCase.get(0))) {
+                            playCard(lesson.getPlayers().get(index).getCard(jIndex), (JLabel) card, index);
+                            moveCard((JLabel) card, currentPlayer);
+                            break;
+                        }else if(copyBestCase.get(0).equals("CLAIM")){
+                            playCard(lesson.getPlayers().get(index).getCard(jIndex), (JLabel) card, index);
+                            moveCard((JLabel) card, currentPlayer);
+                            JOptionPane.showMessageDialog(window,
+                                "You should claim now");
+                        }else{
+                            JOptionPane.showMessageDialog(window,
+                                    "That is not card you should play");
+                        }
+                    }else if(lesson.getHelpLevel()==4){
+                        System.out.println(lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer))+" " + lesson.getPlayers().get(currentPlayer).getCard(jIndex).toString()+" "+copyBestCase.get(0));
+                        if((lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer)) || play==0) && lesson.getPlayers().get(currentPlayer).getCard(jIndex).toString().equals(copyBestCase.get(0))){
+                            playCard( lesson.getPlayers().get(index).getCard(jIndex),(JLabel)card,index);
+                            moveCard((JLabel)card,currentPlayer);
+                            break;
+                        }else if(copyBestCase.get(0).equals("CLAIM")) {
+                            playCard(lesson.getPlayers().get(index).getCard(jIndex), (JLabel) card, index);
+                            moveCard((JLabel) card, currentPlayer);
+                            JOptionPane.showMessageDialog(window,
+                                    "You should claim now");
+                        }else{
+                            JOptionPane.showMessageDialog(window,
+                                    "That is not card you should play");
+                        }
+                    }else if(lesson.getHelpLevel()==5){
+                        if((lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer)) || play==0)&& lesson.getPlayers().get(currentPlayer).getCard(jIndex).toString().equals(copyBestCase.get(0))){
+                            playCard( lesson.getPlayers().get(index).getCard(jIndex),(JLabel)card,index);
+                            moveCard((JLabel)card,currentPlayer);
+                            break;
+                        }else if(copyBestCase.get(0).equals("CLAIM")){
+                            playCard(lesson.getPlayers().get(index).getCard(jIndex), (JLabel) card, index);
+                            moveCard((JLabel) card, currentPlayer);
+                            JOptionPane.showMessageDialog(window,
+                                "You should claim now");
+                        }
+                    }else{
+                        if(lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer))){
+                            playCard( lesson.getPlayers().get(index).getCard(jIndex),(JLabel)card,index);
+                            moveCard((JLabel)card,currentPlayer);
+                        }
                     }
-                    lesson.getPlayers().get(index).addPoints(lesson.getPlayPoints(lesson.getPlayers().get(index).getCard(jIndex).toString()));
 
-                    lesson.getPlayers().get(index).removePlayedCard(lesson.getPlayers().get(index).getCard(jIndex).toString());
+
                 }
                 jIndex++;
             }
-            played=true;
+
+
         }
+    }
+
+
+    public void playCard(Card c,JLabel card,int playerIndex){
+        c.setFlipped(false);
+        card.setIcon(c.getImageIcon());
+        card.validate();
+        card.repaint();
+        if(play ==0){
+            lesson.setFirstCardPlayed(c.toString());
+        }
+        lesson.getPlayers().get(playerIndex).addPoints(lesson.getPlayPoints(c.toString()));
+        lesson.getPlayers().get(playerIndex).removePlayedCard(c.toString());
+        played=true;
+
     }
 
     /**		
@@ -367,24 +477,32 @@ public class GUI{
      * @param testY		
      * @return integer		
      */
+
     public int testCardX(double testX,double testY){
 
         int panelHeight = panels[0].getHeight()-2*ySpaceing;
         int panelWidth = panels[0].getWidth()-2*framePadding;
-    
-        int cardsX	= (int)(panelWidth/testX);
-        int cardsY = (int)(panelHeight/testY);
-        cardsX*=2;
+        testX=Math.ceil(testX/2);
+        System.out.println("x: "+testX+" y: "+testY);
+        int cardsX	= (int)(Math.ceil(panelWidth/testX));
+        int cardsY = (int)(Math.ceil((panelHeight/testY)));
+
         cardsY = (int)((panelHeight - ySpaceing*cardsY)/testY);
         int area = cardsX*cardsY;
         if(area<13){
-            testX-=1;
-            return testCardX(testX-1,calcY(testX));
-        }else if(area>18){
-            testX+=1;
-           return testCardX(testX+1,calcY(testX));
+            testX*=2;
+            testX-=30;
+            System.out.println(panelWidth+"x"+panelHeight+" "+"testx -10: " +testX+" calc: "+calcY(testX)+"cardsX :"+cardsX+" cardsY: "+cardsY+"area is: "+area);
+            return testCardX(testX,calcY(testX));
+        }else if(area>20) {
+            testX *= 2;
+            testX += 30;
+            // testY = calcY(testX);
+            System.out.println(panelWidth + "x" + panelHeight + " " + "testx +10: " + testX + 10 + " calc: " + calcY(testX + 10) + "cardsX :" + cardsX + " cardsY: " + cardsY + "area is: " + area);
+            return testCardX(testX, calcY(testX));
         }else{
-            return (int)testX;
+            System.out.println("area "+area+"new x dim is: " + (int)testX);
+            return (int)testX*2 - 20;
         }
 
     }
@@ -395,7 +513,7 @@ public class GUI{
      * @return double		
      */
     public double calcY(double x){
-        x=(x/72) *96;
+        x=Math.floor(((x/363)*543))-1;
         return x;
     }
 
@@ -415,8 +533,11 @@ public class GUI{
             if(panels[currentPlayer].getComponent(i) instanceof JLabel) {
 
                 if (!copyBestCase.isEmpty() && (lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)) != null && lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).toString(), lesson.getPlayers().get(currentPlayer)))) {
+
+
+                   // System.out.println("Best case is in our hand and valid to play and the card we are looking at is "+lesson.getPlayers().get(currentPlayer).getCard(i).getFlipped()+"and the actual card is"+ lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getFlipped());
                     if(((JLabel)c) == lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel()){
-                       
+
                         noValid = false;
                         break;
                     }else{
@@ -469,19 +590,47 @@ public class GUI{
     /**		
      * <p> adds mouse listeners on elements</p>		
      */
-    public void addMouseListeners(){
-        for(int i =0;i<panels[currentPlayer].getComponents().length;i++){
-            if(panels[currentPlayer].getComponent(i) instanceof JLabel){
-                if(play==0){
+
+    public void addMouseListeners() {
+        System.out.println("help level: "+lesson.getHelpLevel()+" copybest "+copyBestCase.get(0));
+        for (int i = 0; i < panels[currentPlayer].getComponents().length; i++) {
+            if (panels[currentPlayer].getComponent(i) instanceof JLabel) {
+                if (lesson.getHelpLevel() == 0 || lesson.getHelpLevel() == 1 ) {
                     panels[currentPlayer].getComponent(i).addMouseListener(ml);
-                    ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(new Color(226,172,44),4));
-                }else{
-                    if(lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(i).toString(),lesson.getPlayers().get(currentPlayer))){
+                    ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(null);
+
+                } else if (lesson.getHelpLevel() == 2 || lesson.getHelpLevel()==4) {
+                    if (play == 0) {
                         panels[currentPlayer].getComponent(i).addMouseListener(ml);
-                        ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(new Color(226,172,44),4));
+                        ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(new Color(226, 172, 44), 4));
+                    } else {
+                        if (lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(i).toString(), lesson.getPlayers().get(currentPlayer))) {
+                            panels[currentPlayer].getComponent(i).addMouseListener(ml);
+                            ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(new Color(226, 172, 44), 4));
+                        }
+                    }
+
+                }else if(lesson.getHelpLevel() == 3){
+                    if (play == 0) {
+                        panels[currentPlayer].getComponent(i).addMouseListener(ml);
+                        ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(null));
+                    } else {
+                        if (lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(i).toString(), lesson.getPlayers().get(currentPlayer))) {
+                            panels[currentPlayer].getComponent(i).addMouseListener(ml);
+                            ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(null);
+                        }
+                    }
+                }else if(lesson.getHelpLevel()==5){
+                    if(copyBestCase.get(0).equals("CLAIM")){
+                        panels[currentPlayer].getComponent(i).addMouseListener(ml);
+                        ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(new Color(226, 172, 44), 4));
+                    }else{
+                        if((lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(i).toString(), lesson.getPlayers().get(currentPlayer)) || play==0) && lesson.getPlayers().get(currentPlayer).getCard(i).toString().equals(copyBestCase.get(0))){
+                            panels[currentPlayer].getComponent(i).addMouseListener(ml);
+                            ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(new Color(226, 172, 44), 4));
+                        }
                     }
                 }
-
             }
         }
     }
@@ -490,6 +639,7 @@ public class GUI{
      * <p> removes mouseListeners on elements</p>		
      */
     public void removeMouseListeners(){
+        System.out.println(panels[currentPlayer].getComponents().length);
         for(int i = 0;i<panels[currentPlayer].getComponents().length;i++){
             if(panels[currentPlayer].getComponent(i) instanceof JLabel ){
                 panels[currentPlayer].getComponent(i).removeMouseListener(ml);
@@ -504,6 +654,8 @@ public class GUI{
      */
     public void removeCenterCards() throws InterruptedException {
         Thread.sleep(2000);
+        System.out.println("num comps "+centerPanel.getComponents().length);
+
         for(Component c:centerPanel.getComponents()){
             if(c instanceof JLabel ){
                 centerPanel.remove(((JLabel)c));
@@ -525,10 +677,10 @@ public class GUI{
         panels[index].repaint();
         centerPanel.add(source);
         if(index==1 || index==3){
-            source.setLocation(centerPanel.getWidth()/2 - 36,centerPanel.getHeight()/2 + (((index-2)*36)-36));
+            source.setLocation(centerPanel.getWidth()/2 - source.getWidth()/2,centerPanel.getHeight()/2 + (((index-2)*source.getWidth()/2)-source.getWidth()/2));
             source.removeMouseListener(ml);
         }else{
-            source.setLocation(centerPanel.getWidth()/2 - 72 + index*36,centerPanel.getHeight()/2 - 36 );
+            source.setLocation(centerPanel.getWidth()/2 - source.getWidth() + index*(source.getWidth()/2),centerPanel.getHeight()/2 - source.getWidth()/2 );
         }
         centerPanel.validate();
         centerPanel.repaint();
@@ -591,12 +743,15 @@ public class GUI{
      * @return JLabel 		
      */
     private JLabel makeBiddingLabel(){
-        biddingLabel=new JLabel("<html><p style='color:white;'>The Bidding is: "+lesson.getBiddingString()+"<br>The Bidding Suit is: <span style='font-size:150%;'>"+ lesson.getBiddingSuit()+"</span></p></html>");
+        biddingLabel=new JLabel();
         biddingLabel.setLayout(null);
+        biddingLabel.setText("<html><h3 style='color:white;'>The Bidding is: "+lesson.getBiddingString()+"</h3> <h3 style='color:white;'> The Bidding Suit is: "+ lesson.getBiddingSuit()+"</h3></html>");
+
         biddingLabel.setSize(biddingLabel.getPreferredSize());
         biddingLabel.setLocation(centerPanel.getLocation().x + 5, centerPanel.getLocation().y +5);
         return biddingLabel;
     }
+
 
     /**		
      * <p> displays hints</p>		
@@ -611,6 +766,7 @@ public class GUI{
             
             @Override
             public void actionPerformed( ActionEvent e ) {
+
                 if(hintQuestionNumber<hintQuestions.size()&& doneHints==false){
                     if (hintQuestionNumber==6){
                         jtp.setSize(new Dimension(300, 300));
@@ -676,15 +832,42 @@ public class GUI{
         return tips;
     }
 
+
+
+    public void handleClaim(){
+        if(copyBestCase.get(0).equals("CLAIM")){
+            JOptionPane.showMessageDialog(window,
+                    "Congratulations you win the remaining "+(13-tricks)+" tricks");
+            lesson.getPlayers().get(currentPlayer).addTrickWins((13-tricks));
+            for(int i=0;i<panels.length;i++){
+                for(Component c:panels[i].getComponents()){
+                    if(c instanceof JLabel){
+                        panels[i].remove(c);
+                    }
+                }
+            }
+        }else{
+            String s = (String)JOptionPane.showInputDialog(
+                    window,
+                    "Please type the order of cards played for the remaining "+ (13-tricks)+" tricks as a coma separated list","",JOptionPane.PLAIN_MESSAGE);
+            if(s!=null){
+                JOptionPane.showMessageDialog(window,
+                        "You won't win with that order");
+            }
+
+        }
+    }
+
     /**		
      * <p> claim remaining of the game</p>		
      * @return JButton		
      */
+
     private JButton makeClaim(){
         claim = new JButton( new AbstractAction("CLAIM") {
             @Override
             public void actionPerformed( ActionEvent e ) {
-
+                    handleClaim();
             }
         });
         claim.setText("<html><h3>CLAIM</h3></html>");
@@ -718,7 +901,7 @@ public class GUI{
         exit = new JButton( new AbstractAction("EXIT") {
             @Override
             public void actionPerformed( ActionEvent e ) {
-                System.exit(0);
+                window.setVisible(false);
             }
         });
         exit.setText("<html><h2>EXIT</h2></html>");
@@ -775,3 +958,4 @@ public class GUI{
 
 
 }
+

@@ -33,31 +33,37 @@ public class Card{
     Card(char suit, char value) throws IOException {
         this.suit = suit;
         this.value = value;
-        BufferedImage img = ImageIO.read(new File("cardImages/"+value+""+suit+".png"));
+        BufferedImage img = ImageIO.read(new File("images/"+value+suit+".png"));
         BufferedImage img2 = ImageIO.read(new File("cardImages/backOfCard.png"));
-        this.backSide = resize(img2,72,96);
-        this.cardImage = resize(img,72,96);
+        this.backSide = resize(img2,85,128);
+        this.cardImage = resize(img,85,128);
         setPointValue(value);
         this.flipped = false;
-        
+
         this.cardLabel = new JLabel(new ImageIcon(cardImage));
-        this.cardLabel.setSize(72,96);
-	
+        this.cardLabel.setSize(85,128);
+
     }
 
+
     /**
+
      * <p> resizes a card</p>
      * @param width
      * @param height
      * @param flipped 
      */
     public void resizeCard(int width,int height,boolean flipped){
-		
-	backSide=resize(backSide,width,height);
-	cardImage=resize(cardImage,width,height);
-	this.setFlipped(flipped);
-	this.cardLabel.setSize(width,height);
+
+        backSide=resize(backSide,width,height);
+        cardImage=resize(cardImage,width,height);
+        this.setFlipped(flipped);
+        this.cardLabel.setSize(width,height);
+        cardLabel.validate();
+        cardLabel.repaint();
+
     }
+
 
     /**
      * <p> resize image</p>
@@ -91,15 +97,15 @@ public class Card{
      */
     public void setFlipped(boolean flip){
         if(flip){
-		cardLabel.setIcon(new ImageIcon(backSide));
-		cardLabel.validate();
-		cardLabel.repaint();
-	}else{
-		cardLabel.setIcon(new ImageIcon(cardImage));
-		cardLabel.validate();
-		cardLabel.repaint();
-	}
-	
+            cardLabel.setIcon(new ImageIcon(backSide));
+            cardLabel.validate();
+            cardLabel.repaint();
+        }else{
+            cardLabel.setIcon(new ImageIcon(cardImage));
+            cardLabel.validate();
+            cardLabel.repaint();
+        }
+
     }
 
     /**
@@ -213,3 +219,4 @@ public class Card{
 
     }
 }
+
