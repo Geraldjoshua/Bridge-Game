@@ -518,7 +518,7 @@ public class GUI extends java.lang.Thread{
                 if (!copyBestCase.isEmpty() && (lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)) != null && lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).toString(), lesson.getPlayers().get(currentPlayer)))) {
 
 
-                   // System.out.println("Best case is in our hand and valid to play and the card we are looking at is "+lesson.getPlayers().get(currentPlayer).getCard(i).getFlipped()+"and the actual card is"+ lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getFlipped());
+                   System.out.println("Best case is in our hand and valid to play and the card we are looking at is "+lesson.getPlayers().get(currentPlayer).getCard(i).getFlipped()+"and the actual card is"+ lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getFlipped());
                     if(((JLabel)c) == lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel()){
 
                         noValid = false;
@@ -543,17 +543,20 @@ public class GUI extends java.lang.Thread{
             ((JLabel)panels[currentPlayer].getComponent(0)).setIcon(lesson.getPlayers().get(currentPlayer).getCard(0).getImageIcon());
             ((JLabel)panels[currentPlayer].getComponent(0)).validate();
             ((JLabel)panels[currentPlayer].getComponent(0)).repaint();
+			
             moveCard((JLabel)panels[currentPlayer].getComponent(0),currentPlayer);
+			lesson.setFirstCardPlayed(lesson.getPlayers().get(currentPlayer).getCard(0).toString());
             lesson.getPlayers().get(currentPlayer).addPoints(lesson.getPlayPoints(lesson.getPlayers().get(currentPlayer).getCard(0).toString()));
             lesson.getPlayers().get(currentPlayer).removePlayedCard(lesson.getPlayers().get(currentPlayer).getCard(0).toString());
         }else{
 
             lesson.getPlayers().get(currentPlayer).getCard(i).setFlipped(false);
-
+			
             ((JLabel)panels[currentPlayer].getComponent(i)).setIcon(lesson.getPlayers().get(currentPlayer).getCard(i).getImageIcon());
             ((JLabel)panels[currentPlayer].getComponent(i)).validate();
             ((JLabel)panels[currentPlayer].getComponent(i)).repaint();
             moveCard((JLabel)panels[currentPlayer].getComponent(i),currentPlayer);
+			lesson.setFirstCardPlayed(lesson.getPlayers().get(currentPlayer).getCard(i).toString());
             lesson.getPlayers().get(currentPlayer).addPoints(lesson.getPlayPoints(lesson.getPlayers().get(currentPlayer).getCard(i).toString()));
             lesson.getPlayers().get(currentPlayer).removePlayedCard(lesson.getPlayers().get(currentPlayer).getCard(i).toString());
 
@@ -587,6 +590,7 @@ public class GUI extends java.lang.Thread{
                         panels[currentPlayer].getComponent(i).addMouseListener(ml);
                         ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(new Color(226, 172, 44), 4));
                     } else {
+						
                         if (lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(i).toString(), lesson.getPlayers().get(currentPlayer))) {
                             panels[currentPlayer].getComponent(i).addMouseListener(ml);
                             ((JLabel) panels[currentPlayer].getComponent(i)).setBorder(BorderFactory.createLineBorder(new Color(226, 172, 44), 4));
