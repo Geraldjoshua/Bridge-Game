@@ -45,6 +45,13 @@ public class Card{
 
     }
 
+	/**
+     * <p> resizes a card</p>
+     * @param width
+     * @param height
+     * @param flipped 
+     */
+
     public void resizeCard(int width,int height,boolean flipped){
 
         backSide=resize(backSide,width,height);
