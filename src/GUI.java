@@ -39,13 +39,30 @@ public class GUI extends java.lang.Thread{
 
     private JLabel biddingLabel;
 
-    private Thread t;
+    private ArrayList <String> hintQuestions;
+    private int hintQuestionNumber;
+    private JScrollPane scroller; 
+    private boolean doneHints=false;
+    private int timesTipClicked=0;
+
+    
+    /**
+     * <p> constructor </p>
+     * @param lesson
+     * @throws IOException
+     * @throws InterruptedException 
+     */
 
     GUI(Lesson lesson) throws IOException, InterruptedException {
         this.bgPicture=ImageIO.read(new File("images/background3.jpg"));
         this.played=false;
+
         this.lesson=lesson;
         this.playLog = new JPanel();
+
+        this.lesson = lesson;
+        this.copyBestCase = lesson.getBestCase();
+        
         this.currentPlayer = 0;
         this.tricks = 0;
         this.play = 0;
@@ -54,16 +71,25 @@ public class GUI extends java.lang.Thread{
         Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(window.getGraphicsConfiguration());
         this.xSize = Toolkit.getDefaultToolkit().getScreenSize().width-scnMax.right - scnMax.left;
         this.ySize = Toolkit.getDefaultToolkit().getScreenSize().height-scnMax.bottom-scnMax.top;
+
         bgPicture = resize(bgPicture,xSize+100,ySize);
     }
 
 
-    private void initComponents() throws IOException {
+
+    /**
+     * <p> initializes components</p>
+     */
+    private void initComponents(){
+
         initFrame();
         initCardListeners();
         initHoverListener();
     }
 
+    /**
+     * <p> initializes card listeners
+     */
     private void initCardListeners(){
         this.ml = new MouseAdapter() {
             @Override
@@ -85,6 +111,9 @@ public class GUI extends java.lang.Thread{
         };
     }
 
+    /**		
+     * <p> initializes Hover on cards listeners</p>		
+     */
     private void initHoverListener(){
         this.hover = new MouseAdapter() {
             @Override
@@ -99,6 +128,9 @@ public class GUI extends java.lang.Thread{
         };
     }
 
+    /**		
+     * <p> initializes the j-frame</p>		
+     */
     private void initFrame(){
         window = new JFrame("Bridge Tutor");
         window.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -110,6 +142,12 @@ public class GUI extends java.lang.Thread{
 
     }
 
+
+    /**		
+     * <p> changes button color</p>		
+     * @param entered		
+     * @param source 		
+     */
 
     public void changeButtonColour(boolean entered,JButton source){
         if(entered){
@@ -123,6 +161,9 @@ public class GUI extends java.lang.Thread{
         }
     }
 
+    /**		
+     * <p> initializes the centrePanel</p>		
+     */
     private void initCenterPanel(){
         centerPanel.setLayout(null);
         centerPanel.setOpaque(false);
@@ -132,6 +173,10 @@ public class GUI extends java.lang.Thread{
     }
 
 
+    		
+    /**		
+     * <p> initializes playerPanels</p>		
+     */
     private void initPlayerPanels(){
         for(int i=0;i<panels.length;i++){
             panels[i] = new JPanel();
@@ -151,12 +196,22 @@ public class GUI extends java.lang.Thread{
         panels[3].setBounds(0,(int)((3*ySize)/4),xSize,(int)(ySize/4));
     }
 
+    /**		
+     * <p> sets the hover option</p>		
+     * @param source 		
+     */
     public void setHover(JButton source){
 
         source.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
     }
 
+
+    /**		
+     * <p> creates the lesson screen</p>		
+     * @throws IOException		
+     * @throws InterruptedException 		
+     */
     public void makeLessonScreen() throws IOException, InterruptedException {
         initPlayerPanels();
         initCenterPanel();
@@ -198,7 +253,7 @@ public class GUI extends java.lang.Thread{
         components.add(makeScore());components.add(makeExitButton());components.add(makeFlipCards());
         components.add(makeGetTipsButton());components.add(makeGetHintsButton());
         components.add(makePlayLogHeader());components.add(makePlayLog());components.add(makeClaim());components.add(makeBiddingLabel());
-
+        
         for(Component c:components){
             if(c instanceof JButton){
                 c.addMouseListener(hover);
@@ -219,6 +274,7 @@ public class GUI extends java.lang.Thread{
         window.setVisible(true);
 
     }
+
 
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
@@ -241,16 +297,21 @@ public class GUI extends java.lang.Thread{
         }
     }
 
+
+     /**		
+     * <p> starts the game</p>		
+     * @throws InterruptedException 		
+     */
     public void startGame() throws InterruptedException {
 
         for(;tricks<13;tricks++) {
             for (play = 0; play < 4; play++) {
                 played = false;
-                System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerHand() + " before");
+                
                 lesson.getPlayers().get(currentPlayer).setCanPlay(true);
                 playerTurn.setText("<html><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
 
-                System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerName() + " can play");
+               
                 if (!lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("south") && !lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("north")) {
                     Thread.sleep(2000);
                     autoPlay();
@@ -267,9 +328,8 @@ public class GUI extends java.lang.Thread{
                 }
 
                 lesson.getPlayers().get(currentPlayer).setCanPlay(false);
-                //System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerName() + " has played");
-                //System.out.println("The leading suit is " + lesson.getLeadingSuit());
-                System.out.println(lesson.getPlayers().get(currentPlayer).getPlayerHand() + " after");
+             
+              
 
                 currentPlayer++;
                 if (currentPlayer > 3) {
@@ -296,6 +356,13 @@ public class GUI extends java.lang.Thread{
         playerTurn.setText("<html><h1>"+lesson.decideGameWinner()+"won<h1><html>");
     }
 
+    			
+    /**		
+     * <p> searching for the player currently playing</p>		
+     * @param source		
+     * @return integer		
+     * @throws InterruptedException 		
+     */
     public int findPlayer(JLabel source) throws InterruptedException {
 
         Container parent = source.getParent();
@@ -307,7 +374,15 @@ public class GUI extends java.lang.Thread{
         return -1;
     }
 
-    public void makePlay(JLabel source,int index,int play){
+
+    /**		
+     * <p> handles the playing of cards</p>		
+     * @param source		
+     * @param index		
+     * @param play		
+     * @throws InterruptedException 		
+     */
+    public void makePlay(JLabel source,int index,int play) throws InterruptedException {
         int jIndex=0;
         if(lesson.getPlayers().get(index).getCanPlay()){
             for(Component card:panels[index].getComponents()){
@@ -397,6 +472,13 @@ public class GUI extends java.lang.Thread{
 
     }
 
+    /**		
+     * <p> handles the placement of the card on the panel</p>		
+     * @param testX		
+     * @param testY		
+     * @return integer		
+     */
+
     public int testCardX(double testX,double testY){
 
         int panelHeight = panels[0].getHeight()-2*ySpaceing;
@@ -413,9 +495,9 @@ public class GUI extends java.lang.Thread{
             testX-=30;
             System.out.println(panelWidth+"x"+panelHeight+" "+"testx -10: " +testX+" calc: "+calcY(testX)+"cardsX :"+cardsX+" cardsY: "+cardsY+"area is: "+area);
             return testCardX(testX,calcY(testX));
-        }else if(area>24) {
+        }else if(area>20) {
             testX *= 2;
-            testX += 50;
+            testX += 30;
             // testY = calcY(testX);
             System.out.println(panelWidth + "x" + panelHeight + " " + "testx +10: " + testX + 10 + " calc: " + calcY(testX + 10) + "cardsX :" + cardsX + " cardsY: " + cardsY + "area is: " + area);
             return testCardX(testX, calcY(testX));
@@ -426,11 +508,20 @@ public class GUI extends java.lang.Thread{
 
     }
 
+    /**		
+     * <p> used to resize cards to fit on the screen</p>		
+     * @param x		
+     * @return double		
+     */
     public double calcY(double x){
         x=Math.floor(((x/363)*543))-1;
         return x;
     }
 
+    /**		
+     * <p> handles automatic play for west and east hand</p>		
+     * @throws InterruptedException 		
+     */
     public void autoPlay() throws InterruptedException {
 
         boolean noValid=false;
@@ -443,28 +534,26 @@ public class GUI extends java.lang.Thread{
             if(panels[currentPlayer].getComponent(i) instanceof JLabel) {
 
                 if (!copyBestCase.isEmpty() && (lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)) != null && lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).toString(), lesson.getPlayers().get(currentPlayer)))) {
+
                    // System.out.println("Best case is in our hand and valid to play and the card we are looking at is "+lesson.getPlayers().get(currentPlayer).getCard(i).getFlipped()+"and the actual card is"+ lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getFlipped());
                     if(((JLabel)c) == lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel()){
+
                         noValid = false;
                         break;
                     }else{
-                        System.out.println("But not at this index, the card here is "+lesson.getPlayers().get(currentPlayer).getCard(i).toString()+" at index "+i);
                         noValid=true;
                     }
 
                 } else if (lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(i).toString(), lesson.getPlayers().get(currentPlayer))) {
-                    System.out.println("Best case is not in our hand or not valid to play and card at index "+i+" is valid card is "+lesson.getPlayers().get(currentPlayer).getCard(i).toString());
                     noValid = false;
                     break;
 
                 } else {
-                    System.out.println("Best case is not in our hand or not valid to play and card at index "+i+" is valid");
                     noValid = true;
                 }
             }
             i++;
         }
-        System.out.println("INDEX OF CARD BEING PLAYED IS "+i);
         if(noValid){
             lesson.getPlayers().get(currentPlayer).getCard(0).setFlipped(false);
 
@@ -488,12 +577,18 @@ public class GUI extends java.lang.Thread{
         }
 
 
-        System.out.println("removing from hand of "+lesson.getPlayers().get(currentPlayer).getPlayerName()+ "with "+lesson.getPlayers().get(currentPlayer).getPoints()+"points");
-
+       
     }
+    
+    /**		
+     * <p> handles score update</p>		
+     */
     public void updateScoreBoard(){
         score.setText("<html><h1>N + S Score: "+(lesson.getPlayers().get(1).getTrickWins()+lesson.getPlayers().get(3).getTrickWins())+"</h1><h2>W + E Score: "+(lesson.getPlayers().get(0).getTrickWins()+lesson.getPlayers().get(2).getTrickWins())+"</h2></html>");
     }
+    /**		
+     * <p> adds mouse listeners on elements</p>		
+     */
 
     public void addMouseListeners() {
         System.out.println("help level: "+lesson.getHelpLevel()+" copybest "+copyBestCase.get(0));
@@ -539,6 +634,9 @@ public class GUI extends java.lang.Thread{
         }
     }
 
+    /**		
+     * <p> removes mouseListeners on elements</p>		
+     */
     public void removeMouseListeners(){
         System.out.println(panels[currentPlayer].getComponents().length);
         for(int i = 0;i<panels[currentPlayer].getComponents().length;i++){
@@ -548,9 +646,16 @@ public class GUI extends java.lang.Thread{
             }
         }
     }
+    
+    /**		
+     * <p> handles removing of cards from center panel</p>		
+     * @throws InterruptedException 		
+     */
     public void removeCenterCards() throws InterruptedException {
         Thread.sleep(2000);
+
         System.out.println("num comps "+centerPanel.getComponents().length);
+
         for(Component c:centerPanel.getComponents()){
             if(c instanceof JLabel ){
                 centerPanel.remove(((JLabel)c));
@@ -560,6 +665,11 @@ public class GUI extends java.lang.Thread{
         }
     }
 
+    /**		
+     * <p> handles moving of the card to the center</p>		
+     * @param source		
+     * @param index 		
+     */
     public void moveCard(JLabel source,int index){
         source.setBorder(null);
         panels[index].remove(source);
@@ -567,16 +677,20 @@ public class GUI extends java.lang.Thread{
         panels[index].repaint();
         centerPanel.add(source);
         if(index==1 || index==3){
-            source.setLocation(centerPanel.getWidth()/2 - 36,centerPanel.getHeight()/2 + (((index-2)*36)-36));
+            source.setLocation(centerPanel.getWidth()/2 - source.getWidth()/2,centerPanel.getHeight()/2 + (((index-2)*source.getWidth()/2)-source.getWidth()/2));
             source.removeMouseListener(ml);
         }else{
-            source.setLocation(centerPanel.getWidth()/2 - 72 + index*36,centerPanel.getHeight()/2 - 36 );
+            source.setLocation(centerPanel.getWidth()/2 - source.getWidth() + index*(source.getWidth()/2),centerPanel.getHeight()/2 - source.getWidth()/2 );
         }
         centerPanel.validate();
         centerPanel.repaint();
 
     }
 
+    /**		
+     * <p> PlayLogheader</p>		
+     * @return JLabel		
+     */
     private JLabel makePlayLogHeader(){
         playLogHeader = new JLabel("<html><h2 style='color:white;text-decoration:underline;' >Play Log</h2></html>");
         playLogHeader.setLayout(null);
@@ -585,6 +699,10 @@ public class GUI extends java.lang.Thread{
         return playLogHeader;
     }
 
+    /**		
+     * <p> handles flipping of cards</p>		
+     * @return JButton		
+     */
     private JButton makeFlipCards(){
         JButton flip = new JButton( new AbstractAction("FLIP") {
             @Override
@@ -620,6 +738,10 @@ public class GUI extends java.lang.Thread{
         return flip;
     }
 
+    /**		
+     * <p> displays bidding string</p>		
+     * @return JLabel 		
+     */
     private JLabel makeBiddingLabel(){
         biddingLabel=new JLabel();
         biddingLabel.setLayout(null);
@@ -630,11 +752,41 @@ public class GUI extends java.lang.Thread{
         return biddingLabel;
     }
 
-    private JButton	makeGetHintsButton(){
+
+    /**		
+     * <p> displays hints</p>		
+     * @return JButton		
+     */
+    private JButton makeGetHintsButton (){
+        JTextPane jtp = new JTextPane();
+        jtp.setEditable(false);
+        jtp.setSize(new Dimension(300, 100));
+        jtp.setPreferredSize(new Dimension(300,100));
         hints = new JButton( new AbstractAction("HINTS") {
+            
             @Override
             public void actionPerformed( ActionEvent e ) {
 
+                if(hintQuestionNumber<hintQuestions.size()&& doneHints==false){
+                    if (hintQuestionNumber==6){
+                        jtp.setSize(new Dimension(300, 300));
+                        jtp.setPreferredSize(new Dimension(300,300));
+                        jtp.setText(lesson.getHintasked(hintQuestions.get(hintQuestionNumber)));
+                        JOptionPane.showMessageDialog(window,jtp, hintQuestions.get(hintQuestionNumber), 1);
+                        
+                        
+                    }
+                    else{
+                        jtp.setText(lesson.getHintasked(hintQuestions.get(hintQuestionNumber)));
+                        JOptionPane.showMessageDialog(window,jtp, hintQuestions.get(hintQuestionNumber), 1);
+                        hintQuestionNumber++;
+                    }
+                }
+                else{
+                    JOptionPane.showMessageDialog(window,"No more Hints to give!");
+                    doneHints=true;
+                    
+                }
             }
         });
         hints.setText("<html><h3>GETS HINTS</h3></html>");
@@ -645,11 +797,29 @@ public class GUI extends java.lang.Thread{
         hints.setLocation((int) tips.getLocation().x-hints.getWidth()-framePadding/2,ySize - hints.getHeight() - 2*framePadding);
         return hints;
     }
-
+    /**		
+     * <p> displays Tips on clicking</p>		
+     * @return JButton		
+     */
     private JButton	makeGetTipsButton(){
         tips = new JButton( new AbstractAction("TIPS") {
             @Override
             public void actionPerformed( ActionEvent e ) {
+                
+                if(timesTipClicked<lesson.getTips().size()){
+                        JOptionPane.showMessageDialog(window,
+                        "Tip: " + lesson.getTipsasked(timesTipClicked) + " (click Tips for more)");
+                        timesTipClicked++;
+                        
+                }
+                else{
+                    JOptionPane.showMessageDialog(window,
+                    "No more Tips!"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...");
+                    tips.setEnabled(false);
+                    tips.setBackground(Color.GRAY);
+                    
+                    
+                }
 
             }
         });
@@ -661,6 +831,7 @@ public class GUI extends java.lang.Thread{
         tips.setLocation(xSize - (int)tips.getPreferredSize().getWidth()-framePadding,ySize - tips.getHeight() - 2*framePadding);
         return tips;
     }
+
 
     public void handleClaim(){
         if(copyBestCase.get(0).equals("CLAIM")){
@@ -686,6 +857,12 @@ public class GUI extends java.lang.Thread{
         }
     }
 
+
+    /**		
+     * <p> claim remaining of the game</p>		
+     * @return JButton		
+     */
+
     private JButton makeClaim(){
         claim = new JButton( new AbstractAction("CLAIM") {
             @Override
@@ -702,6 +879,10 @@ public class GUI extends java.lang.Thread{
         return claim;
     }
 
+    /**		
+     * <p> sets the layout and how the score is displayed</p>		
+     * @return JLabel		
+     */
     private JLabel makeScore(){
         score = new JLabel("<html><h1>N + S Score: "+(lesson.getPlayers().get(1).getTrickWins()+lesson.getPlayers().get(3).getTrickWins())+"</h1><h2>W + E Score: "+(lesson.getPlayers().get(0).getTrickWins()+lesson.getPlayers().get(2).getTrickWins())+"</h2></html>");
         score.setLayout(null);
@@ -711,6 +892,10 @@ public class GUI extends java.lang.Thread{
         return score;
     }
 
+    /**		
+     * <p>exit lesson</p>		
+     * @return JBUtton		
+     */
     private JButton makeExitButton(){
 
         exit = new JButton( new AbstractAction("EXIT") {
@@ -733,6 +918,11 @@ public class GUI extends java.lang.Thread{
 
 
 
+    /**		
+     * <p> corrects display on different monitors</p>		
+     * @param source		
+     * @param offset 		
+     */
     public void offSet(JLabel source,int offset){
         Point pt = source.getLocation();
         int x = pt.x;
@@ -743,19 +933,29 @@ public class GUI extends java.lang.Thread{
         }
     }
 
-    public JPanel makePlayLog() throws IOException{
-        playLog.setOpaque(false);
-        playLog.setLayout(null);
-        playLog.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));
+    /**		
+     * <p> makes the play log scroll-able and shows the progress of the game</p>		
+     * @return JScrollPane		
+     * @throws IOException 		
+     */
+    public JScrollPane makePlayLog() throws IOException{
+        playLog = new JPanel();
         playerTurn = new JLabel();
-        playerTurn.setSize(300,50);
         playerTurn.setForeground(Color.white);
         playerTurn.setLocation(20,20);
+        playerTurn.setSize(300,50);     
+        playLog.add(playerTurn); 
         playLog.setSize(300,150);
-        playLog.add(playerTurn);
+        playLog.setBackground(new Color(0, 134, 64));
         playLog.setLocation(framePadding,panels[0].getLocation().y + panels[0].getHeight() + playLogHeader.getHeight() + 10);
-        return playLog;
+        scroller = new JScrollPane(playLog);
+        scroller.setOpaque(false);
+        scroller.setSize(xSize/4-2*framePadding,ySize/4-2*framePadding);
+        scroller.setLocation(framePadding,panels[0].getLocation().y + panels[0].getHeight() + playLogHeader.getHeight() + 10);
+        scroller.setBorder(BorderFactory.createLineBorder(new Color(226,172,44),2));
+        return scroller;
     }
 
 
 }
+

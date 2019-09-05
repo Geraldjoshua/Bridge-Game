@@ -36,7 +36,7 @@ public class Lesson{
 
 
     /**
-     * <p>contstructor</p>
+     * <p>constructor</p>
      * @param filename the file to be parsed
      *
      * @throws java.io.IOException when the file does not match the lesson files
@@ -49,11 +49,13 @@ public class Lesson{
         players.add(new Person("South"));
         loadInput(filename);
         loadTips("input/tips.txt");
+
         this.helpLevel=level;
+
     }
 
     /**
-     * <p>another contstructor for testing purposes</p>
+     * <p>another constructor for testing purposes</p>
      *
      */
     Lesson(){
@@ -84,11 +86,22 @@ public class Lesson{
         return hints;
     }
 
+    /**
+     * <p> Obtains hints a player needs for a lesson</p>
+     * @param key
+     * @return String
+     */
+
     public String getHintasked(String key){
         String hint = hints.get(key);
         return hint;
     }
 
+    /**
+     * <p>Obtains tips a player needs to remember during the game</p>
+     * @param key
+     * @return String
+     */
     public String getTipsasked(int key){
         String tip = tips.get(key);
         return tip;
@@ -129,18 +142,20 @@ public class Lesson{
      * @throws java.io.IOException when the file does not match the lesson files
      *
      */
-    public void loadInput(String filename) throws IOException{
+    private void loadInput(String filename) throws IOException{
 
         Scanner lesson = new Scanner(new File(filename));
         System.out.println("The bidding is: ");
         String bidding = lesson.nextLine();
+
         setBiddingString(bidding);
+
         String[] Bidding = bidding.split(" ");
         setBidding(Bidding);
         System.out.println(bidding);
-        //number of hands is number of players
+        
         int number_of_hands=0;
-        //Loop to initialise number of players in the game
+        
         while (number_of_hands<=3){
             String hand = lesson.nextLine();
             String[] hand_split = hand.split(",");
@@ -152,7 +167,6 @@ public class Lesson{
                 }
             }
             players.get(number_of_hands).setHand(cardArray);
-            //System.out.println(players.get(number_of_hands).getPlayerHand());
             number_of_hands++;
             cardArray.clear();
         }
@@ -164,7 +178,7 @@ public class Lesson{
         while(maxNumOfTricksLeft>0){
             String trick = lesson.nextLine();
             String[] singleTrick = trick.split(",");
-            //System.out.println(Arrays.toString(singleTrick));
+           
 
             //Check if claim has been played or invalid input (Will only happen before all 13 tricks have been played)
             if(singleTrick.length==1){
@@ -178,11 +192,11 @@ public class Lesson{
             maxNumOfTricksLeft--;
 
         }
-        //System.out.println(lesson.nextLine());
-        /*Rest of input will be parsed here*/
-        LinkedHashMap<String,String> hint = new LinkedHashMap<String,String>();
-        for(int i=0;i<questions.length;i++){
-            hint.put(questions[i],lesson.nextLine());
+      
+       
+        LinkedHashMap<String,String> hint = new LinkedHashMap<>();
+        for (String question : questions) {
+            hint.put(question, lesson.nextLine());
         }
         setHints(hint);
 
@@ -191,14 +205,14 @@ public class Lesson{
     }
 
     /**
-     * <p>function to parse in tipinput</p>
+     * <p>function to parse in tip input</p>
      * @param filename the file to be parsed
      *
      * @throws java.io.IOException when the file does not match the lesson files
      *
      */
-    public void loadTips(String filename) throws IOException{
-        LinkedHashMap<Integer,String> tip = new LinkedHashMap<Integer,String>();
+    private void loadTips(String filename) throws IOException{
+        LinkedHashMap<Integer,String> tip = new LinkedHashMap<>();
         Scanner tipfile = new Scanner(new File(filename));
         int counter = 0;
         while(tipfile.hasNext()){
@@ -211,9 +225,12 @@ public class Lesson{
 
 
 
-    //Method to return best case to be played
+    /**
+     * <p>Method to return best case to be played</p>
+     * @return ArrayList String
+     */
     public ArrayList<String> getBestCase(){
-        ArrayList<String> BestCase = new ArrayList<String>();
+        ArrayList<String> BestCase = new ArrayList<>();
         for(String[] trick:bestCase){
             for(String card:trick){
                 BestCase.add(card);
@@ -223,25 +240,10 @@ public class Lesson{
 
     }
 
-    public ArrayList<String> getBestCase1(int trick){
-        ArrayList<String> BestCase = new ArrayList<String>();
-        if(trick<bestCase.size()){
-            for(String card:bestCase.get(trick)){
-                BestCase.add(card);
-
-            }
-
-        }
-        else{
-            BestCase.add("No tricks!!");
-        }
-        return BestCase;
-
-    }
-
     /**
      * <p>sets leading suit</p>
      *
+     * @param Suit
      */
     public void setLeadingSuit(char Suit){
         this.leadingSuit = Suit;
@@ -281,19 +283,14 @@ public class Lesson{
         if(player.inHand(card) && (card.charAt(1) == getSuit())){
             //For gui purposes
             return true;
-        }else if((player.getPlayerHand().size()!=0)&&(player.noSuit(getLeadingSuit()))){
-
-            return true;
-        }else{
-            return false;
-        }
+        }else return (!player.getPlayerHand().isEmpty())&&(player.noSuit(getLeadingSuit()));
 
     }
 
     /**
      * <p>translates a card to it equivalent points: Get points for card played </p>
      * @param card The card that needs to be translated to it equivalent points
-     * @return int Points for the played card
+     * @return integer Points for the played card
      *
      */
     public int getPlayPoints(String card){
@@ -327,7 +324,7 @@ public class Lesson{
      *
      */
     public void setBidding(String[] bidding){
-        ArrayList<String> biddingstring = new ArrayList<String>(Arrays.asList(bidding));
+        ArrayList<String> biddingstring = new ArrayList<>(Arrays.asList(bidding));
         Collections.reverse(biddingstring);
         String card = biddingstring.get(3);
         biddingSuit = card.charAt(1);
@@ -378,7 +375,7 @@ public class Lesson{
 
     /**
      * <p>getter to get the suit from the first card played the first card played </p>
-     * @return ArrayList<Person> containing all the players
+     * @return ArrayList Person  containing all the players
      *
      */
     public ArrayList<Person> getPlayers(){
@@ -421,6 +418,7 @@ public class Lesson{
     /**
      * <p>Decides winner of trick based on points from cards played </p>
      *
+     * @return String
      */
     public String decideWinner(){
         Person winner = new Person();
@@ -431,8 +429,10 @@ public class Lesson{
                 winner = player;
             }
         }
+
         // System.out.println(winner.getPlayerName() + " Wins the trick!");
         //setWinner(winner.getPlayerName());
+
         return winner.getPlayerName();
     }
 
@@ -476,8 +476,8 @@ public class Lesson{
      *
      */
     public void printPlayers(){
-        for(int i=0;i<players.size();i++){
-            System.out.println(players.get(i).getPlayerName());
+        for (Person player : players) {
+            System.out.println(player.getPlayerName());
         }
     }
 
@@ -504,5 +504,6 @@ public class Lesson{
 
 
 }
+
 
 

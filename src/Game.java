@@ -263,6 +263,13 @@ public class Game{
 
     public static void main(String args[]) throws IOException, InterruptedException{
 
+        /*Scanner userinput = new Scanner(System.in);
+        System.out.println("Enter level: ");
+        String level = userinput.nextLine();
+        String lesson_file = "input/input"+level+".txt";
+        Lesson lesson = new Lesson(lesson_file);*/
+
+
         Game g = new Game();
         g.initWelcomeScreen();
         g.loadMenuScreenComponents();
@@ -371,3 +378,4 @@ public class Game{
         */
     }
 }
+
