@@ -125,16 +125,16 @@ public class LessonTest{
 		    
 		}
 
-		@Test
-		public void testdecideWinner(){
-			System.out.println("Test 11:decideWinner() method: should be true for the player who wins the game.");
-			Lesson test = new Lesson();
-			ArrayList<Person> players = test.getPlayers();
-			players.get(1).setPoints(4);
-			test.decideWinner();
-			assertEquals(true,players.get(1).getWinner());
+		// @Test
+		// public void testdecideWinner(){
+		// 	System.out.println("Test 11:decideWinner() method: should be true for the player who wins the game.");
+		// 	Lesson test = new Lesson();
+		// 	ArrayList<Person> players = test.getPlayers();
+		// 	players.get(1).setPoints(4);
+		// 	test.decideWinner();
+		// 	assertEquals(true,players.get(1).getWinner());
 			 
-		}
+		// }
 		
 		@Test
 		public void testSetBid(){

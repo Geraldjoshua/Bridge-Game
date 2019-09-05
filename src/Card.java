@@ -45,7 +45,9 @@ public class Card{
 
     }
 
-/**
+
+    /**
+
      * <p> resizes a card</p>
      * @param width
      * @param height
@@ -54,7 +56,6 @@ public class Card{
     public void resizeCard(int width,int height,boolean flipped){
 
         backSide=resize(backSide,width,height);
-
         cardImage=resize(cardImage,width,height);
         this.setFlipped(flipped);
         this.cardLabel.setSize(width,height);
@@ -62,6 +63,7 @@ public class Card{
         cardLabel.repaint();
 
     }
+
 
     /**
      * <p> resize image</p>

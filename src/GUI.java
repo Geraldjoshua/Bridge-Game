@@ -75,8 +75,6 @@ public class GUI extends java.lang.Thread{
         bgPicture = resize(bgPicture,xSize+100,ySize);
     }
 
-
-
     /**
      * <p> initializes components</p>
      */
@@ -148,7 +146,6 @@ public class GUI extends java.lang.Thread{
      * @param entered		
      * @param source 		
      */
-
     public void changeButtonColour(boolean entered,JButton source){
         if(entered){
             source.setBackground(new Color(0, 134, 64));
@@ -206,13 +203,14 @@ public class GUI extends java.lang.Thread{
 
     }
 
-
     /**		
      * <p> creates the lesson screen</p>		
      * @throws IOException		
      * @throws InterruptedException 		
      */
+
     public void makeLessonScreen() throws IOException, InterruptedException {
+
         initPlayerPanels();
         initCenterPanel();
         int x = testCardX(85,85);
@@ -276,6 +274,7 @@ public class GUI extends java.lang.Thread{
     }
 
 
+
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -296,7 +295,6 @@ public class GUI extends java.lang.Thread{
             e.printStackTrace();
         }
     }
-
 
      /**		
      * <p> starts the game</p>		
@@ -458,6 +456,7 @@ public class GUI extends java.lang.Thread{
         }
     }
 
+
     public void playCard(Card c,JLabel card,int playerIndex){
         c.setFlipped(false);
         card.setIcon(c.getImageIcon());
@@ -535,6 +534,7 @@ public class GUI extends java.lang.Thread{
 
                 if (!copyBestCase.isEmpty() && (lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)) != null && lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).toString(), lesson.getPlayers().get(currentPlayer)))) {
 
+
                    // System.out.println("Best case is in our hand and valid to play and the card we are looking at is "+lesson.getPlayers().get(currentPlayer).getCard(i).getFlipped()+"and the actual card is"+ lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getFlipped());
                     if(((JLabel)c) == lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel()){
 
@@ -586,6 +586,7 @@ public class GUI extends java.lang.Thread{
     public void updateScoreBoard(){
         score.setText("<html><h1>N + S Score: "+(lesson.getPlayers().get(1).getTrickWins()+lesson.getPlayers().get(3).getTrickWins())+"</h1><h2>W + E Score: "+(lesson.getPlayers().get(0).getTrickWins()+lesson.getPlayers().get(2).getTrickWins())+"</h2></html>");
     }
+
     /**		
      * <p> adds mouse listeners on elements</p>		
      */
@@ -653,7 +654,6 @@ public class GUI extends java.lang.Thread{
      */
     public void removeCenterCards() throws InterruptedException {
         Thread.sleep(2000);
-
         System.out.println("num comps "+centerPanel.getComponents().length);
 
         for(Component c:centerPanel.getComponents()){
@@ -833,6 +833,7 @@ public class GUI extends java.lang.Thread{
     }
 
 
+
     public void handleClaim(){
         if(copyBestCase.get(0).equals("CLAIM")){
             JOptionPane.showMessageDialog(window,
@@ -856,7 +857,6 @@ public class GUI extends java.lang.Thread{
 
         }
     }
-
 
     /**		
      * <p> claim remaining of the game</p>		

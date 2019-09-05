@@ -267,8 +267,8 @@ public class Game{
         System.out.println("Enter level: ");
         String level = userinput.nextLine();
         String lesson_file = "input/input"+level+".txt";
-        Lesson lesson = new Lesson(lesson_file);*/
 
+        Lesson lesson = new Lesson(lesson_file);*/
 
         Game g = new Game();
         g.initWelcomeScreen();

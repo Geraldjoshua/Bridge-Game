@@ -49,7 +49,6 @@ public class Lesson{
         players.add(new Person("South"));
         loadInput(filename);
         loadTips("input/tips.txt");
-
         this.helpLevel=level;
 
     }
@@ -147,6 +146,7 @@ public class Lesson{
         Scanner lesson = new Scanner(new File(filename));
         System.out.println("The bidding is: ");
         String bidding = lesson.nextLine();
+
 
         setBiddingString(bidding);
 
@@ -281,7 +281,6 @@ public class Lesson{
     public boolean isValid(String card , Person player){
         //play can be Suit from first play or trump Suit
         if(player.inHand(card) && (card.charAt(1) == getSuit())){
-            //For gui purposes
             return true;
         }else return (!player.getPlayerHand().isEmpty())&&(player.noSuit(getLeadingSuit()));
 
