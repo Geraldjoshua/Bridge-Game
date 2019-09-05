@@ -290,7 +290,7 @@ public class GUI extends java.lang.Thread{
 
                
                 if (!lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("south") && !lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("north")) {
-                    Thread.sleep(2000);
+                    //Thread.sleep(2000);
                     autoPlay();
                 } else {
                     addMouseListeners();
@@ -330,7 +330,9 @@ public class GUI extends java.lang.Thread{
             removeCenterCards();
             updateScoreBoard();
         }
-        playerTurn.setText("<html><h1>"+lesson.decideGameWinner()+"won<h1><html>");
+        JOptionPane.showMessageDialog(window,
+                                    "<html><h1>"+lesson.decideGameWinner()+" won</h1></html>");
+		window.dispose();
     }
 
     			
@@ -374,11 +376,15 @@ public class GUI extends java.lang.Thread{
                             break;
                         }
                     }else if(lesson.getHelpLevel()==2){
-                        if(lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer))){
-                            playCard( lesson.getPlayers().get(index).getCard(jIndex),(JLabel)card,index);
+                        if(lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer)) && play==0){
+                            playCard(lesson.getPlayers().get(index).getCard(jIndex),(JLabel)card,index);
                             moveCard((JLabel)card,currentPlayer);
                             break;
-                        }
+                        }else{
+							playCard(lesson.getPlayers().get(index).getCard(jIndex),(JLabel)card,index);
+                            moveCard((JLabel)card,currentPlayer);
+							break;
+						}
                     }else if(lesson.getHelpLevel()==3){
                         if(lesson.isValid(lesson.getPlayers().get(index).getCard(jIndex).toString(),lesson.getPlayers().get(currentPlayer)) && lesson.getPlayers().get(currentPlayer).getCard(jIndex).toString().equals(copyBestCase.get(0))) {
                             playCard(lesson.getPlayers().get(index).getCard(jIndex), (JLabel) card, index);

@@ -440,15 +440,16 @@ public class Lesson{
      *
      */
     public String decideGameWinner(){
+	String winners = "";
         Person winner = new Person();
         int trickWins=0;
-        for(Person player:players){
-            if(player.getTrickWins()>trickWins){
-                trickWins=player.getTrickWins();
-                winner = player;
+        for(int i=0;i<players.size()/2;i++){
+            if(players.get(i).getTrickWins()+players.get(i+2).getTrickWins()>trickWins){
+                trickWins=players.get(i).getTrickWins()+players.get(i+2).getTrickWins();
+               	winners=players.get(i).getPlayerName()+" and "+players.get(i+2).getPlayerName();
             }
         }
-        return winner.getPlayerName();
+        return winners;
     }
 
 
