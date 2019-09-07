@@ -10,13 +10,27 @@ public class GameController {
 	
 	private LoadScreen ls;
 	private MenuScreen ms;
+	private MouseListener selectListener;
 	//private Lesson lesson;	
 	
 	GameController(LoadScreen ls,MenuScreen ms)throws InterruptedException{
 		this.ls = ls;
 		this.ms = ms;
 		loadProgram();
+		initListeners();
+		ms.addSelectLessonListener(selectListener);
 		//this.leson = lesson;
+	}
+
+	public void initListeners(){
+		this.selectListener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                showButtons(false,ms.getMenuButtons());
+				showButtons(true,ms.getLessonButtons());
+            }
+            
+        };
 	}
 
 	public void loadProgram()throws InterruptedException{
@@ -40,6 +54,12 @@ public class GameController {
 			    loadBar.setValue(i);
         }		
 
+	}
+
+	public void showButtons(boolean visible,ArrayList<JButton> buttons){
+		for(int i=0;i<buttons.size();i++){
+			buttons.get(i).setVisible(visible);
+		}
 	}
 
 }

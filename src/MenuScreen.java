@@ -9,11 +9,12 @@ import java.awt.event.*;
 
 public class MenuScreen extends JFrame{
 	
-	private final int xSize,ySize;
+	private final int xSize,ySize,framePadding = 100;
 	private final Dimension smallButton = new Dimension(20,20),largeButton = new Dimension(200,50);
 	private int headingHeight;
 	private BackgroundPanel bgPanel;
 	private JButton exitButton,selectLesson;
+	private ArrayList<JButton> lessonButtons,menuButtons;
 
 	MenuScreen(int xSize, int ySize)throws IOException{
 		this.xSize = xSize;
@@ -21,6 +22,8 @@ public class MenuScreen extends JFrame{
 		this.setUndecorated(true);
 		this.bgPanel = new BackgroundPanel(new File("images/background2.jpg"));
 		this.setSize(bgPanel.getSize());
+		this.lessonButtons = new ArrayList<JButton>();
+		this.menuButtons = new ArrayList<JButton>();
 		addComponentsToPanel();
 		bgPanel.addBackGround();		
 		this.add(bgPanel);
@@ -33,7 +36,7 @@ public class MenuScreen extends JFrame{
 		initExitButton();
 		initHeader();
 		initSelectLessonButton();
-		
+		generateLessonButtons();
 	}
 
 	public void initExitButton(){
@@ -71,9 +74,41 @@ public class MenuScreen extends JFrame{
 		return b;
 	}
 
+	public void generateLessonButtons(){
+		int y = headingHeight + framePadding + 50;
+        int x = framePadding;
+        for(int i=1;i<new File("input").listFiles().length;i++){
+            JButton j= new JButton(i+"");
+			
+            j=initButton(j,i+"",Color.red,Color.white,new Dimension((int)(j.getPreferredSize().getWidth()+50),(int)(j.getPreferredSize().getHeight()+30)),new Point(x,y),false);
+            x += (int) ((j.getWidth()) + 50);
+            if(x>bgPanel.getWidth()-framePadding- i*50){
+                x=framePadding;
+                y+=10+j.getHeight();
+            }
+            j.setVisible(false);
+            lessonButtons.add(j);
+            bgPanel.add(j);
+        }
+
+	}
+
 	public void initSelectLessonButton(){
 		selectLesson=initButton(selectLesson,"<html><h3 style='color:red;'>SELECT LESSON</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,40 + headingHeight),true);
+		menuButtons.add(selectLesson);
 		bgPanel.add(selectLesson);
 	}
 
+	
+	public void addSelectLessonListener(MouseListener ml){
+		selectLesson.addMouseListener(ml);
+	}
+
+	public ArrayList<JButton> getLessonButtons(){
+		return lessonButtons;
+	}
+
+	public ArrayList<JButton> getMenuButtons(){
+		return menuButtons;
+	}
 }
