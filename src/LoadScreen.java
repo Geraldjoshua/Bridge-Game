@@ -43,10 +43,19 @@ public class LoadScreen extends JFrame {
 	}
 
 	public JProgressBar makeAndGetProgressBar(int yPos,int width){
-		JProgressBar loadBar = new JProgressBar(SwingConstants.HORIZONTAL,0);
+		JProgressBar loadBar = new JProgressBar(SwingConstants.HORIZONTAL,0,width);
 		loadBar.setSize(width,3);	
-		loadBar.setLocation(this.getWidth()/2 - loadBar.getWidth()/2,this.getHeight()/2 - loadBar.getHeight()/2 + yPos);
+		loadBar.setLocation(this.getWidth()/2 - loadBar.getWidth()/2,this.getHeight()/2 - loadBar.getHeight()/2 + yPos - 20);
+		loadBar.setOpaque(false);
+		loadBar.setBorderPainted(false);
+		loadBar.setValue(0);
+		loadBar.setBorder(null);
 		loadBar.setForeground(Color.WHITE);
+		
+		return loadBar;
+	}
+	
+	public JProgressBar getLoadBar(){
 		return loadBar;
 	}
 

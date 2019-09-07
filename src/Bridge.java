@@ -10,7 +10,7 @@ import java.awt.Component;
 
 public class Bridge{
 
-	public static void main(String[] args) throws IOException  {
+	public static void main(String[] args) throws IOException, InterruptedException  {
 		//Block of code to get screen size of the screen - toolbars size
 		//Toolbar position differs for different OS 
 		//position of toolbar can also be set to users preference on different OS
@@ -20,7 +20,8 @@ public class Bridge{
         	int ySize = Toolkit.getDefaultToolkit().getScreenSize().height-scnMax.bottom-scnMax.top;
 			
 		LoadScreen ls = new LoadScreen(xSize,ySize);
-		ls.setVisible(true);
+		GameController gc = new GameController(ls);
+		
 		
 	}
 
