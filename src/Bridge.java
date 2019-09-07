@@ -20,7 +20,8 @@ public class Bridge{
         	int ySize = Toolkit.getDefaultToolkit().getScreenSize().height-scnMax.bottom-scnMax.top;
 			
 		LoadScreen ls = new LoadScreen(xSize,ySize);
-		GameController gc = new GameController(ls);
+		MenuScreen ms = new MenuScreen(xSize,ySize);
+		GameController gc = new GameController(ls,ms);
 		
 		
 	}

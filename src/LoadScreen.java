@@ -10,29 +10,27 @@ public class LoadScreen extends JFrame {
 	
 	private final int xSize,ySize;
 	private JProgressBar loadBar;
+	private BackgroundPanel bgPanel;
 
 	LoadScreen(int xSize,int ySize) throws IOException {
 		this.xSize = xSize;
 		this.ySize = ySize;
         	this.setUndecorated(true);
-		this.setSize(makeAndGetPanel().getSize());
+		this.bgPanel = new BackgroundPanel(new File("images/background.jpg"));
+		this.setSize(bgPanel.getSize());
 		this.setLocation(xSize/2 - this.getWidth()/2,ySize/2 - this.getHeight()/2);
-		this.add(makeAndGetPanel());
+		addComponentsToPanel();
+		bgPanel.addBackGround();
+		this.add(bgPanel);
 	}
 
-	public JPanel makeAndGetPanel() throws IOException{
-		ArrayList<Component> components = new ArrayList<Component>();
-		JPanel bgPanel =new JPanel(null);
-        	JLabel bg = new JLabel(new ImageIcon(ImageIO.read(new File("images/background.jpg"))));
-		JLabel l = makeAndGetLabel("<html><span style='color:white;font-size:120%;'>Welcome To</span><h1 style='color:white;font-size:150%;margin-top:0px;'>Bridge Tutor v 1.0</h1></html>");
-		bg.setSize(bg.getPreferredSize());
-		bgPanel.setSize(bg.getSize());
-		this.loadBar = makeAndGetProgressBar(l.getHeight(),l.getWidth());
-		bgPanel.add(loadBar);
-		bgPanel.add(l);
-		bgPanel.add(bg);
+	public void addComponentsToPanel() throws IOException{
 		
-		return bgPanel;
+		JLabel l = makeAndGetLabel("<html><span style='color:white;font-size:120%;'>Welcome To</span><h1 style='color:white;font-size:150%;margin-top:0px;'>Bridge Tutor v 1.0</h1></html>");
+		this.loadBar = makeAndGetProgressBar(l.getHeight(),l.getWidth());
+		this.bgPanel.add(loadBar);
+		this.bgPanel.add(l);
+		
 	}
 
 	public JLabel makeAndGetLabel(String text){

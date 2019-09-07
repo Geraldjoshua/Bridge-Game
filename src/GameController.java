@@ -9,10 +9,12 @@ import java.awt.event.*;
 public class GameController {
 	
 	private LoadScreen ls;
+	private MenuScreen ms;
 	//private Lesson lesson;	
 	
-	GameController(LoadScreen ls/*, Lesson lesson*/)throws InterruptedException{
+	GameController(LoadScreen ls,MenuScreen ms)throws InterruptedException{
 		this.ls = ls;
+		this.ms = ms;
 		loadProgram();
 		//this.leson = lesson;
 	}
@@ -22,7 +24,7 @@ public class GameController {
 		ls.setVisible(true);
 		load(ls.getLoadBar(),ls.getLoadBar().getWidth());
 		ls.dispose();		
-
+		ms.setVisible(true);
 	}
 
 	public void load(JProgressBar loadBar,int width)throws InterruptedException{
