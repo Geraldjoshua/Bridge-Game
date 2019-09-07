@@ -31,7 +31,7 @@ public class PersonTest{
 		System.out.println("Test 2:removePlayedCard() method: should return true since the hand is empty ");
 		ArrayList<Card> hand = new ArrayList<>();
 		hand.add(new Card('S','A'));
-		hand.add(new Card('D','S'));
+		hand.add(new Card('D','5'));
 		hand.add(new Card('D','2'));
 		tester.setHand(hand);
 		tester.removePlayedCard("AS");

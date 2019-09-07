@@ -83,7 +83,7 @@ public class LessonTest{
 		public void testReadFile() throws IOException {
 			System.out.println("Test 7:LoadInput method: should return file not found:");
 			try{
-				Lesson test = new Lesson("input/test.txt");
+				Lesson test = new Lesson("input/test.txt",1);
 			}catch (IOException e) {
             		System.out.println("file test.txt not found");
 			}
@@ -125,16 +125,16 @@ public class LessonTest{
 		    
 		}
 
-		// @Test
-		// public void testdecideWinner(){
-		// 	System.out.println("Test 11:decideWinner() method: should be true for the player who wins the game.");
-		// 	Lesson test = new Lesson();
-		// 	ArrayList<Person> players = test.getPlayers();
-		// 	players.get(1).setPoints(4);
-		// 	test.decideWinner();
-		// 	assertEquals(true,players.get(1).getWinner());
+		@Test
+		public void testdecideWinner(){
+			System.out.println("Test 11:decideWinner() method: should be true for the player who wins the game.");
+			Lesson test = new Lesson();
+			ArrayList<Person> players = test.getPlayers();
+			players.get(1).setPoints(4);
+			test.decideWinner();
+			assertEquals("North",test.decideWinner());
 			 
-		// }
+		}
 		
 		@Test
 		public void testSetBid(){
