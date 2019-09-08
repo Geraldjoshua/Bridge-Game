@@ -13,7 +13,7 @@ public class MenuScreen extends JFrame{
 	private final Dimension smallButton = new Dimension(20,20),largeButton = new Dimension(200,50);
 	private int headingHeight;
 	private BackgroundPanel bgPanel;
-	private JButton exitButton,selectLesson;
+	private JButton exitButton,selectLesson,toggleHelpLevel,backButton;
 	private ArrayList<JButton> lessonButtons,menuButtons;
 
 	MenuScreen(int xSize, int ySize)throws IOException{
@@ -36,6 +36,8 @@ public class MenuScreen extends JFrame{
 		initExitButton();
 		initHeader();
 		initSelectLessonButton();
+		initToggleHelpLevelButton();
+		initBackButton();
 		generateLessonButtons();
 	}
 
@@ -46,12 +48,11 @@ public class MenuScreen extends JFrame{
                 System.exit(0);
 		    }
 		});
-		
 		exitButton.setText("<html><span style='font-size:200%;font-weight:bold;color:white;'>&#10005;</span></html>");
 		exitButton.setSize(exitButton.getPreferredSize());
 		exitButton.setContentAreaFilled(false);
-       	exitButton.setBorderPainted(false);
-        exitButton.setLocation(this.getWidth()-exitButton.getWidth()-20,20);
+   		exitButton.setBorderPainted(false);
+    	exitButton.setLocation(this.getWidth()-exitButton.getWidth()-20,20);
 		exitButton.setFocusPainted(false);
 		bgPanel.add(exitButton);
 	}
@@ -94,17 +95,47 @@ public class MenuScreen extends JFrame{
 	}
 
 	public void initSelectLessonButton(){
-		selectLesson=initButton(selectLesson,"<html><h3 style='color:red;'>SELECT LESSON</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,40 + headingHeight),true);
+		selectLesson=initButton(selectLesson,"<html><h3 style='color:red;'>SELECT LESSON</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,100 + headingHeight),true);
 		menuButtons.add(selectLesson);
 		bgPanel.add(selectLesson);
 	}
+	
+	public void initToggleHelpLevelButton(){
+		toggleHelpLevel = initButton(toggleHelpLevel,"<html><h3 style='color:red;'>NO HELP</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,selectLesson.getLocation().y + selectLesson.getHeight() + 40),true);
+		toggleHelpLevel.setFocusPainted(false);
+		menuButtons.add(toggleHelpLevel);
+		bgPanel.add(toggleHelpLevel);
+	}
 
+	public void initBackButton(){
+		backButton = initButton(backButton,"<html><span style='font-size:300%;font-weight:bold;'>&larr;</span></html>",Color.white,Color.white,new Dimension(20,20),new Point(20,20),false);
+		backButton.setContentAreaFilled(false);
+   		backButton.setBorderPainted(false);
+		backButton.setFocusPainted(false);
+		backButton.setSize(backButton.getPreferredSize());
+		bgPanel.add(backButton);
+	}
+
+	public JButton getBackButton(){
+		return backButton;
+	}
 	
 	public void addSelectLessonListener(MouseListener ml){
 		selectLesson.addMouseListener(ml);
 	}
+	
+	public void addBackButtonListener(MouseListener ml){
+		backButton.addMouseListener(ml);
+	}
+	public void addLessonListener(MouseListener ml,int index) {
+		lessonButtons.get(index).addMouseListener(ml);
+	}
 
-	public ArrayList<JButton> getLessonButtons(){
+	public void addToggleHelpLevel(MouseListener ml){
+		toggleHelpLevel.addMouseListener(ml);
+	}
+
+	public ArrayList<JButton> getLessonButtons() {
 		return lessonButtons;
 	}
 
