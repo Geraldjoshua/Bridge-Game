@@ -35,7 +35,10 @@ all: 				Card.class \
 				Lesson.class \
 				GUI.class \
 				Game.class \
+				BackgroundPanel.class\
 				LoadScreen.class\
+				MenuScreen.class\
+				GameScreen.class\
 				GameController.class\
 				Bridge.class
 				 
