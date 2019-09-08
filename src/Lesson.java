@@ -87,8 +87,8 @@ public class Lesson{
 
     /**
      * <p> Obtains hints a player needs for a lesson</p>
-     * @param key
-     * @return String
+     * @param key key number of the hint asked
+     * @return String containing the hint
      */
 
     public String getHintasked(String key){
@@ -98,8 +98,8 @@ public class Lesson{
 
     /**
      * <p>Obtains tips a player needs to remember during the game</p>
-     * @param key
-     * @return String
+     * @param key key number of the tip asked
+     * @return String containing the tip
      */
     public String getTipsasked(int key){
         String tip = tips.get(key);
@@ -243,7 +243,7 @@ public class Lesson{
     /**
      * <p>sets leading suit</p>
      *
-     * @param Suit
+     * @param Suit containing the leading suit
      */
     public void setLeadingSuit(char Suit){
         this.leadingSuit = Suit;
@@ -417,7 +417,7 @@ public class Lesson{
     /**
      * <p>Decides winner of trick based on points from cards played </p>
      *
-     * @return String
+     * @return String containing the winner
      */
     public String decideWinner(){
         Person winner = new Person();
@@ -437,7 +437,7 @@ public class Lesson{
 
     /**
      * <p>Decides winner of entire game by counting trick points </p>
-     *
+     *@return string of the winner of the game
      */
     public String decideGameWinner(){
 	String winners = "";

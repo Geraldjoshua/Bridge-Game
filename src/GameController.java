@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * 
+ * controller class for the game
+ */
 public class GameController {
 	
 	private LoadScreen ls;
@@ -14,6 +18,15 @@ public class GameController {
 	private MouseListener selectButtonListener,lessonButtonListener,toggleButtonListener,backButtonListener;	
 	private int clicks = 0;
 	private final int xSize,ySize;
+        
+        /**
+         * constructor to initialize the game controller
+         * @param ls a load screen object
+         * @param ms a menu screen object
+         * @param xSize integer representing the horizontal size
+         * @param ySize integer representing the vertical size
+         * @throws InterruptedException when game controller is interrupted
+         */
 	GameController(LoadScreen ls,MenuScreen ms,int xSize,int ySize)throws InterruptedException{
 		this.ls = ls;
 		this.ms = ms;
@@ -27,6 +40,9 @@ public class GameController {
 		ms.addBackButtonListener(backButtonListener);
 	}
 
+        /**
+         * initializes all the mouse listeners in the controller class
+         */
 	public void initListeners(){
 		this.selectButtonListener = new MouseAdapter() {
 		    @Override
@@ -74,6 +90,10 @@ public class GameController {
     	};
 	}
 
+        /**
+         * method to display load progress bar as the program starts
+         * @throws InterruptedException when the load program is interrupted
+         */
 	public void loadProgram()throws InterruptedException{
 		
 		ls.setVisible(true);
@@ -85,6 +105,12 @@ public class GameController {
                                     "<html><h3>Select the toggle help button to toggle the <br>help level for the lesson from No help - help level 5</h3></html>");
 	}
 
+        /**
+         * increments the load level in the progress bar
+         * @param loadBar A Jprogressbar object
+         * @param width size of the progress bar
+         * @throws InterruptedException when loading is interrupted
+         */
 	public void load(JProgressBar loadBar,int width)throws InterruptedException{
 		
 		Thread.sleep(1200);
@@ -100,6 +126,13 @@ public class GameController {
 
 	}
 
+        /**
+         * 
+         * @param e mouse-event object
+         * @param buttons arraylist of lesson buttons
+         * @throws IOException when lesson input is wrong
+         * @throws InterruptedException  when findlesson is interrupted 
+         */
 	public void findLesson(MouseEvent e,ArrayList<JButton> buttons)throws IOException, InterruptedException{
 		
 		for(int i=0;i<buttons.size();i++){
@@ -112,6 +145,11 @@ public class GameController {
 
 	}
 
+        /**
+         * 
+         * @param e mouseevent for the toggle button
+         * @param buttons arraylist containing the Jbutton
+         */
 	public void toggleButton(MouseEvent e,ArrayList<JButton> buttons){
 		clicks++;		
 		for(int i=0;i<buttons.size();i++){
@@ -127,6 +165,11 @@ public class GameController {
 		}
 	}
 
+        /**
+         * 
+         * @param e mouseevent for the find button method
+         * @param buttons  arraylist containing jbutton
+         */
 	public void findButton(MouseEvent e,ArrayList<JButton> buttons){
 		
 		for(int i=0;i<buttons.size();i++){
@@ -138,21 +181,40 @@ public class GameController {
 
 	}
 
+        /**
+         * 
+         * @param b Jbutton object to handle hoover text
+         * @param index  int number of which lesson plan in to should at
+         */
 	public void handleToolTip(JButton b,int index){
 		b.setToolTipText("<html><h4>This is a lesson for scenario "+(index+1)+"</h4></html>");
 	}
+        /**
+         * 
+         * @param buttons arraylist of jbuttons that require lesson listeners
+         */
 	public void addLessonListeners(ArrayList<JButton> buttons){
 		for(int i=0;i<buttons.size();i++){
 			ms.addLessonListener(lessonButtonListener,i);
 		}
 	}
 
+        /**
+         * 
+         * @param visible boolean: true to show else not
+         * @param buttons  arraylist of jbuttons needing to be setvisible or not
+         */
 	public void showButtons(boolean visible,ArrayList<JButton> buttons){
 		for(int i=0;i<buttons.size();i++){
 			buttons.get(i).setVisible(visible);
 		}
 	}
 	
+        /**
+         * 
+         * @param visible boolean: true to show else not
+         * @param b Jbutton object
+         */
 	public void showBackButton(boolean visible,JButton b){
 		b.setVisible(visible);
 	}

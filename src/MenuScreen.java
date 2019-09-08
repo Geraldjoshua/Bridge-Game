@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
 public class MenuScreen extends JFrame{
 	
 	private final int xSize,ySize,framePadding = 100;
@@ -16,6 +17,12 @@ public class MenuScreen extends JFrame{
 	private JButton exitButton,selectLesson,toggleHelpLevel,backButton;
 	private ArrayList<JButton> lessonButtons,menuButtons;
 
+        /**
+         * constructor
+         * @param xSize of the menu screen
+         * @param ySize of the menu screen
+         * @throws IOException input output exception
+         */
 	MenuScreen(int xSize, int ySize)throws IOException{
 		this.xSize = xSize;
 		this.ySize = ySize;
@@ -31,6 +38,9 @@ public class MenuScreen extends JFrame{
 		
 	}
 
+        /**
+         * adds all components to the panel
+         */
 	public void addComponentsToPanel(){
 		
 		initExitButton();
@@ -41,6 +51,9 @@ public class MenuScreen extends JFrame{
 		generateLessonButtons();
 	}
 
+        /**
+         * exits the game
+         */
 	public void initExitButton(){
 		exitButton = new JButton( new AbstractAction("EXIT") {
             @Override
@@ -57,6 +70,9 @@ public class MenuScreen extends JFrame{
 		bgPanel.add(exitButton);
 	}
 
+        /**
+         * initialize heading bridge tutor
+         */
 	public void initHeader(){
 		JLabel header = new JLabel("<html><h1 style='color:white;font-weight:bold;'>Bridge Tutor v 1.0</h1></html>");
 		header.setSize(header.getPreferredSize());
@@ -65,6 +81,17 @@ public class MenuScreen extends JFrame{
 		bgPanel.add(header);
 	}
 
+        /**
+         * initializes the J-button
+         * @param b Jbutton object
+         * @param text takes a string
+         * @param bg takes a color object
+         * @param tc takes a color object 
+         * @param d takes a dimension object
+         * @param p takes a point object
+         * @param visible true for buttons visible else false
+         * @return Jbutton button object
+         */
 	public JButton initButton(JButton b,String text,Color bg,Color tc,Dimension d,Point p,boolean visible){
 		b = new JButton(text);
 		b.setSize(d);
@@ -75,6 +102,9 @@ public class MenuScreen extends JFrame{
 		return b;
 	}
 
+        /**
+         * method to generate lesson buttons
+         */
 	public void generateLessonButtons(){
 		int y = headingHeight + framePadding + 50;
         int x = framePadding;
@@ -94,12 +124,18 @@ public class MenuScreen extends JFrame{
 
 	}
 
+        /**
+         * method to initialize select button
+         */
 	public void initSelectLessonButton(){
 		selectLesson=initButton(selectLesson,"<html><h3 style='color:red;'>SELECT LESSON</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,100 + headingHeight),true);
 		menuButtons.add(selectLesson);
 		bgPanel.add(selectLesson);
 	}
 	
+        /**
+         * method to initialize the get help level button
+         */
 	public void initToggleHelpLevelButton(){
 		toggleHelpLevel = initButton(toggleHelpLevel,"<html><h3 style='color:red;'>NO HELP</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,selectLesson.getLocation().y + selectLesson.getHeight() + 40),true);
 		toggleHelpLevel.setFocusPainted(false);
@@ -107,6 +143,9 @@ public class MenuScreen extends JFrame{
 		bgPanel.add(toggleHelpLevel);
 	}
 
+        /**
+         * method to initialize the back button
+         */
 	public void initBackButton(){
 		backButton = initButton(backButton,"<html><span style='font-size:300%;font-weight:bold;'>&larr;</span></html>",Color.white,Color.white,new Dimension(20,20),new Point(20,20),false);
 		backButton.setContentAreaFilled(false);
@@ -116,29 +155,58 @@ public class MenuScreen extends JFrame{
 		bgPanel.add(backButton);
 	}
 
+        /**
+         * 
+         * @return Jbutton object
+         */
 	public JButton getBackButton(){
 		return backButton;
 	}
 	
+        /**
+         * adds listener
+         * @param ml mouselistener object
+         */
 	public void addSelectLessonListener(MouseListener ml){
 		selectLesson.addMouseListener(ml);
 	}
 	
+        /**
+         * adds listener
+         * @param ml mouselistener object
+         */
 	public void addBackButtonListener(MouseListener ml){
 		backButton.addMouseListener(ml);
 	}
+        /**
+         * adds listener
+         * @param ml mouselistener object
+         * @param index index to the button requiring mouse listener
+         */
 	public void addLessonListener(MouseListener ml,int index) {
 		lessonButtons.get(index).addMouseListener(ml);
 	}
 
+        /**
+         * adds toggling help
+         * @param ml mouselistener object 
+         */
 	public void addToggleHelpLevel(MouseListener ml){
 		toggleHelpLevel.addMouseListener(ml);
 	}
 
+        /**
+         * gets the lesson buttons in an array form
+         * @return array list of lesson Jbuttons
+         */
 	public ArrayList<JButton> getLessonButtons() {
 		return lessonButtons;
 	}
 
+        /**
+         * gets menu buttons in an array form
+         * @return array list of menu Jbuttons
+         */
 	public ArrayList<JButton> getMenuButtons(){
 		return menuButtons;
 	}

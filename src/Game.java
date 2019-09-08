@@ -26,6 +26,9 @@ public class Game{
     private int clicks = 1;
     private int helpLevel = 1;
 
+    /**
+     * <P> constructor</p>
+     */
     Game(){
         initGUIComponents();
         Insets scnMax = Toolkit.getDefaultToolkit().getScreenInsets(menuScreen.getGraphicsConfiguration());
@@ -33,12 +36,19 @@ public class Game{
         this.ySize = Toolkit.getDefaultToolkit().getScreenSize().height-scnMax.bottom-scnMax.top;
     }
 
+    /**
+     * initialize Generated user interface components
+     */
     private void initGUIComponents(){
         menuScreen=new JFrame();
         initFrame(menuScreen);
         initLessonListeners();
     }
 
+    /**
+     * generates the load menu screen components
+     * @throws IOException when images not found in the folder
+     */
     private void loadMenuScreenComponents() throws IOException {
         JLabel bg = new JLabel(new ImageIcon(ImageIO.read(new File("images/background2.jpg"))));
         initLabel(bg,bg.getPreferredSize(),0,0);
@@ -106,12 +116,27 @@ public class Game{
         menuScreen.setVisible(true);
     }
 
+    /**
+     * initialize j-label considering the size, location and layout
+     * @param l Jlabel object
+     * @param d dimension object
+     * @param xCoord x location of the labels
+     * @param yCoord  y location of the labels
+     */
     public void initLabel(JLabel l,Dimension d,int xCoord, int yCoord){
         l.setLayout(null);
         l.setSize(d);
         l.setLocation(xCoord,yCoord);
     }
 
+    /**
+     * initialize J-buttons considering size,layout,text and background
+     * @param b takes in jbutton object
+     * @param d takes in a dimension object
+     * @param text takes in a color object
+     * @param background takes in a color object
+     * @param stringText  takes in a string for the button
+     */
     public void initButton(JButton b,Dimension d,Color text,Color background,String stringText){
         b.setLayout(null);
         b.setText(stringText);
@@ -121,7 +146,14 @@ public class Game{
         b.setFocusPainted(false);
     }
 
-    //Method that will determine how much to space the buttons out by
+    /**
+     * Method that will determine how much to space the buttons out by
+     * @param d takes in a dimension object
+     * @param numButtons takes in the number of buttons present
+     * @param padding integer number of the padding required
+     * @param frame takes in the jframe object
+     * @return Dimension new dimension
+     */
     public Dimension calcFreeSpace(Dimension d,int numButtons,int padding,JFrame frame){
         double remainingSpaceX=(frame.getWidth()-padding)/d.getWidth();
         double remainingSpaceY=(frame.getHeight()-padding)/d.getHeight();
@@ -132,6 +164,10 @@ public class Game{
         return new Dimension(60,60);
     }
 
+    /**
+     * toggles level of help needed
+     * @param b  takes in a jbutton object
+     */
     public void toggle(JButton b){
 
         clicks++;
@@ -147,6 +183,9 @@ public class Game{
 
     }
 
+    /**
+     * initializes a mouse click listener for lessons 
+     */
     private void initLessonListeners(){
         this.lessonML = new MouseAdapter() {
             @Override
@@ -163,6 +202,10 @@ public class Game{
         };
     }
 
+    /**
+     * hides the first page of the game containing select lesson and select level of help
+     * @param visible takes in a boolean either to show menu else hide
+     */
     public void hideMenuButtons(boolean visible){
         heading.setVisible(false);
         for(JButton b:optionButtons){
@@ -170,6 +213,9 @@ public class Game{
         }
     }
 
+    /**
+     * generates the buttons for each lesson
+     */
     public void generateLessonButtons(){
         int y = heading.getHeight() + framePadding + 50;
         int x = framePadding;
@@ -189,6 +235,12 @@ public class Game{
         }
     }
 
+    /**
+     * finds the lesson number clicked
+     * @param e  takes mouseevent object
+     * @throws IOException when lesson not found
+     * @throws InterruptedException when method is interrupted 
+     */
     public void findLesson(MouseEvent e) throws IOException, InterruptedException {
         int index=1;
         for(JButton b:lessonButtons){
@@ -203,12 +255,21 @@ public class Game{
 
     }
 
+    /**
+     * makes the buttons for every lesson visible
+     * @param visible takes in a boolean either to show menu else hide
+     */
     public void showLessonButtons(boolean visible){
         for(int i=0;i<lessonButtons.size();i++){
             lessonButtons.get(i).setVisible(visible);
         }
     }
 
+    /**
+     * builds up the welcome screen
+     * @throws IOException when background image not found
+     * @throws InterruptedException when method is interrupted
+     */
     public void initWelcomeScreen() throws IOException, InterruptedException {
         JFrame welcomeScreen = new JFrame();
         JPanel bgPanel =new JPanel(null);
@@ -241,6 +302,12 @@ public class Game{
         loadMenuScreenComponents();
     }
 
+    /**
+     * builds up the load-bar (progress button)
+     * @param b takes in a jprogressbar object
+     * @param end integer representing the end of the load bar
+     * @throws InterruptedException  when method is interrupted
+     */
     public void loadBar(JProgressBar b,int end) throws InterruptedException {
         Thread.sleep(1200);
         for(int i=0;i<end;i++){
@@ -255,12 +322,17 @@ public class Game{
 
     }
 
+    /**
+     * creates the frame to display all swing components
+     * @param frame takes in a jframe object
+     */
     public void initFrame(JFrame frame){
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setUndecorated(true);
     }
 
+    
     public static void main(String args[]) throws IOException, InterruptedException{
 
         /*Scanner userinput = new Scanner(System.in);

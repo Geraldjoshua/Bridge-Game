@@ -49,9 +49,9 @@ public class Card{
     /**
 
      * <p> resizes a card</p>
-     * @param width
-     * @param height
-     * @param flipped 
+     * @param width of the resized card in integer
+     * @param height of the resized card in integer
+     * @param flipped takes in a boolean of either flipped or not
      */
     public void resizeCard(int width,int height,boolean flipped){
 
@@ -67,10 +67,10 @@ public class Card{
 
     /**
      * <p> resize image</p>
-     * @param img
-     * @param newW
-     * @param newH
-     * @return BufferedImage 
+     * @param img takes buffered-image object to be resized
+     * @param newW new height
+     * @param newH new width
+     * @return BufferedImage object
      */
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
@@ -85,7 +85,7 @@ public class Card{
 
     /**
      * <p>getter for the cardLabel</p>
-     * @return JLabel 
+     * @return JLabel object
      */
     public JLabel getCardLabel(){
         return cardLabel;
@@ -93,7 +93,7 @@ public class Card{
     }
     /**
      * <p> sets boolean true for flip else false</p>
-     * @param flip 
+     * @param flip takes in a boolean either to show cards else hide
      */
     public void setFlipped(boolean flip){
         if(flip){

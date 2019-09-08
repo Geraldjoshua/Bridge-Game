@@ -31,9 +31,9 @@ public class GUI extends java.lang.Thread{
 	
     /**
      * <p> constructor </p>
-     * @param lesson
-     * @throws IOException
-     * @throws InterruptedException 
+     * @param lesson to be loaded in
+     * @throws IOException when image background not found
+     * @throws InterruptedException  when method is interrupted
      */
 
     GUI(Lesson lesson) throws IOException, InterruptedException {
@@ -122,8 +122,8 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> changes button color</p>		
-     * @param entered		
-     * @param source 		
+     * @param entered boolean: true to change to green else gold		
+     * @param source Jbutton object that reuires the change of color 		
      */
     public void changeButtonColour(boolean entered,JButton source){
         if(entered){
@@ -174,7 +174,7 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> sets the hover option</p>		
-     * @param source 		
+     * @param source Jbutton object		
      */
     public void setHover(JButton source){
 
@@ -184,8 +184,8 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> creates the lesson screen</p>		
-     * @throws IOException		
-     * @throws InterruptedException 		
+     * @throws IOException when image background not found		
+     * @throws InterruptedException when method is interrupted		
      */
 
     public void makeLessonScreen() throws IOException, InterruptedException {
@@ -254,7 +254,13 @@ public class GUI extends java.lang.Thread{
     }
 
 
-
+    /**
+     * 
+     * @param img bufferedImage object to be resized
+     * @param newW size of the new width
+     * @param newH size of the new height
+     * @return bufferedimage
+     */
     public static BufferedImage resize(BufferedImage img, int newW, int newH) {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -264,6 +270,10 @@ public class GUI extends java.lang.Thread{
         return dimg;
     }
 
+    /**
+     * 
+     * @return JFrame
+     */
     public JFrame getWindow(){
         return this.window;
     }
@@ -278,7 +288,7 @@ public class GUI extends java.lang.Thread{
 
      /**		
      * <p> starts the game</p>		
-     * @throws InterruptedException 		
+     * @throws InterruptedException  when method is interrupted		
      */
     public void startGame() throws InterruptedException {
 
@@ -339,9 +349,9 @@ public class GUI extends java.lang.Thread{
     			
     /**		
      * <p> searching for the player currently playing</p>		
-     * @param source		
-     * @return integer		
-     * @throws InterruptedException 		
+     * @param source Jlabel object		
+     * @return integer of the player been searched for		
+     * @throws InterruptedException when method is interrupted 		
      */
     public int findPlayer(JLabel source) throws InterruptedException {
 
@@ -357,10 +367,10 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> handles the playing of cards</p>		
-     * @param source		
-     * @param index		
-     * @param play		
-     * @throws InterruptedException 		
+     * @param source	jlabel object	
+     * @param index	index of the player
+     * @param play	integer position to find who is allowed to play	
+     * @throws InterruptedException when method is interrupted		
      */
     public void makePlay(JLabel source,int index,int play) throws InterruptedException {
         int jIndex=0;
@@ -443,6 +453,12 @@ public class GUI extends java.lang.Thread{
     }
 
 
+    /**
+     * 
+     * @param c card object of the card being played
+     * @param card jlabel object of the card
+     * @param playerIndex  index of the player who is playing
+     */
     public void playCard(Card c,JLabel card,int playerIndex){
         c.setFlipped(false);
         card.setIcon(c.getImageIcon());
@@ -459,9 +475,9 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> handles the placement of the card on the panel</p>		
-     * @param testX		
-     * @param testY		
-     * @return integer		
+     * @param testX x-tested location of the card		
+     * @param testY y-tested location of the card		
+     * @return integer of the correct placement		
      */
 
     public int testCardX(double testX,double testY){
@@ -493,8 +509,8 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> used to resize cards to fit on the screen</p>		
-     * @param x		
-     * @return double		
+     * @param x	the integer that needs to be resized	
+     * @return double the resized number		
      */
     public double calcY(double x){
         x=Math.floor(((x/363)*543));
@@ -503,7 +519,7 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> handles automatic play for west and east hand</p>		
-     * @throws InterruptedException 		
+     * @throws InterruptedException when method is interrupted		
      */
     public void autoPlay() throws InterruptedException {
 
@@ -638,7 +654,7 @@ public class GUI extends java.lang.Thread{
     
     /**		
      * <p> handles removing of cards from center panel</p>		
-     * @throws InterruptedException 		
+     * @throws InterruptedException when method is interrupted 		
      */
     public void removeCenterCards() throws InterruptedException {
         Thread.sleep(2000);
@@ -655,8 +671,8 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> handles moving of the card to the center</p>		
-     * @param source		
-     * @param index 		
+     * @param source Jlabel object		
+     * @param index of the card being moved		
      */
     public void moveCard(JLabel source,int index){
         source.setBorder(null);
@@ -678,7 +694,7 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> handles flipping of cards</p>		
-     * @return JButton		
+     * @return JButton button to flip cards		
      */
     private JButton makeFlipCards(){
         JButton flip = new JButton( new AbstractAction("FLIP") {
@@ -717,7 +733,7 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> displays bidding string</p>		
-     * @return JLabel 		
+     * @return JLabel string containing the bidding		
      */
     private JLabel makeBiddingLabel(){
         biddingLabel=new JLabel();
@@ -732,7 +748,7 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> displays hints</p>		
-     * @return JButton		
+     * @return JButton	button for getting hints	
      */
     private JButton makeGetHintsButton (){
         JTextPane jtp = new JTextPane();
@@ -776,7 +792,7 @@ public class GUI extends java.lang.Thread{
     }
     /**		
      * <p> displays Tips on clicking</p>		
-     * @return JButton		
+     * @return JButton	button to get tips	
      */
     private JButton	makeGetTipsButton(){
         tips = new JButton( new AbstractAction("TIPS") {
@@ -810,6 +826,9 @@ public class GUI extends java.lang.Thread{
     }
 
 
+    /**
+     * handle how claim functions
+     */
 
     public void handleClaim(){
         if(copyBestCase.get(0).equals("CLAIM")){
@@ -837,7 +856,7 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> claim remaining of the game</p>		
-     * @return JButton		
+     * @return JButton button to claim the remaining of the games		
      */
 
     private JButton makeClaim(){
@@ -858,7 +877,7 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> sets the layout and how the score is displayed</p>		
-     * @return JLabel		
+     * @return JLabel to show points		
      */
     private JLabel makeScore(){
         score = new JLabel("<html><h1>N + S Score: "+(lesson.getPlayers().get(1).getTrickWins()+lesson.getPlayers().get(3).getTrickWins())+"</h1><h2>W + E Score: "+(lesson.getPlayers().get(0).getTrickWins()+lesson.getPlayers().get(2).getTrickWins())+"</h2></html>");
@@ -871,7 +890,7 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p>exit lesson</p>		
-     * @return JBUtton		
+     * @return JBUtton button  to exit a lesson		
      */
     private JButton makeExitButton(){
 
@@ -897,8 +916,8 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> corrects display on different monitors</p>		
-     * @param source		
-     * @param offset 		
+     * @param source display to be corrected		
+     * @param offset the size of padding needed to be applied		
      */
     public void offSet(JLabel source,int offset){
         Point pt = source.getLocation();
@@ -912,8 +931,8 @@ public class GUI extends java.lang.Thread{
 
     /**		
      * <p> makes the play log scroll-able and shows the progress of the game</p>		
-     * @return JScrollPane		
-     * @throws IOException 		
+     * @return JScrollPane Jlabel to display playlog		
+     * @throws IOException when there is no input or output		
      */
     public JLabel makePlayLog() throws IOException{
         
