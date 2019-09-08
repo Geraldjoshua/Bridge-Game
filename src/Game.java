@@ -195,7 +195,6 @@ public class Game{
             if(b==e.getSource()){
                 Lesson lesson = new Lesson("input/input"+index+".txt",helpLevel);
                 GUI g = new GUI(lesson);
-		g.makeLessonScreen();
                 g.makeLessonScreen();
                 g.start();
             }

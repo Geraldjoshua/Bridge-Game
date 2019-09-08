@@ -10,11 +10,15 @@ public class GameController {
 	
 	private LoadScreen ls;
 	private MenuScreen ms;
+	private GameScreen gs;
 	private MouseListener selectButtonListener,lessonButtonListener,toggleButtonListener,backButtonListener;	
 	private int clicks = 0;
-	GameController(LoadScreen ls,MenuScreen ms)throws InterruptedException{
+	private final int xSize,ySize;
+	GameController(LoadScreen ls,MenuScreen ms,int xSize,int ySize)throws InterruptedException{
 		this.ls = ls;
 		this.ms = ms;
+		this.xSize = xSize;
+		this.ySize = ySize;
 		loadProgram();
 		initListeners();
 		ms.addSelectLessonListener(selectButtonListener);
@@ -101,10 +105,8 @@ public class GameController {
 		for(int i=0;i<buttons.size();i++){
 			
 			if(e.getSource() instanceof JButton && e.getSource() == buttons.get(i)){
-				Lesson l = new Lesson("input/input"+(i+1)+".txt",clicks);
-				GUI g = new GUI(l);
-				g.makeLessonScreen();
-				g.start();
+				gs = new GameScreen(xSize,ySize,new Lesson("input/input"+(i+1)+".txt",clicks));
+				gs.setVisible(true);
 			}
 		}
 

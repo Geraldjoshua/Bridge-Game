@@ -21,7 +21,7 @@ public class Bridge{
 			
 		LoadScreen ls = new LoadScreen(xSize,ySize);
 		MenuScreen ms = new MenuScreen(xSize,ySize);
-		GameController gc = new GameController(ls,ms);
+		GameController gc = new GameController(ls,ms,xSize,ySize);
 		
 		
 	}
