@@ -131,7 +131,6 @@ public class LessonTest{
 			Lesson test = new Lesson();
 			ArrayList<Person> players = test.getPlayers();
 			players.get(1).setPoints(4);
-			test.decideWinner();
 			assertEquals("North",test.decideWinner());
 			 
 		}
