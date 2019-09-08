@@ -34,7 +34,10 @@ all: 				Card.class \
 				Person.class \
 				Lesson.class \
 				GUI.class \
-				Game.class 
+				Game.class \
+				LoadScreen.class\
+				GameController.class\
+				Bridge.class
 				 
 					
 
@@ -43,8 +46,9 @@ all: 				Card.class \
 run:
 	java -cp bin Game 
 
-				
-# Rules for generating documentation
+MVC:
+	java -cp bin Bridge
+
 doc:
 	javadoc -d $(DOCDIR) $(SRCDIR)/*.java
  
