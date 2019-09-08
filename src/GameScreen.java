@@ -29,21 +29,18 @@ public class GameScreen extends JFrame{
 
 	public void makeAndAddComponents(){
 		makePanels();
-
+		for(Component c:components){
+			this.add(c);
+		}
 	}
 
 	public void makePanels(){
 		for(int i=0;i<panels.length;i++){
             panels[i] = new JPanel();
-            //panels[i].setOpaque(false);
+            panels[i].setOpaque(false);
             panels[i].setLayout(null);
             components.add(panels[i]);
         }
-
-        panels[0].setBackground(Color.blue);
-        panels[1].setBackground(Color.green);
-        panels[2].setBackground(Color.yellow);
-        panels[3].setBackground(Color.red);
 
         panels[0].setBounds(0,(int)(ySize/4),(int)(xSize/4),(int)(ySize/2));
         panels[1].setBounds(0,0,xSize,(int)(ySize/4));
