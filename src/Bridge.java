@@ -8,13 +8,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.Component;
 
-/**
- * 
- * @author Chris Cushway
- * @author Gerald Ngumbulu
- * @author Blessed Chitamba
- */
-
 public class Bridge{
 
 	public static void main(String[] args) throws IOException, InterruptedException  {

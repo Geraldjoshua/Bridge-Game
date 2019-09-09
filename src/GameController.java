@@ -6,43 +6,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/**
- * 
- * controller class for the game
- */
 public class GameController {
 	
 	private LoadScreen ls;
 	private MenuScreen ms;
 	private GameScreen gs;
-	private MouseListener selectButtonListener,lessonButtonListener,toggleButtonListener,backButtonListener;	
-	private int clicks = 0;
+	private Lesson lesson;
+	private MouseListener selectButtonListener,lessonButtonListener,toggleButtonListener,backButtonListener,cardListener;
+	private MouseListener exitGameListener,getHintsListener,getTipsListener;
+	private int clicks = 0,play=0,timesTipClicked = 0,currentPlayer,hintQuestionNumber = 0;
+	private ArrayList<String> copyBestCase,hintQuestions;
 	private final int xSize,ySize;
-        
-        /**
-         * constructor to initialize the game controller
-         * @param ls a load screen object
-         * @param ms a menu screen object
-         * @param xSize integer representing the horizontal size
-         * @param ySize integer representing the vertical size
-         * @throws InterruptedException when game controller is interrupted
-         */
 	GameController(LoadScreen ls,MenuScreen ms,int xSize,int ySize)throws InterruptedException{
 		this.ls = ls;
 		this.ms = ms;
 		this.xSize = xSize;
 		this.ySize = ySize;
+		this.currentPlayer = 0;
 		loadProgram();
 		initListeners();
-		ms.addSelectLessonListener(selectButtonListener);
-		addLessonListeners(ms.getLessonButtons());
-		ms.addToggleHelpLevel(toggleButtonListener);
-		ms.addBackButtonListener(backButtonListener);
+		addListeners();
+
+
 	}
 
-        /**
-         * initializes all the mouse listeners in the controller class
-         */
 	public void initListeners(){
 		this.selectButtonListener = new MouseAdapter() {
 		    @Override
@@ -88,12 +75,88 @@ public class GameController {
 		    }
             
     	};
+		this.cardListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				/*try {
+					//makePlay((JLabel)e.getSource(),findPlayer((JLabel)e.getSource()),play);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}*/
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				offSet((JLabel)e.getSource(),-20);
+			}
+			@Override
+			public void mouseExited(MouseEvent e){
+				offSet((JLabel)e.getSource(),20);
+			}
+		};
+		this.exitGameListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				gs.dispose();
+			}
+
+		};
+		this.getTipsListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(timesTipClicked<lesson.getTips().size()){
+					JOptionPane.showMessageDialog(gs,
+							"Tip: " + lesson.getTipsasked(timesTipClicked) + " (click Tips for more)");
+					timesTipClicked++;
+
+				}
+				else{
+					JOptionPane.showMessageDialog(gs,
+							"No more Tips!"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...");
+					((JButton)e.getSource()).setEnabled(false);
+					((JButton)e.getSource()).setBackground(Color.GRAY);
+
+
+				}
+			}
+
+		};
+		this.getHintsListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JTextPane jtp = new JTextPane();
+				jtp.setEditable(false);
+				jtp.setSize(new Dimension(300, 100));
+				jtp.setPreferredSize(new Dimension(300,100));
+				if(hintQuestionNumber<hintQuestions.size()){
+					if (hintQuestionNumber==6){
+						jtp.setSize(new Dimension(300, 300));
+						jtp.setPreferredSize(new Dimension(300,300));
+						jtp.setText(lesson.getHintasked(hintQuestions.get(hintQuestionNumber)));
+						JOptionPane.showMessageDialog(gs,jtp, hintQuestions.get(hintQuestionNumber), 1);
+
+
+					}
+					else{
+						jtp.setText(lesson.getHintasked(hintQuestions.get(hintQuestionNumber)));
+						JOptionPane.showMessageDialog(gs,jtp, hintQuestions.get(hintQuestionNumber), 1);
+						hintQuestionNumber++;
+					}
+				}
+
+			}
+
+		};
+
 	}
 
-        /**
-         * method to display load progress bar as the program starts
-         * @throws InterruptedException when the load program is interrupted
-         */
+	public void addListeners(){
+		ms.addSelectLessonListener(selectButtonListener);
+		addLessonListeners(ms.getLessonButtons());
+		ms.addToggleHelpLevel(toggleButtonListener);
+		ms.addBackButtonListener(backButtonListener);
+
+	}
+
 	public void loadProgram()throws InterruptedException{
 		
 		ls.setVisible(true);
@@ -105,12 +168,6 @@ public class GameController {
                                     "<html><h3>Select the toggle help button to toggle the <br>help level for the lesson from No help - help level 5</h3></html>");
 	}
 
-        /**
-         * increments the load level in the progress bar
-         * @param loadBar A Jprogressbar object
-         * @param width size of the progress bar
-         * @throws InterruptedException when loading is interrupted
-         */
 	public void load(JProgressBar loadBar,int width)throws InterruptedException{
 		
 		Thread.sleep(1200);
@@ -126,30 +183,23 @@ public class GameController {
 
 	}
 
-        /**
-         * 
-         * @param e mouse-event object
-         * @param buttons arraylist of lesson buttons
-         * @throws IOException when lesson input is wrong
-         * @throws InterruptedException  when findlesson is interrupted 
-         */
 	public void findLesson(MouseEvent e,ArrayList<JButton> buttons)throws IOException, InterruptedException{
 		
 		for(int i=0;i<buttons.size();i++){
 			
 			if(e.getSource() instanceof JButton && e.getSource() == buttons.get(i)){
-				gs = new GameScreen(xSize,ySize,new Lesson("input/input"+(i+1)+".txt",clicks));
+				lesson = new Lesson("input/input"+(i+1)+".txt",clicks);
+				gs = new GameScreen(xSize,ySize,lesson);
+				hintQuestions = new ArrayList<>(lesson.getHints().keySet());
 				gs.setVisible(true);
+				gs.addExitListener(exitGameListener);
+				gs.addGetTipsListener(getTipsListener);
+				gs.addGetHintsListener(getHintsListener);
 			}
 		}
 
 	}
 
-        /**
-         * 
-         * @param e mouseevent for the toggle button
-         * @param buttons arraylist containing the Jbutton
-         */
 	public void toggleButton(MouseEvent e,ArrayList<JButton> buttons){
 		clicks++;		
 		for(int i=0;i<buttons.size();i++){
@@ -165,11 +215,6 @@ public class GameController {
 		}
 	}
 
-        /**
-         * 
-         * @param e mouseevent for the find button method
-         * @param buttons  arraylist containing jbutton
-         */
 	public void findButton(MouseEvent e,ArrayList<JButton> buttons){
 		
 		for(int i=0;i<buttons.size();i++){
@@ -181,42 +226,40 @@ public class GameController {
 
 	}
 
-        /**
-         * 
-         * @param b Jbutton object to handle hoover text
-         * @param index  int number of which lesson plan in to should at
-         */
 	public void handleToolTip(JButton b,int index){
 		b.setToolTipText("<html><h4>This is a lesson for scenario "+(index+1)+"</h4></html>");
 	}
-        /**
-         * 
-         * @param buttons arraylist of jbuttons that require lesson listeners
-         */
 	public void addLessonListeners(ArrayList<JButton> buttons){
 		for(int i=0;i<buttons.size();i++){
 			ms.addLessonListener(lessonButtonListener,i);
 		}
 	}
 
-        /**
-         * 
-         * @param visible boolean: true to show else not
-         * @param buttons  arraylist of jbuttons needing to be setvisible or not
-         */
 	public void showButtons(boolean visible,ArrayList<JButton> buttons){
 		for(int i=0;i<buttons.size();i++){
 			buttons.get(i).setVisible(visible);
 		}
 	}
 	
-        /**
-         * 
-         * @param visible boolean: true to show else not
-         * @param b Jbutton object
-         */
 	public void showBackButton(boolean visible,JButton b){
 		b.setVisible(visible);
 	}
 
+	public void offSet(JLabel source,int offset){
+		Point pt = source.getLocation();
+		int x = pt.x;
+		int y = pt.y;
+		source.setLocation(x,y+offset);
+		if(offset>0){
+			source.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		}
+	}
+
+	public void addCardListeners(ArrayList<JLabel> cards){
+		System.out.println(cards.size());
+		for(int i=0;i<cards.size();i++){
+			gs.addCardListener(cardListener,i);
+		}
+
+	}
 }
