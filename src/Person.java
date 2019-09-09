@@ -100,7 +100,7 @@ public class Person{
 
     /**
      * <p> set if a player can play</p>
-     * @param canPlay boolean true to play and else false 
+     * @param canPlay 
      */
     public void setCanPlay(boolean canPlay){
         this.canPlay = canPlay;
@@ -108,7 +108,7 @@ public class Person{
 
     /**
      * <p> set if a player can play</p>
-     * @return boolean canplay 
+     * @return 
      */
     public boolean getCanPlay(){
         return canPlay;
@@ -202,7 +202,7 @@ public class Person{
     }
 
     /**
-     * <p>sets the winner
+     * <p>sets the winner </p>
      * Turn boolean iswinner to true if the player is a winner of the trick else false </p>
      *
      */
@@ -386,7 +386,7 @@ public class Person{
 
     /**
      * <p> removes played card</p>
-     * @param index  of the card to be removed
+     * @param index 
      */
     public void removePlayerCard(int index){
         hand.remove(index);

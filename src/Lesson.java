@@ -87,8 +87,8 @@ public class Lesson{
 
     /**
      * <p> Obtains hints a player needs for a lesson</p>
-     * @param key key number of the hint asked
-     * @return String containing the hint
+     * @param key
+     * @return String
      */
 
     public String getHintasked(String key){
@@ -98,8 +98,8 @@ public class Lesson{
 
     /**
      * <p>Obtains tips a player needs to remember during the game</p>
-     * @param key key number of the tip asked
-     * @return String containing the tip
+     * @param key
+     * @return String
      */
     public String getTipsasked(int key){
         String tip = tips.get(key);
@@ -243,7 +243,7 @@ public class Lesson{
     /**
      * <p>sets leading suit</p>
      *
-     * @param Suit containing the leading suit
+     * @param Suit
      */
     public void setLeadingSuit(char Suit){
         this.leadingSuit = Suit;
@@ -294,22 +294,30 @@ public class Lesson{
      */
     public int getPlayPoints(String card){
         int points=0;
-        if(card.charAt(1)==getBiddingSuit()){
-            points+=15;
-        }
-        if(card.charAt(0)=='A'){
-            points+=14;
-        }else if(card.charAt(0)=='K'){
-            points+=13;
-        }else if(card.charAt(0)=='Q'){
-            points+=12;
-        }else if(card.charAt(0)=='J'){
-            points+=11;
-        }else if(card.charAt(0)=='T'){
-            points+=10;
+
+        if(card.charAt(1)==leadingSuit || card.charAt(1)==getBiddingSuit()){
+
+            if(card.charAt(0)=='A'){
+                points+=14;
+            }else if(card.charAt(0)=='K'){
+                points+=13;
+            }else if(card.charAt(0)=='Q'){
+                points+=12;
+            }else if(card.charAt(0)=='J'){
+                points+=11;
+            }else if(card.charAt(0)=='T'){
+                points+=10;
+            }else{
+                points+=Character.getNumericValue(card.charAt(0));
+            }
+
+            if(card.charAt(1)==getBiddingSuit()) {
+                points += 15;
+            }
         }else{
-            points+=Character.getNumericValue(card.charAt(0));
+            points+=0;
         }
+
 
         return points;
 
@@ -417,7 +425,7 @@ public class Lesson{
     /**
      * <p>Decides winner of trick based on points from cards played </p>
      *
-     * @return String containing the winner
+     * @return String
      */
     public String decideWinner(){
         Person winner = new Person();
@@ -437,7 +445,7 @@ public class Lesson{
 
     /**
      * <p>Decides winner of entire game by counting trick points </p>
-     *@return string of the winner of the game
+     *
      */
     public String decideGameWinner(){
 	String winners = "";
