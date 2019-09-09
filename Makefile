@@ -47,9 +47,6 @@ all: 				Card.class \
 # rule to run the class
 
 run:
-	java -cp bin Game 
-
-MVC:
 	java -cp bin Bridge
 
 doc:

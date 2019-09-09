@@ -21,7 +21,6 @@ public class Card{
     private BufferedImage backSide;
     private JLabel cardLabel;
     private boolean flipped;
-    private JLabel flippedCard;
 
     /**
      * <p>constructor for the card class </p>
