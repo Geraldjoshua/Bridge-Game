@@ -714,7 +714,6 @@ public class GUI extends java.lang.Thread{
 
                             }
                         }
-
                         j++;
                         count++;
                     }

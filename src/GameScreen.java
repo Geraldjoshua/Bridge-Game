@@ -174,6 +174,7 @@ public class GameScreen extends JFrame{
         bidding.setLocation(centerPanel.getLocation().x+framePadding,centerPanel.getLocation().y+framePadding);
         playerTurn = new JLabel();
         playerTurn.setSize(300,20);
+        playerTurn.setLocation(centerPanel.getLocation().x+framePadding,centerPanel.getLocation().y + centerPanel.getHeight() - playerTurn.getHeight() - framePadding);
         components.add(score);
         components.add(bidding);
         components.add(playerTurn);
@@ -207,4 +208,19 @@ public class GameScreen extends JFrame{
     }
 
     public JPanel[] getPanels(){return panels;}
+
+    public JLabel getPlayerTurnJLabel(){
+        return playerTurn;
+    }
+
+    public void removeCardListener(MouseListener ml,int index){
+        cards.get(index).removeMouseListener(ml);
+    }
+
+    public JPanel getCenterPanel(){
+        return centerPanel;
+    }
+    public JLabel getScoreJLabel(){
+        return score;
+    }
 }
