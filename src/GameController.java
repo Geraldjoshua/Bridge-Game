@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class GameController extends Thread{
+public class GameController implements Runnable{
 	
 	private LoadScreen ls;
 	private MenuScreen ms;
@@ -17,6 +17,7 @@ public class GameController extends Thread{
 	private ArrayList<String> copyBestCase,hintQuestions;
 	private final int xSize,ySize;
 	private boolean played;
+	private Thread t;
 	GameController(LoadScreen ls,MenuScreen ms,int xSize,int ySize)throws InterruptedException{
 		this.ls = ls;
 		this.ms = ms;
@@ -28,8 +29,8 @@ public class GameController extends Thread{
 		initListeners();
 		addListeners();
 
-
 	}
+
 
 	public void initListeners(){
 		this.selectButtonListener = new MouseAdapter() {
@@ -38,6 +39,8 @@ public class GameController extends Thread{
 				showButtons(false,ms.getMenuButtons());
 				showButtons(true,ms.getLessonButtons());
 				showBackButton(true,ms.getBackButton());
+				ms.getSelectLessonHeader().setText("<html><h1 style='color:white;font-weight:bold;'>SELECT LESSON</h1></html>");
+				ms.getSelectLessonHeader().setSize(ms.getSelectLessonHeader().getPreferredSize());
 		    }
             
     	};
@@ -47,6 +50,8 @@ public class GameController extends Thread{
 				showButtons(true,ms.getMenuButtons());
 				showButtons(false,ms.getLessonButtons());
 				showBackButton(false,(JButton)e.getSource());
+				ms.getSelectLessonHeader().setText("<html><h1 style='color:white;font-weight:bold;'>MAIN MENU</h1></html>");
+				ms.getSelectLessonHeader().setSize(ms.getSelectLessonHeader().getPreferredSize());
 		    }
             
     	};
@@ -56,6 +61,7 @@ public class GameController extends Thread{
 		    public void mouseClicked(MouseEvent e){
 				try{
 					findLesson(e,ms.getLessonButtons());
+
 				}catch(InterruptedException e1){
 					e1.printStackTrace();
 				}catch(IOException e2){
@@ -67,8 +73,12 @@ public class GameController extends Thread{
 			public void mouseEntered(MouseEvent e){
 				findButton(e,ms.getLessonButtons());
 			}
-            
-    	};
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				resetColour((JButton)e.getSource());
+			}
+		};
 		this.toggleButtonListener = new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
@@ -98,6 +108,9 @@ public class GameController extends Thread{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				gs.dispose();
+				t.interrupt();
+				currentPlayer = 0;
+
 			}
 
 		};
@@ -213,8 +226,8 @@ public class GameController extends Thread{
 				gs.addGetHintsListener(getHintsListener);
 				gs.addClaimListener(claimListener);
 				gs.addFlipCardsListener(flipCardsListener);
-
-				start();
+				t = new Thread(this);
+				t.start();
 			}
 		}
 
@@ -243,7 +256,15 @@ public class GameController extends Thread{
 				 handleToolTip(buttons.get(i),i);
 			}
 		}
+		((JButton)e.getSource()).setForeground(Color.white);
+		((JButton)e.getSource()).setBackground(Color.red);
+		((JButton)e.getSource()).setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+	}
+
+	public void resetColour(JButton b){
+		b.setForeground(Color.red);
+		b.setBackground(Color.white);
 	}
 
 	public void handleToolTip(JButton b,int index){
@@ -346,26 +367,20 @@ public class GameController extends Thread{
 				lesson.getPlayers().get(currentPlayer).setCanPlay(true);
 				gs.getPlayerTurnJLabel().setText("<html><h3 style='color:white;'>"+lesson.getPlayers().get(currentPlayer).getPlayerName()+" is playing...</h1></html>");
 
-
 				if (!lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("south") && !lesson.getPlayers().get(currentPlayer).getPlayerName().toLowerCase().equals("north")) {
 					//Thread.sleep(2000);
 					autoPlay(gs.getPanels());
 				} else {
 					addMouseListeners(gs.getPanels());
 					while (!played) {
-						Thread.sleep(1);
+						t.sleep(1);
 					}
 					removeMouseListeners(gs.getPanels());
 				}
-
 				if(!copyBestCase.isEmpty() && !copyBestCase.get(0).equals("CLAIM")){
 					copyBestCase.remove(0);
 				}
-
 				lesson.getPlayers().get(currentPlayer).setCanPlay(false);
-
-
-
 				currentPlayer++;
 				if (currentPlayer > 3) {
 					currentPlayer = 0;
@@ -391,6 +406,8 @@ public class GameController extends Thread{
 		JOptionPane.showMessageDialog(gs,
 				"<html><h1>"+lesson.decideGameWinner()+" won</h1></html>");
 		gs.dispose();
+		t.interrupt();
+		currentPlayer=0;
 	}
 
 	public void autoPlay(JPanel[] panels){
@@ -398,13 +415,12 @@ public class GameController extends Thread{
 		int i=0;
 
 		for(Component c:panels[currentPlayer].getComponents()){
-			if (!copyBestCase.isEmpty() && (play == 0 && lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)) != null )) {
+			if (!copyBestCase.isEmpty() && (play == 0 && lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)) != null ) && copyBestCase.get(0) != "CLAIM") {
 				lesson.setFirstCardPlayed(copyBestCase.get(0));
 			}
 			if(panels[currentPlayer].getComponent(i) instanceof JLabel) {
 
 				if (!copyBestCase.isEmpty() && (lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)) != null && lesson.isValid(lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).toString(), lesson.getPlayers().get(currentPlayer)))) {
-
 
 					System.out.println("Best case is in our hand and valid to play and the card we are looking at is "+lesson.getPlayers().get(currentPlayer).getCard(i).getFlipped()+"and the actual card is"+ lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getFlipped());
 					if(((JLabel)c) == lesson.getPlayers().get(currentPlayer).getCard(copyBestCase.get(0)).getCardLabel()){
@@ -427,24 +443,28 @@ public class GameController extends Thread{
 		}
 		if(noValid){
 			lesson.getPlayers().get(currentPlayer).getCard(0).setFlipped(false);
-
 			((JLabel)panels[currentPlayer].getComponent(0)).setIcon(lesson.getPlayers().get(currentPlayer).getCard(0).getImageIcon());
 			((JLabel)panels[currentPlayer].getComponent(0)).validate();
 			((JLabel)panels[currentPlayer].getComponent(0)).repaint();
-
 			moveCard((JLabel)panels[currentPlayer].getComponent(0),currentPlayer,panels,gs.getCenterPanel());
-			lesson.setFirstCardPlayed(lesson.getPlayers().get(currentPlayer).getCard(0).toString());
+			if(copyBestCase.get(0) == "CLAIM" && play ==0){
+				lesson.setFirstCardPlayed(lesson.getPlayers().get(currentPlayer).getCard(0).toString());
+			}
+			//
+			System.out.println("Setting first card played to "+lesson.getPlayers().get(currentPlayer).getCard(0).toString());
 			lesson.getPlayers().get(currentPlayer).addPoints(lesson.getPlayPoints(lesson.getPlayers().get(currentPlayer).getCard(0).toString()));
 			lesson.getPlayers().get(currentPlayer).removePlayedCard(lesson.getPlayers().get(currentPlayer).getCard(0).toString());
 		}else{
 
 			lesson.getPlayers().get(currentPlayer).getCard(i).setFlipped(false);
-
 			((JLabel)panels[currentPlayer].getComponent(i)).setIcon(lesson.getPlayers().get(currentPlayer).getCard(i).getImageIcon());
 			((JLabel)panels[currentPlayer].getComponent(i)).validate();
 			((JLabel)panels[currentPlayer].getComponent(i)).repaint();
 			moveCard((JLabel)panels[currentPlayer].getComponent(i),currentPlayer,panels,gs.getCenterPanel());
-			lesson.setFirstCardPlayed(lesson.getPlayers().get(currentPlayer).getCard(i).toString());
+			if(copyBestCase.get(0) == "CLAIM" && play ==0){
+				lesson.setFirstCardPlayed(lesson.getPlayers().get(currentPlayer).getCard(i).toString());
+			}
+			System.out.println("Setting first card played to "+lesson.getPlayers().get(currentPlayer).getCard(i).toString());
 			lesson.getPlayers().get(currentPlayer).addPoints(lesson.getPlayPoints(lesson.getPlayers().get(currentPlayer).getCard(i).toString()));
 			lesson.getPlayers().get(currentPlayer).removePlayedCard(lesson.getPlayers().get(currentPlayer).getCard(i).toString());
 
@@ -593,6 +613,7 @@ public class GameController extends Thread{
 		card.validate();
 		card.repaint();
 		if(play ==0){
+			System.out.println("setting firstCard "+c.toString());
 			lesson.setFirstCardPlayed(c.toString());
 		}
 		lesson.getPlayers().get(playerIndex).addPoints(lesson.getPlayPoints(c.toString()));
@@ -613,7 +634,7 @@ public class GameController extends Thread{
 	}
 
 	public void removeCenterCards(JPanel centerPanel)throws InterruptedException{
-		Thread.sleep(2000);
+		t.sleep(2000);
 		System.out.println("num comps "+centerPanel.getComponents().length);
 
 		for(Component c:centerPanel.getComponents()){

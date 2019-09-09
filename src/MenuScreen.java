@@ -13,6 +13,7 @@ public class MenuScreen extends JFrame{
 	private final Dimension smallButton = new Dimension(20,20),largeButton = new Dimension(200,50);
 	private int headingHeight;
 	private BackgroundPanel bgPanel;
+	private JLabel selectLessonHeader;
 	private JButton exitButton,selectLesson,toggleHelpLevel,backButton;
 	private ArrayList<JButton> lessonButtons,menuButtons;
 
@@ -35,6 +36,7 @@ public class MenuScreen extends JFrame{
 		
 		initExitButton();
 		initHeader();
+		initSelectLessonHeader();
 		initSelectLessonButton();
 		initToggleHelpLevelButton();
 		initBackButton();
@@ -65,6 +67,14 @@ public class MenuScreen extends JFrame{
 		bgPanel.add(header);
 	}
 
+	public void initSelectLessonHeader(){
+
+		selectLessonHeader = new JLabel("<html><h1 style='color:white;font-weight:bold;'>MAIN MENU</h1></html>");
+		selectLessonHeader.setSize(selectLessonHeader.getPreferredSize());
+		selectLessonHeader.setLocation(this.getWidth()/2 - selectLessonHeader.getWidth()/2,framePadding );
+		bgPanel.add(selectLessonHeader);
+	}
+
 	public JButton initButton(JButton b,String text,Color bg,Color tc,Dimension d,Point p,boolean visible){
 		b = new JButton(text);
 		b.setSize(d);
@@ -79,11 +89,12 @@ public class MenuScreen extends JFrame{
 		int y = headingHeight + framePadding + 50;
         int x = framePadding;
         for(int i=1;i<new File("input").listFiles().length;i++){
-            JButton j= new JButton(i+"");
+            JButton j= new JButton("<html><span style='font-size:150%;font-weight:bold;'>"+i+"</span></html>");
 			
-            j=initButton(j,i+"",Color.red,Color.white,new Dimension((int)(j.getPreferredSize().getWidth()+50),(int)(j.getPreferredSize().getHeight()+30)),new Point(x,y),false);
+            j=initButton(j,i+"",Color.white,Color.red,new Dimension((int)(j.getPreferredSize().getWidth()+50),(int)(j.getPreferredSize().getHeight()+30)),new Point(x,y),false);
+            j.setBorder(BorderFactory.createLineBorder(Color.red,1));
             x += (int) ((j.getWidth()) + 50);
-            if(x>bgPanel.getWidth()-framePadding- i*50){
+            if(x>bgPanel.getWidth()-framePadding){
                 x=framePadding;
                 y+=10+j.getHeight();
             }
@@ -95,13 +106,13 @@ public class MenuScreen extends JFrame{
 	}
 
 	public void initSelectLessonButton(){
-		selectLesson=initButton(selectLesson,"<html><h3 style='color:red;'>SELECT LESSON</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,100 + headingHeight),true);
+		selectLesson=initButton(selectLesson,"<html><h3 style='color:red;'>SELECT LESSON</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,selectLessonHeader.getLocation().y + selectLessonHeader.getHeight() + 20),true);
 		menuButtons.add(selectLesson);
 		bgPanel.add(selectLesson);
 	}
 	
 	public void initToggleHelpLevelButton(){
-		toggleHelpLevel = initButton(toggleHelpLevel,"<html><h3 style='color:red;'>NO HELP</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,selectLesson.getLocation().y + selectLesson.getHeight() + 40),true);
+		toggleHelpLevel = initButton(toggleHelpLevel,"<html><h3 style='color:red;'>NO HELP</h3></html>",Color.white,Color.red,largeButton,new Point(this.getWidth()/2,selectLesson.getLocation().y + selectLesson.getHeight() +20),true);
 		toggleHelpLevel.setFocusPainted(false);
 		menuButtons.add(toggleHelpLevel);
 		bgPanel.add(toggleHelpLevel);
@@ -141,5 +152,8 @@ public class MenuScreen extends JFrame{
 
 	public ArrayList<JButton> getMenuButtons(){
 		return menuButtons;
+	}
+	public JLabel getSelectLessonHeader(){
+		return selectLessonHeader;
 	}
 }
