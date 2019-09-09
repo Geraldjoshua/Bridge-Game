@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="JavaApplication3">
+  <ClassDiagramComponents>
+    <Class name="BackgroundPanel" package="" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="bg" type="JLabel" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="package">
+          <Argument type="File" name="file"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="addBackGround" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Bridge" package="" visibility="public" xPosition="320.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Card" package="" visibility="public" xPosition="620.0" yPosition="20.0">
+      <Fields>
+        <Field name="suit" type="char" visibility="private"/>
+        <Field name="value" type="char" visibility="private"/>
+        <Field name="pointValue" type="int" visibility="private"/>
+        <Field name="cardImage" type="BufferedImage" visibility="private"/>
+        <Field name="backSide" type="BufferedImage" visibility="private"/>
+        <Field name="cardLabel" type="JLabel" visibility="private"/>
+        <Field name="flipped" type="boolean" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="package">
+          <Argument type="char" name="suit"/>
+          <Argument type="char" name="value"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="resizeCard" returnType="void" visibility="public">
+          <Argument type="int" name="width"/>
+          <Argument type="int" name="height"/>
+          <Argument type="boolean" name="flipped"/>
+        </Method>
+        <Method name="resize" returnType="BufferedImage" visibility="public" isStatic="true">
+          <Argument type="BufferedImage" name="img"/>
+          <Argument type="int" name="newW"/>
+          <Argument type="int" name="newH"/>
+        </Method>
+        <Method name="getCardLabel" returnType="JLabel" visibility="public"/>
+        <Method name="setFlipped" returnType="void" visibility="public">
+          <Argument type="boolean" name="flip"/>
+        </Method>
+        <Method name="getImageIcon" returnType="ImageIcon" visibility="public"/>
+        <Method name="getFlipped" returnType="boolean" visibility="public"/>
+        <Method name="getSuit" returnType="char" visibility="public"/>
+        <Method name="getValue" returnType="char" visibility="public"/>
+        <Method name="setPointValue" returnType="void" visibility="public">
+          <Argument type="char" name="value"/>
+        </Method>
+        <Method name="getPointValue" returnType="int" visibility="public"/>
+        <Method name="getCardImage" returnType="BufferedImage" visibility="public"/>
+        <Method name="toString" returnType="String" visibility="public"/>
+        <Method name="toString" returnType="String" visibility="public">
+          <Argument type="boolean" name="check"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="GameController" package="" visibility="public" xPosition="920.0" yPosition="20.0">
+      <Fields>
+        <Field name="ls" type="LoadScreen" visibility="private"/>
+        <Field name="ms" type="MenuScreen" visibility="private"/>
+        <Field name="gs" type="GameScreen" visibility="private"/>
+        <Field name="lesson" type="Lesson" visibility="private"/>
+        <Field name="selectButtonListener" type="MouseListener" visibility="private"/>
+        <Field name="exitGameListener" type="MouseListener" visibility="private"/>
+        <Field name="clicks" type="int" visibility="private"/>
+        <Field name="copyBestCase" type="ArrayList&lt;String&gt;" visibility="private"/>
+        <Field name="xSize" type="int" visibility="private" isFinal="true"/>
+        <Field name="played" type="boolean" visibility="private"/>
+        <Field name="t" type="Thread" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="package">
+          <Argument type="LoadScreen" name="ls"/>
+          <Argument type="MenuScreen" name="ms"/>
+          <Argument type="int" name="xSize"/>
+          <Argument type="int" name="ySize"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initListeners" returnType="void" visibility="public"/>
+        <Method name="addListeners" returnType="void" visibility="public"/>
+        <Method name="loadProgram" returnType="void" visibility="public"/>
+        <Method name="load" returnType="void" visibility="public">
+          <Argument type="JProgressBar" name="loadBar"/>
+          <Argument type="int" name="width"/>
+        </Method>
+        <Method name="findLesson" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+          <Argument type="ArrayList&lt;JButton&gt;" name="buttons"/>
+        </Method>
+        <Method name="toggleButton" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+          <Argument type="ArrayList&lt;JButton&gt;" name="buttons"/>
+        </Method>
+        <Method name="findButton" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="e"/>
+          <Argument type="ArrayList&lt;JButton&gt;" name="buttons"/>
+        </Method>
+        <Method name="resetColour" returnType="void" visibility="public">
+          <Argument type="JButton" name="b"/>
+        </Method>
+        <Method name="handleToolTip" returnType="void" visibility="public">
+          <Argument type="JButton" name="b"/>
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="addLessonListeners" returnType="void" visibility="public">
+          <Argument type="ArrayList&lt;JButton&gt;" name="buttons"/>
+        </Method>
+        <Method name="showButtons" returnType="void" visibility="public">
+          <Argument type="boolean" name="visible"/>
+          <Argument type="ArrayList&lt;JButton&gt;" name="buttons"/>
+        </Method>
+        <Method name="showBackButton" returnType="void" visibility="public">
+          <Argument type="boolean" name="visible"/>
+          <Argument type="JButton" name="b"/>
+        </Method>
+        <Method name="offSet" returnType="void" visibility="public">
+          <Argument type="JLabel" name="source"/>
+          <Argument type="int" name="offset"/>
+        </Method>
+        <Method name="addCardListeners" returnType="void" visibility="public">
+          <Argument type="ArrayList&lt;JLabel&gt;" name="cards"/>
+        </Method>
+        <Method name="handleClaim" returnType="void" visibility="public">
+          <Argument type="JPanel[]" name="panels"/>
+        </Method>
+        <Method name="flipCards" returnType="void" visibility="public">
+          <Argument type="JPanel[]" name="panels"/>
+        </Method>
+        <Method name="run" returnType="void" visibility="public"/>
+        <Method name="startGame" returnType="void" visibility="public"/>
+        <Method name="autoPlay" returnType="void" visibility="public">
+          <Argument type="JPanel[]" name="panels"/>
+        </Method>
+        <Method name="addMouseListeners" returnType="void" visibility="public">
+          <Argument type="JPanel[]" name="panels"/>
+        </Method>
+        <Method name="removeMouseListeners" returnType="void" visibility="public">
+          <Argument type="JPanel[]" name="panels"/>
+        </Method>
+        <Method name="makePlay" returnType="void" visibility="public">
+          <Argument type="JLabel" name="source"/>
+          <Argument type="int" name="index"/>
+          <Argument type="int" name="play"/>
+          <Argument type="JPanel[]" name="panels"/>
+        </Method>
+        <Method name="playCard" returnType="void" visibility="public">
+          <Argument type="Card" name="c"/>
+          <Argument type="JLabel" name="card"/>
+          <Argument type="int" name="playerIndex"/>
+        </Method>
+        <Method name="findPlayer" returnType="int" visibility="public">
+          <Argument type="JLabel" name="source"/>
+          <Argument type="JPanel[]" name="panels"/>
+        </Method>
+        <Method name="removeCenterCards" returnType="void" visibility="public">
+          <Argument type="JPanel" name="centerPanel"/>
+        </Method>
+        <Method name="updateScoreBoard" returnType="void" visibility="public">
+          <Argument type="JLabel" name="score"/>
+        </Method>
+        <Method name="moveCard" returnType="void" visibility="public">
+          <Argument type="JLabel" name="source"/>
+          <Argument type="int" name="index"/>
+          <Argument type="JPanel[]" name="panels"/>
+          <Argument type="JPanel" name="centerPanel"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="GameScreen" package="" visibility="public" xPosition="1220.0" yPosition="20.0">
+      <Fields>
+        <Field name="lesson" type="Lesson" visibility="private"/>
+        <Field name="bgPanel" type="BackgroundPanel" visibility="private"/>
+        <Field name="xSize" type="int" visibility="private" isFinal="true"/>
+        <Field name="panels" type="JPanel[]" visibility="private"/>
+        <Field name="components" type="ArrayList&lt;Component&gt;" visibility="private"/>
+        <Field name="centerPanel" type="JPanel" visibility="private"/>
+        <Field name="cardLabels" type="ArrayList&lt;JLabel&gt;" visibility="private"/>
+        <Field name="exitButton" type="JButton" visibility="private"/>
+        <Field name="score" type="JLabel" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="package">
+          <Argument type="int" name="xSize"/>
+          <Argument type="int" name="ySize"/>
+          <Argument type="Lesson" name="lesson"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="makeAndAddComponents" returnType="void" visibility="public"/>
+        <Method name="makePanels" returnType="void" visibility="public"/>
+        <Method name="initCenterPanel" returnType="void" visibility="private"/>
+        <Method name="makeCards" returnType="void" visibility="public"/>
+        <Method name="testCardX" returnType="int" visibility="public">
+          <Argument type="double" name="testX"/>
+          <Argument type="double" name="testY"/>
+        </Method>
+        <Method name="calcY" returnType="double" visibility="public">
+          <Argument type="double" name="x"/>
+        </Method>
+        <Method name="initUserButtons" returnType="void" visibility="public"/>
+        <Method name="initButton" returnType="JButton" visibility="public">
+          <Argument type="String" name="text"/>
+          <Argument type="Color" name="c1"/>
+          <Argument type="Color" name="c2"/>
+          <Argument type="Point" name="p"/>
+        </Method>
+        <Method name="initLabels" returnType="void" visibility="public"/>
+        <Method name="addCardListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="addExitListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+        </Method>
+        <Method name="addGetHintsListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+        </Method>
+        <Method name="addGetTipsListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+        </Method>
+        <Method name="addClaimListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+        </Method>
+        <Method name="addFlipCardsListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+        </Method>
+        <Method name="getCards" returnType="ArrayList&lt;JLabel&gt;" visibility="public"/>
+        <Method name="getPanels" returnType="JPanel[]" visibility="public"/>
+        <Method name="getPlayerTurnJLabel" returnType="JLabel" visibility="public"/>
+        <Method name="removeCardListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="getCenterPanel" returnType="JPanel" visibility="public"/>
+        <Method name="getScoreJLabel" returnType="JLabel" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="GameThread" package="" visibility="public" xPosition="1520.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Lesson" package="" visibility="public" xPosition="1820.0" yPosition="20.0">
+      <Fields>
+        <Field name="players" type="ArrayList&lt;Person&gt;" visibility="private"/>
+        <Field name="cardArray" type="ArrayList&lt;Card&gt;" visibility="private"/>
+        <Field name="bestCase" type="ArrayList&lt;String[]&gt;" visibility="private"/>
+        <Field name="firstCardPlayed" type="String" visibility="private"/>
+        <Field name="leadingSuit" type="char" visibility="private"/>
+        <Field name="biddingSuit" type="char" visibility="private"/>
+        <Field name="hints" type="LinkedHashMap&lt;String, String&gt;" visibility="private"/>
+        <Field name="tips" type="LinkedHashMap&lt;Integer, String&gt;" visibility="private"/>
+        <Field name="helpLevel" type="int" visibility="private"/>
+        <Field name="questions" type="String[]" visibility="private"/>
+        <Field name="biddingString" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="package">
+          <Argument type="String" name="filename"/>
+          <Argument type="int" name="level"/>
+        </Constructor>
+        <Constructor visibility="package"/>
+      </Constructors>
+      <Methods>
+        <Method name="setHints" returnType="void" visibility="public">
+          <Argument type="LinkedHashMap&lt;String, String&gt;" name="hints"/>
+        </Method>
+        <Method name="getHints" returnType="LinkedHashMap&lt;String, String&gt;" visibility="public"/>
+        <Method name="getHintasked" returnType="String" visibility="public">
+          <Argument type="String" name="key"/>
+        </Method>
+        <Method name="getTipsasked" returnType="String" visibility="public">
+          <Argument type="int" name="key"/>
+        </Method>
+        <Method name="setTips" returnType="void" visibility="public">
+          <Argument type="LinkedHashMap&lt;Integer, String&gt;" name="tips"/>
+        </Method>
+        <Method name="getTips" returnType="LinkedHashMap&lt;Integer, String&gt;" visibility="public"/>
+        <Method name="setBiddingString" returnType="void" visibility="public">
+          <Argument type="String" name="bidding"/>
+        </Method>
+        <Method name="getBiddingString" returnType="String" visibility="public"/>
+        <Method name="loadInput" returnType="void" visibility="private">
+          <Argument type="String" name="filename"/>
+        </Method>
+        <Method name="loadTips" returnType="void" visibility="private">
+          <Argument type="String" name="filename"/>
+        </Method>
+        <Method name="getBestCase" returnType="ArrayList&lt;String&gt;" visibility="public"/>
+        <Method name="setLeadingSuit" returnType="void" visibility="public">
+          <Argument type="char" name="Suit"/>
+        </Method>
+        <Method name="getLeadingSuit" returnType="char" visibility="public"/>
+        <Method name="getFirstCardPlayed" returnType="String" visibility="public"/>
+        <Method name="isValid" returnType="boolean" visibility="public">
+          <Argument type="String" name="card"/>
+          <Argument type="Person" name="player"/>
+        </Method>
+        <Method name="getPlayPoints" returnType="int" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+        <Method name="setBidding" returnType="void" visibility="public">
+          <Argument type="String[]" name="bidding"/>
+        </Method>
+        <Method name="checkClaim" returnType="void" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+        <Method name="getBiddingSuit" returnType="char" visibility="public"/>
+        <Method name="setFirstCardPlayed" returnType="void" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+        <Method name="getSuit" returnType="char" visibility="public"/>
+        <Method name="getPlayers" returnType="ArrayList&lt;Person&gt;" visibility="public"/>
+        <Method name="resetWinner" returnType="void" visibility="public"/>
+        <Method name="setWinner" returnType="void" visibility="public">
+          <Argument type="String" name="playername"/>
+        </Method>
+        <Method name="decideWinner" returnType="String" visibility="public"/>
+        <Method name="decideGameWinner" returnType="String" visibility="public"/>
+        <Method name="setHelpLevel" returnType="void" visibility="public">
+          <Argument type="int" name="level"/>
+        </Method>
+        <Method name="getHelpLevel" returnType="int" visibility="public"/>
+        <Method name="resetPoints" returnType="void" visibility="public"/>
+        <Method name="printPlayers" returnType="void" visibility="public"/>
+        <Method name="reorderPlayers" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="LoadScreen" package="" visibility="public" xPosition="2120.0" yPosition="20.0">
+      <Fields>
+        <Field name="xSize" type="int" visibility="private" isFinal="true"/>
+        <Field name="loadBar" type="JProgressBar" visibility="private"/>
+        <Field name="bgPanel" type="BackgroundPanel" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="package">
+          <Argument type="int" name="xSize"/>
+          <Argument type="int" name="ySize"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="addComponentsToPanel" returnType="void" visibility="public"/>
+        <Method name="makeAndGetLabel" returnType="JLabel" visibility="public">
+          <Argument type="String" name="text"/>
+        </Method>
+        <Method name="makeAndGetProgressBar" returnType="JProgressBar" visibility="public">
+          <Argument type="int" name="yPos"/>
+          <Argument type="int" name="width"/>
+        </Method>
+        <Method name="getLoadBar" returnType="JProgressBar" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="MenuScreen" package="" visibility="public" xPosition="20.0" yPosition="420.0">
+      <Fields>
+        <Field name="xSize" type="int" visibility="private" isFinal="true"/>
+        <Field name="smallButton" type="Dimension" visibility="private" isFinal="true"/>
+        <Field name="headingHeight" type="int" visibility="private"/>
+        <Field name="bgPanel" type="BackgroundPanel" visibility="private"/>
+        <Field name="selectLessonHeader" type="JLabel" visibility="private"/>
+        <Field name="exitButton" type="JButton" visibility="private"/>
+        <Field name="lessonButtons" type="ArrayList&lt;JButton&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="package">
+          <Argument type="int" name="xSize"/>
+          <Argument type="int" name="ySize"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="addComponentsToPanel" returnType="void" visibility="public"/>
+        <Method name="initExitButton" returnType="void" visibility="public"/>
+        <Method name="initHeader" returnType="void" visibility="public"/>
+        <Method name="initSelectLessonHeader" returnType="void" visibility="public"/>
+        <Method name="initButton" returnType="JButton" visibility="public">
+          <Argument type="JButton" name="b"/>
+          <Argument type="String" name="text"/>
+          <Argument type="Color" name="bg"/>
+          <Argument type="Color" name="tc"/>
+          <Argument type="Dimension" name="d"/>
+          <Argument type="Point" name="p"/>
+          <Argument type="boolean" name="visible"/>
+        </Method>
+        <Method name="generateLessonButtons" returnType="void" visibility="public"/>
+        <Method name="initSelectLessonButton" returnType="void" visibility="public"/>
+        <Method name="initToggleHelpLevelButton" returnType="void" visibility="public"/>
+        <Method name="initBackButton" returnType="void" visibility="public"/>
+        <Method name="getBackButton" returnType="JButton" visibility="public"/>
+        <Method name="addSelectLessonListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+        </Method>
+        <Method name="addBackButtonListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+        </Method>
+        <Method name="addLessonListener" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="addToggleHelpLevel" returnType="void" visibility="public">
+          <Argument type="MouseListener" name="ml"/>
+        </Method>
+        <Method name="getLessonButtons" returnType="ArrayList&lt;JButton&gt;" visibility="public"/>
+        <Method name="getMenuButtons" returnType="ArrayList&lt;JButton&gt;" visibility="public"/>
+        <Method name="getSelectLessonHeader" returnType="JLabel" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Person" package="" visibility="public" xPosition="320.0" yPosition="420.0">
+      <Fields>
+        <Field name="hand" type="ArrayList&lt;Card&gt;" visibility="private"/>
+        <Field name="points" type="int" visibility="private"/>
+        <Field name="name" type="String" visibility="private"/>
+        <Field name="playedcard" type="String" visibility="private"/>
+        <Field name="isWinner" type="boolean" visibility="private"/>
+        <Field name="trickWins" type="int" visibility="private"/>
+        <Field name="handStrength" type="int" visibility="private"/>
+        <Field name="canPlay" type="boolean" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="package"/>
+        <Constructor visibility="package">
+          <Argument type="String" name="name"/>
+        </Constructor>
+        <Constructor visibility="package">
+          <Argument type="ArrayList&lt;Card&gt;" name="hand"/>
+          <Argument type="String" name="name"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="setName" returnType="void" visibility="public">
+          <Argument type="String" name="name"/>
+        </Method>
+        <Method name="addTrickWins" returnType="void" visibility="public">
+          <Argument type="int" name="tricks"/>
+        </Method>
+        <Method name="incrementTrickWins" returnType="void" visibility="public"/>
+        <Method name="getCard" returnType="Card" visibility="public">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="setCanPlay" returnType="void" visibility="public">
+          <Argument type="boolean" name="canPlay"/>
+        </Method>
+        <Method name="getCanPlay" returnType="boolean" visibility="public"/>
+        <Method name="getCard" returnType="Card" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+        <Method name="getTrickWins" returnType="int" visibility="public"/>
+        <Method name="setTrickWins" returnType="void" visibility="public">
+          <Argument type="int" name="num"/>
+        </Method>
+        <Method name="printNiceHand" returnType="void" visibility="public"/>
+        <Method name="setHand" returnType="void" visibility="public">
+          <Argument type="ArrayList&lt;Card&gt;" name="hand"/>
+        </Method>
+        <Method name="getPlayerName" returnType="String" visibility="public"/>
+        <Method name="getPlayerHand" returnType="ArrayList&lt;Card&gt;" visibility="public"/>
+        <Method name="setWinner" returnType="void" visibility="public"/>
+        <Method name="getWinner" returnType="boolean" visibility="public"/>
+        <Method name="resetWinner" returnType="void" visibility="public"/>
+        <Method name="getPersonPoints" returnType="int" visibility="public"/>
+        <Method name="incrementPoints" returnType="void" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+        <Method name="getPoints" returnType="int" visibility="public"/>
+        <Method name="setPoints" returnType="void" visibility="public">
+          <Argument type="int" name="number"/>
+        </Method>
+        <Method name="addPoints" returnType="void" visibility="public">
+          <Argument type="int" name="points"/>
+        </Method>
+        <Method name="recordplayedCard" returnType="void" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+        <Method name="getrecordplayedCard" returnType="String" visibility="public"/>
+        <Method name="inHand" returnType="boolean" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+        <Method name="noSuit" returnType="boolean" visibility="public">
+          <Argument type="char" name="suit"/>
+        </Method>
+        <Method name="bestCaseInHand" returnType="String" visibility="public">
+          <Argument type="ArrayList&lt;String&gt;" name="bestcard"/>
+        </Method>
+        <Method name="removePlayedCard" returnType="void" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+        <Method name="removePlayerCard" returnType="void" visibility="public">
+          <Argument type="int" name="index"/>
+        </Method>
+        <Method name="checkhand" returnType="boolean" visibility="public">
+          <Argument type="String" name="card"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="ls" source="GameController" target="LoadScreen" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="lesson" source="GameScreen" target="Lesson" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="bgPanel" source="LoadScreen" target="BackgroundPanel" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="cardArray" source="Lesson" target="Card" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;Card&gt;"/>
+    <UseRelation source="Lesson" target="Person" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="players" source="Lesson" target="Person" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;Person&gt;"/>
+    <HasRelation name="bgPanel" source="MenuScreen" target="BackgroundPanel" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="lesson" source="GameController" target="Lesson" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="GameController" target="Card" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="bgPanel" source="GameScreen" target="BackgroundPanel" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="gs" source="GameController" target="GameScreen" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="hand" source="Person" target="Card" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;Card&gt;"/>
+    <UseRelation source="Person" target="Card" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="ms" source="GameController" target="MenuScreen" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
