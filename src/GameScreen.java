@@ -198,8 +198,13 @@ public class GameScreen extends JFrame{
     public void addClaimListener(MouseListener ml){
         claimButton.addMouseListener(ml);
     }
+    public void addFlipCardsListener(MouseListener ml){
+        flipCardsButton.addMouseListener(ml);
+    }
 
     public ArrayList<JLabel> getCards(){
         return cards;
     }
+
+    public JPanel[] getPanels(){return panels;}
 }

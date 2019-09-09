@@ -13,8 +13,8 @@ public class GameController {
 	private GameScreen gs;
 	private Lesson lesson;
 	private MouseListener selectButtonListener,lessonButtonListener,toggleButtonListener,backButtonListener,cardListener;
-	private MouseListener exitGameListener,getHintsListener,getTipsListener;
-	private int clicks = 0,play=0,timesTipClicked = 0,currentPlayer,hintQuestionNumber = 0;
+	private MouseListener exitGameListener,getHintsListener,getTipsListener,claimListener,flipCardsListener;
+	private int clicks = 0,play=0,timesTipClicked = 0,currentPlayer,hintQuestionNumber = 0,tricks=0,timesClicked = 0;
 	private ArrayList<String> copyBestCase,hintQuestions;
 	private final int xSize,ySize;
 	GameController(LoadScreen ls,MenuScreen ms,int xSize,int ySize)throws InterruptedException{
@@ -146,6 +146,20 @@ public class GameController {
 			}
 
 		};
+		this.claimListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				handleClaim(gs.getPanels());
+			}
+
+		};
+		this.flipCardsListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				flipCards(gs.getPanels());
+			}
+
+		};
 
 	}
 
@@ -191,10 +205,13 @@ public class GameController {
 				lesson = new Lesson("input/input"+(i+1)+".txt",clicks);
 				gs = new GameScreen(xSize,ySize,lesson);
 				hintQuestions = new ArrayList<>(lesson.getHints().keySet());
+				copyBestCase = lesson.getBestCase();
 				gs.setVisible(true);
 				gs.addExitListener(exitGameListener);
 				gs.addGetTipsListener(getTipsListener);
 				gs.addGetHintsListener(getHintsListener);
+				gs.addClaimListener(claimListener);
+				gs.addFlipCardsListener(flipCardsListener);
 			}
 		}
 
@@ -261,5 +278,51 @@ public class GameController {
 			gs.addCardListener(cardListener,i);
 		}
 
+	}
+
+	public void handleClaim(JPanel[] panels){
+		if(copyBestCase.get(0).equals("CLAIM")){
+			JOptionPane.showMessageDialog(gs,
+					"Congratulations you win the remaining "+(13-tricks)+" tricks");
+			lesson.getPlayers().get(currentPlayer).addTrickWins((13-tricks));
+			for(int i=0;i<panels.length;i++){
+				for(Component c:panels[i].getComponents()){
+					if(c instanceof JLabel){
+						panels[i].remove(c);
+					}
+				}
+			}
+		}else{
+			String s = (String)JOptionPane.showInputDialog(
+					gs,
+					"Please type the order of cards played for the remaining "+ (13-tricks)+" tricks as a coma separated list","",JOptionPane.PLAIN_MESSAGE);
+			if(s!=null){
+				JOptionPane.showMessageDialog(gs,
+						"You won't win with that order");
+			}
+
+		}
+	}
+
+	public void flipCards(JPanel[] panels){
+		int count=0;
+		int j=0;
+		timesClicked++;
+		for(int i=0;i<3;i+=2){
+			for(Component card:panels[i].getComponents()){
+				if(card instanceof JLabel){
+					if(timesClicked%2==0){
+						lesson.getPlayers().get(i).getCard(j).setFlipped(true);
+
+					}else{
+						lesson.getPlayers().get(i).getCard(j).setFlipped(false);
+
+					}
+				}
+				j++;
+				count++;
+			}
+			j=0;
+		}
 	}
 }
