@@ -280,7 +280,7 @@ public class Lesson{
      */
     public boolean isValid(String card , Person player){
         //play can be Suit from first play or trump Suit
-        if(player.inHand(card) && (card.charAt(1) == getSuit())){
+        if(player.inHand(card) && (card.charAt(1) == leadingSuit)){
             return true;
         }else return (!player.getPlayerHand().isEmpty())&&(player.noSuit(getLeadingSuit()));
 
