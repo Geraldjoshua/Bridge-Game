@@ -38,12 +38,10 @@ public class Card{
         this.cardImage = resize(img,85,128);
         setPointValue(value);
         this.flipped = false;
-
         this.cardLabel = new JLabel(new ImageIcon(cardImage));
         this.cardLabel.setSize(85,128);
 
     }
-
 
     /**
 
@@ -148,7 +146,7 @@ public class Card{
      *
      */
     public void setPointValue(char value){
-        //Possible better way to do this other than an if tree ?
+
         if(value == 'A'){
             pointValue = 4;
         }

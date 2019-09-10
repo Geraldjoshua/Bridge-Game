@@ -361,7 +361,7 @@ public class Person{
         for (Card hand1 : hand) {
             hset.add(hand1.toString());
         }
-        //bestcardarray
+
         for (String bestcard1 : bestcard) {
             if (hset.contains(bestcard1)) {
                 return bestcard1;
@@ -372,7 +372,7 @@ public class Person{
 
 
     /**
-     * <p>remove the card from players hand after it has being played</p>
+     * <p>remove the card from players hand after it has been played</p>
      * @param card To be removed
      *
      */

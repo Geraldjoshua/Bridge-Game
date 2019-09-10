@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class GameController implements Runnable{
-	
+
 	private LoadScreen ls;
 	private MenuScreen ms;
 	private GameScreen gs;
@@ -18,6 +18,15 @@ public class GameController implements Runnable{
 	private final int xSize,ySize;
 	private boolean played;
 	private Thread t;
+	/**
+	 * <p>Constructor that initialises the GameController object and initialises the programs' MouseListeners and adds
+	 * them to the relevant buttons</p>
+	 * @param ls LessonScreen
+	 * @param ms MenuScreen
+	 * @param xSize int
+	 * @param ySize int
+	 * @throws InterruptedException
+	 */
 	GameController(LoadScreen ls,MenuScreen ms,int xSize,int ySize)throws InterruptedException{
 		this.ls = ls;
 		this.ms = ms;
@@ -31,8 +40,11 @@ public class GameController implements Runnable{
 
 	}
 
-
+	/**
+	 * <p>Method that initialises all the mouse listeners that will be used in the program</p>
+	 */
 	public void initListeners(){
+		//Mouse listener for the select lesson button on MenuScreen ms
 		this.selectButtonListener = new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
@@ -42,8 +54,9 @@ public class GameController implements Runnable{
 				ms.getSelectLessonHeader().setText("<html><h1 style='color:white;font-weight:bold;'>SELECT LESSON</h1></html>");
 				ms.getSelectLessonHeader().setSize(ms.getSelectLessonHeader().getPreferredSize());
 		    }
-            
+
     	};
+		//MouseListener for backButton on MenuScreen ms
 		this.backButtonListener = new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
@@ -53,9 +66,9 @@ public class GameController implements Runnable{
 				ms.getSelectLessonHeader().setText("<html><h1 style='color:white;font-weight:bold;'>MAIN MENU</h1></html>");
 				ms.getSelectLessonHeader().setSize(ms.getSelectLessonHeader().getPreferredSize());
 		    }
-            
-    	};
 
+    	};
+		//MouseListener for lesson button on MenuScreen ms
 		this.lessonButtonListener = new MouseAdapter(){
 		    @Override
 		    public void mouseClicked(MouseEvent e){
@@ -67,7 +80,7 @@ public class GameController implements Runnable{
 				}catch(IOException e2){
 					e2.printStackTrace();
 				}
-				
+
 		    }
 			@Override
 			public void mouseEntered(MouseEvent e){
@@ -79,13 +92,15 @@ public class GameController implements Runnable{
 				resetColour((JButton)e.getSource());
 			}
 		};
+		//MouseListener for toggle help level button on MenuScreen ms
 		this.toggleButtonListener = new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 				toggleButton(e,ms.getMenuButtons());
 		    }
-            
+
     	};
+		//MouseListener for every card object on GameScreen gs
 		this.cardListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -104,6 +119,7 @@ public class GameController implements Runnable{
 				offSet((JLabel)e.getSource(),20);
 			}
 		};
+		//Mouse listener for exit button on GameScreen gs
 		this.exitGameListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -114,6 +130,7 @@ public class GameController implements Runnable{
 			}
 
 		};
+		//Mouse listener for getTips button on GameScreen gs
 		this.getTipsListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -134,6 +151,7 @@ public class GameController implements Runnable{
 			}
 
 		};
+		//Mouse listener for getHints button on GameScreen gs
 		this.getHintsListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -160,6 +178,7 @@ public class GameController implements Runnable{
 			}
 
 		};
+		//Mouse listener for claimListener button on GameScreen gs
 		this.claimListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -176,28 +195,39 @@ public class GameController implements Runnable{
 		};
 
 	}
-
+	/**
+	 * <p>Method that adds listeners to elements that have been initialised already</p>
+	 */
 	public void addListeners(){
 		ms.addSelectLessonListener(selectButtonListener);
 		addLessonListeners(ms.getLessonButtons());
-		ms.addToggleHelpLevel(toggleButtonListener);
+		ms.addToggleHelpLevelListener(toggleButtonListener);
 		ms.addBackButtonListener(backButtonListener);
 
 	}
-
+	/**
+	 * <p>Method disposes of the LoadScreen when Load function finish executing it is finished loading and then shows the MenuScreen as well as
+	 * pop up that makes user aware of toggle button functionality</p>
+	 * @throws InterruptedException
+	 */
 	public void loadProgram()throws InterruptedException{
-		
+
 		ls.setVisible(true);
 		load(ls.getLoadBar(),ls.getLoadBar().getWidth());
-		ls.dispose();		
+		ls.dispose();
 		ms.setVisible(true);
 		Thread.sleep(500);
 		JOptionPane.showMessageDialog(ms,
                                     "<html><h3>Select the toggle help button to toggle the <br>help level for the lesson from No help - help level 5</h3></html>");
 	}
-
+	/**
+	 * <p>Method that loads the JProgressBar with increasing speed until it has finished loading</p>
+	 * @param loadBar int
+	 * @param width int
+	 * @throws InterruptedException
+	 */
 	public void load(JProgressBar loadBar,int width)throws InterruptedException{
-		
+
 		Thread.sleep(1200);
         for(int i=0;i<width;i++){
 			Thread.sleep(10);
@@ -207,51 +237,72 @@ public class GameController implements Runnable{
 				i+=2;
 		    }
 			    loadBar.setValue(i);
-        }		
+        }
 
 	}
-
+	/**
+	 * <p>Method that initialises the lesson that is mapped to a lesson button, the GameScreen, hintQuestions and copyBestCase.</p>
+	 * @param e MouseEvent
+	 * @param buttons ArrayList
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public void findLesson(MouseEvent e,ArrayList<JButton> buttons)throws IOException, InterruptedException{
-		
+
 		for(int i=0;i<buttons.size();i++){
-			
+
 			if(e.getSource() instanceof JButton && e.getSource() == buttons.get(i)){
-				lesson = new Lesson("input/input"+(i+1)+".txt",clicks);
-				gs = new GameScreen(xSize,ySize,lesson);
+				lesson = new Lesson("input/input"+(i+1)+".txt",clicks);//initialises lesson based on index of button clicked
+				gs = new GameScreen(xSize,ySize,lesson);						//and difficulty level
 				hintQuestions = new ArrayList<>(lesson.getHints().keySet());
 				copyBestCase = lesson.getBestCase();
 				gs.setVisible(true);
-				gs.addExitListener(exitGameListener);
-				gs.addGetTipsListener(getTipsListener);
+				gs.addExitListener(exitGameListener);		//All listeners for GameScreen components are added
+				gs.addGetTipsListener(getTipsListener);		//Now that they have been initialised
 				gs.addGetHintsListener(getHintsListener);
-				gs.addClaimListener(claimListener);
+				if(clicks>2){
+					gs.addClaimListener(claimListener);
+				}else{
+					gs.getClaimButton().setBackground(Color.gray);
+				}
 				gs.addFlipCardsListener(flipCardsListener);
-				t = new Thread(this);
-				t.start();
+				t = new Thread(this);					//create new thread to run game on
+				t.start();									//start thread thus calling run
 			}
 		}
 
 	}
-
+	/**
+	 * <p>Method that handles when a person clicks the toggle help level button. The help level gets incremented each time a
+	 * person clicks the button. if help level ever gets greater than 5 it resets to 0. The buttons text is also updated
+	 * based on what the help level is set to</p>
+	 * @param e MouseEvent
+	 * @param buttons ArrayList
+	 */
 	public void toggleButton(MouseEvent e,ArrayList<JButton> buttons){
-		clicks++;		
+		clicks++;
 		for(int i=0;i<buttons.size();i++){
-			
+
 			if(e.getSource() instanceof JButton && e.getSource() == buttons.get(i)){
 				if(clicks>5){
 						clicks=0;
 						buttons.get(i).setText("<html><h3 style='color:red;'>NO HELP</h3></html>");
 					}else if(clicks>0){
-						buttons.get(i).setText("<html><h3 style='color:red;'>HELP LEVEL: "+clicks+"</h3></html>");					
+						buttons.get(i).setText("<html><h3 style='color:red;'>HELP LEVEL: "+clicks+"</h3></html>");
 					}
 			}
 		}
 	}
-
+	/**
+	 * <p>Method that finds the button index of the button where the MouseEvent originated from and then changes the colours of
+	 * the source's text and background</p>
+	 * @param e MouseEvent
+	 * @param buttons ArrayList
+	 */
 	public void findButton(MouseEvent e,ArrayList<JButton> buttons){
-		
+
 		for(int i=0;i<buttons.size();i++){
-			
+
 			if(e.getSource() instanceof JButton && e.getSource() == buttons.get(i)){
 				 handleToolTip(buttons.get(i),i);
 			}
@@ -261,12 +312,19 @@ public class GameController implements Runnable{
 		((JButton)e.getSource()).setCursor(new Cursor(Cursor.HAND_CURSOR));
 
 	}
-
+	/**
+	 * <p>Method that resets the buttons colour back to the default colours</p>
+	 * @param b JButton
+	 */
 	public void resetColour(JButton b){
 		b.setForeground(Color.red);
 		b.setBackground(Color.white);
 	}
-
+	/**
+	 * <p>Method that sets the tooltip for the lesson button that was hovered over</p>
+	 * @param b JButton
+	 * @param index int
+	 */
 	public void handleToolTip(JButton b,int index){
 		b.setToolTipText("<html><h4>This is a lesson for scenario "+(index+1)+"</h4></html>");
 	}
@@ -275,17 +333,29 @@ public class GameController implements Runnable{
 			ms.addLessonListener(lessonButtonListener,i);
 		}
 	}
-
+	/**
+	 * <p>Method that sets visibility of the JButtons in the buttons ArrayList based on what visible parameter is. </p>
+	 * @param visible boolean
+	 * @param buttons ArrayList
+	 */
 	public void showButtons(boolean visible,ArrayList<JButton> buttons){
 		for(int i=0;i<buttons.size();i++){
 			buttons.get(i).setVisible(visible);
 		}
 	}
-	
+	/**
+	 * <p>Method that sets visibility of baackButton on MenuScreen based on value of visible parameter</p>
+	 * @param visible boolean
+	 * @param b JButton
+	 */
 	public void showBackButton(boolean visible,JButton b){
 		b.setVisible(visible);
 	}
-
+	/**
+	 * <p>Method that offsets the card JLabel's y coordinate by the amount of the offset parameter </p>
+	 * @param source JLabel
+	 * @param offset int
+	 */
 	public void offSet(JLabel source,int offset){
 		Point pt = source.getLocation();
 		int x = pt.x;
@@ -303,7 +373,10 @@ public class GameController implements Runnable{
 		}
 
 	}
-
+	/**
+	 * <p>Method that verifies whether a person can actually claim at this time in the game</p>
+	 * @param panels JPanel[]
+	 */
 	public void handleClaim(JPanel[] panels){
 		if(copyBestCase.get(0).equals("CLAIM")){
 			JOptionPane.showMessageDialog(gs,
@@ -317,17 +390,15 @@ public class GameController implements Runnable{
 				}
 			}
 		}else{
-			String s = (String)JOptionPane.showInputDialog(
-					gs,
-					"Please type the order of cards played for the remaining "+ (13-tricks)+" tricks as a coma separated list","",JOptionPane.PLAIN_MESSAGE);
-			if(s!=null){
-				JOptionPane.showMessageDialog(gs,
-						"You won't win with that order");
+			JOptionPane.showMessageDialog(gs,
+					"You can't claim at this time!");
 			}
 
 		}
-	}
-
+	/**
+	 * <p>Method that flips the cards of the opponent team</p>
+	 * @param panels JPanel[]
+	 */
 	public void flipCards(JPanel[] panels){
 		int count=0;
 		int j=0;
@@ -358,7 +429,10 @@ public class GameController implements Runnable{
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * <p>Method that handles all the boolean logic for an entire game. Determines who plays a card, who wins a trick and who wins the game</p>
+	 * @throws InterruptedException
+	 */
 	public void startGame() throws InterruptedException{
 		for(;tricks<13;tricks++) {
 			for (play = 0; play < 4; play++) {
@@ -410,7 +484,10 @@ public class GameController implements Runnable{
 		t.interrupt();
 		currentPlayer=0;
 	}
-
+	/**
+	 * <p>Method that searches through all the cards in the currentplayers hand and plays a valid card for them</p>
+	 * @param panels JPanel[]
+	 */
 	public void autoPlay(JPanel[] panels){
 		boolean noValid=false;
 		int i=0;
@@ -463,7 +540,7 @@ public class GameController implements Runnable{
 			((JLabel)panels[currentPlayer].getComponent(i)).validate();
 			((JLabel)panels[currentPlayer].getComponent(i)).repaint();
 			moveCard((JLabel)panels[currentPlayer].getComponent(i),currentPlayer,panels,gs.getCenterPanel());
-			if(copyBestCase.get(0) == "CLAIM" && play ==0){
+			if(play ==0){
 				System.out.println("Setting first card played to "+lesson.getPlayers().get(currentPlayer).getCard(i).toString());
 				lesson.setFirstCardPlayed(lesson.getPlayers().get(currentPlayer).getCard(i).toString());
 			}
@@ -474,7 +551,10 @@ public class GameController implements Runnable{
 		}
 
 	}
-
+	/**
+	 * <p>Method that adds MouseListeners to the card JLabels of the player depending on what the help level is set to</p>
+	 * @param panels JPanel[]
+	 */
 	public void addMouseListeners(JPanel[] panels){
 		System.out.println("help level: "+lesson.getHelpLevel()+" copybest "+copyBestCase.get(0));
 		for (int i = 0; i < panels[currentPlayer].getComponents().length; i++) {
@@ -519,7 +599,10 @@ public class GameController implements Runnable{
 			}
 		}
 	}
-
+	/**
+	 * <p>Method that removes MouseListeners from players cards when it is not their turn</p>
+	 * @param panels JPanel[]
+	 */
 	public void removeMouseListeners(JPanel[] panels){
 		System.out.println(panels[currentPlayer].getComponents().length);
 		for(int i = 0;i<panels[currentPlayer].getComponents().length;i++){
@@ -529,7 +612,14 @@ public class GameController implements Runnable{
 			}
 		}
 	}
-
+	/**
+	 * <p>Method that handles the players play depending on the help level </p>
+	 * @param source JLabel
+	 * @param index int
+	 * @param play int
+	 * @param panels JPanel
+	 * @throws InterruptedException
+	 */
 	public void makePlay(JLabel source,int index,int play,JPanel[] panels) throws InterruptedException {
 		int jIndex=0;
 		if(lesson.getPlayers().get(index).getCanPlay()){
@@ -609,7 +699,13 @@ public class GameController implements Runnable{
 
 		}
 	}
-
+	/**
+	 * <p>Method that adds points to the person who played the card based on its point value, sets the firstcard played if
+	 * its the first play of a trick,removes the Card object from the Person objects hand and updates the system that they have played</p>
+	 * @param c Card
+	 * @param card JLabel
+	 * @param playerIndex int
+	 */
 	public void playCard(Card c,JLabel card,int playerIndex){
 		c.setFlipped(false);
 		card.setIcon(c.getImageIcon());
@@ -626,7 +722,12 @@ public class GameController implements Runnable{
 		played=true;
 
 	}
-
+	/**
+	 * <p> Method to loop through the player panels to get the index of the player who attempted to play a card</p>
+	 * @param source JLabel
+	 * @param panels JPanel[]
+	 * @return integer
+	 */
 	public int findPlayer(JLabel source,JPanel[] panels) throws InterruptedException {
 
 		Container parent = source.getParent();
@@ -637,7 +738,11 @@ public class GameController implements Runnable{
 		}
 		return -1;
 	}
-
+	/**
+	 * <p>Method that removes all the cards from the centerpanel after a trick has played</p>
+	 * @param centerPanel JPanel
+	 * @throws InterruptedException
+	 */
 	public void removeCenterCards(JPanel centerPanel)throws InterruptedException{
 
 		for(Component c:centerPanel.getComponents()){
@@ -648,11 +753,20 @@ public class GameController implements Runnable{
 			}
 		}
 	}
-
+	/**
+	 * <p>Method that updates the score board with the trick wins of the teams</p>
+	 * @param score JLabel
+	 */
 	public void updateScoreBoard(JLabel score){
 		score.setText("<html><head><style>body{color:white;}</style></head><body><h1>N + S Score: "+(lesson.getPlayers().get(1).getTrickWins()+lesson.getPlayers().get(3).getTrickWins())+"</h1><h2>W + E Score: "+(lesson.getPlayers().get(0).getTrickWins()+lesson.getPlayers().get(2).getTrickWins())+"</h2></body></html>");
 	}
-
+	/**
+	 * <p>Method that moves the card to a certain location in the centerpanel based on its the index of the player who played the card</p>
+	 * @param source JLabel
+	 * @param index int
+	 * @param panels JPanel[]
+	 * @param centerPanel JPanel
+	 */
 	public void moveCard(JLabel source,int index,JPanel[] panels,JPanel centerPanel){
 		source.setBorder(null);
 		panels[index].remove(source);
