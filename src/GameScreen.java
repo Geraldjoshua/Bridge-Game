@@ -302,4 +302,12 @@ public class GameScreen extends JFrame{
     public JLabel getScoreJLabel(){
         return score;
     }
+
+    /**
+     * <p>Method to return claimButton</p>
+     * @return JButton
+     */
+    public JButton getClaimButton(){
+        return claimButton;
+    }
 }

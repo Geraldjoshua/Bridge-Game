@@ -260,7 +260,11 @@ public class GameController implements Runnable{
 				gs.addExitListener(exitGameListener);		//All listeners for GameScreen components are added
 				gs.addGetTipsListener(getTipsListener);		//Now that they have been initialised
 				gs.addGetHintsListener(getHintsListener);
-				gs.addClaimListener(claimListener);
+				if(clicks>2){
+					gs.addClaimListener(claimListener);
+				}else{
+					gs.getClaimButton().setBackground(Color.gray);
+				}
 				gs.addFlipCardsListener(flipCardsListener);
 				t = new Thread(this);					//create new thread to run game on
 				t.start();									//start thread thus calling run
@@ -386,16 +390,11 @@ public class GameController implements Runnable{
 				}
 			}
 		}else{
-			String s = (String)JOptionPane.showInputDialog(
-					gs,
-					"Please type the order of cards played for the remaining "+ (13-tricks)+" tricks as a coma separated list","",JOptionPane.PLAIN_MESSAGE);
-			if(s!=null){
-				JOptionPane.showMessageDialog(gs,
-						"You won't win with that order");
+			JOptionPane.showMessageDialog(gs,
+					"You can't claim at this time!");
 			}
 
 		}
-	}
 	/**
 	 * <p>Method that flips the cards of the opponent team</p>
 	 * @param panels JPanel[]
